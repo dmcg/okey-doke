@@ -1,6 +1,7 @@
 package org.hamcrest.approvals;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
@@ -34,7 +35,7 @@ public class ApprovalsRuleTest {
 
     @Test public void look_at_the_nice_messages_from_hamcrest() throws IOException {
         try {
-            Assert.assertThat("Deliberate failure - Jackdaws adore my big sphincter of quartz", approver.isAsApproved());
+            Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
             fail("Unexpected non-assertion");
         } catch (AssertionError expected) {
             System.out.println(expected);
@@ -42,11 +43,17 @@ public class ApprovalsRuleTest {
 
         approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
         try {
-            Assert.assertThat("Deliberate failure - Jackdaws adore my big sphincter of quartz", approver.isAsApproved());
+            Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
             fail("Unexpected non-assertion");
         } catch (AssertionError expected) {
             System.out.println(expected);
         }
+    }
+
+    @Ignore("Unignore to see failure report in IDE")
+    @Test public void see_how_my_IDE_reports_diffs() throws IOException {
+        approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
+        Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
     }
 
     @Test public void can_force_approval_by_editing_the_matcher() throws IOException {

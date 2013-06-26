@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.approvals.internal.IO;
+import org.hamcrest.core.IsEqual;
 import org.junit.rules.TestWatchman;
 import org.junit.runners.model.FrameworkMethod;
 
@@ -47,7 +48,7 @@ public class ApprovalsRule extends TestWatchman {
 
     private <T> Matcher <T> isAsApproved(String testname) {
         String approved = readApproved(testname);
-        return matches(approved);
+        return (Matcher<T>) (approved == null ? noApproval(testname) : matches(approved, testname));
     }
 
     private void writeApproved(Object approved, String testname) throws IOException {
@@ -61,37 +62,31 @@ public class ApprovalsRule extends TestWatchman {
                 null : new String(IO.readBytes(approvalFile));
     }
 
-    private <T> Matcher<T> matches(final Object approved) {
-        return new TypeSafeDiagnosingMatcher<T>() {
+    private <T> Matcher<T> matches(final T approved, final String testname) {
+        return new IsEqual<T>(approved) {
             @Override
-            protected boolean matchesSafely(T thing, Description description) {
-                try {
-                    IO.writeBytes(actualFile(), thing.toString().getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                if (approved == null) {
-                    description.appendText("No approved thing was found");
-                    return false;
-                } else if (approved.equals(thing)) {
-                    return true;
-                } else {
-                    description.appendText("Expected :" + approved);
-                    description.appendText("Actual   :" + thing);
-                    return false;
-                }
+            public boolean matches(Object thing) {
+                writeActual(thing, testname);
+                return super.matches(thing);
             }
 
-            public void describeTo(Description description) {
-            }
         };
     }
 
+    private <T> void writeActual(T thing, String testname) {
+        try {
+            IO.writeBytes(actualFileFor(testname), thing.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private static <T> Matcher<T> noApproval(final String testname) {
+
+    private <T> Matcher<T> noApproval(final String testname) {
         return new TypeSafeDiagnosingMatcher<T>() {
             @Override
             protected boolean matchesSafely(T thing, Description description) {
+                writeActual(thing, testname);
                 description.appendText("No approved thing was found");
                 return false;
             }
