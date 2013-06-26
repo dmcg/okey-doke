@@ -9,12 +9,22 @@ import org.junit.runners.model.FrameworkMethod;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static org.hamcrest.Matchers.equalTo;
 
 public class ApprovalsRule extends TestWatchman {
 
+    private final String srcRoot;
+    private final Object test;
+
     private String testName;
+
+    public ApprovalsRule(String srcRoot, Object test) {
+        this.srcRoot = srcRoot;
+        this.test = test;
+    }
 
     @Override
     public void starting(FrameworkMethod method) {
@@ -43,7 +53,7 @@ public class ApprovalsRule extends TestWatchman {
     }
 
     private File fileFor(String testname) {
-        return new File(testname);
+        return new File(new File(srcRoot, test.getClass().getPackage().getName().replaceAll("\\.", "/")), testname + ".approved");
     }
 
     private void writeApproved(Object approved, String testname) throws IOException {
