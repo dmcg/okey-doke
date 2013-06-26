@@ -11,7 +11,7 @@ import static org.hamcrest.approvals.Approvals.*;
 public class ApprovalsTest {
 
     @Test public void doesnt_match_where_no_approved_result() {
-        fileFor("testname").delete();
+        forgetApproval("testname");
         assertThat("banana", not(isAsApproved("testname")));
     }
 

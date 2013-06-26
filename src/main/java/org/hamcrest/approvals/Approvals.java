@@ -21,8 +21,12 @@ public class Approvals {
         return (Matcher<? super String>) (approved == null ? noApproval(testname) : equalTo(approved));
     }
 
-    public static void approve(String banana, String testname) throws IOException {
-        writeApproved(banana, testname);
+    public static void approve(String approved, String testname) throws IOException {
+        writeApproved(approved, testname);
+    }
+
+    public static void forgetApproval(String testname) {
+        fileFor(testname).delete();
     }
 
     private static void writeApproved(String approved, String testname) throws IOException {
