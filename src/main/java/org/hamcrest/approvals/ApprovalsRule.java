@@ -21,33 +21,33 @@ public class ApprovalsRule extends TestWatchman {
         testName = method.getName();
     }
 
-    public String testName() {
-        return testName;
-    }
-
     public void forgetApproval() {
         fileFor(testName()).delete();
     }
 
-    public Matcher<? super String> isAsApproved() {
+    public <T> Matcher<T> isAsApproved() {
         return isAsApproved(testName());
     }
 
-    public void approve(String approved) throws IOException {
+    public void approve(Object approved) throws IOException {
         writeApproved(approved, testName());
     }
 
-    public static File fileFor(String testname) {
+    public String testName() {
+        return testName;
+    }
+
+    private <T> Matcher <T> isAsApproved(String testname) {
+        String approved = readApproved(testname);
+        return (Matcher<T>) (approved == null ? noApproval(testname) : equalTo(approved));
+    }
+
+    private File fileFor(String testname) {
         return new File(testname);
     }
 
-    public Matcher<? super String> isAsApproved(String testname) {
-        String approved = readApproved(testname);
-        return  approved == null ? noApproval(testname) : (Matcher<? super String>)equalTo(approved);
-    }
-
-    private void writeApproved(String approved, String testname) throws IOException {
-        byte[] bytes = approved.getBytes();
+    private void writeApproved(Object approved, String testname) throws IOException {
+        byte[] bytes = approved.toString().getBytes();
         IO.writeBytes(fileFor(testname), bytes);
     }
 
@@ -57,10 +57,10 @@ public class ApprovalsRule extends TestWatchman {
                 null : new String(IO.readBytes(approvalFile));
     }
 
-    private static Matcher<? super String> noApproval(final String testname) {
-        return new TypeSafeDiagnosingMatcher<String>() {
+    private static <T> Matcher<T> noApproval(final String testname) {
+        return new TypeSafeDiagnosingMatcher<T>() {
             @Override
-            protected boolean matchesSafely(String s, Description description) {
+            protected boolean matchesSafely(T thing, Description description) {
                 description.appendText("No approved thing was found");
                 return false;
             }

@@ -13,10 +13,6 @@ public class ApprovalsRuleTest {
 
     @Rule public final ApprovalsRule approver = new ApprovalsRule();
 
-    @Test public void squirrels_away_the_test_name_for_us() {
-        assertEquals("squirrels_away_the_test_name_for_us", approver.testName());
-    }
-
     @Test public void doesnt_match_where_no_approved_result() {
         approver.forgetApproval();
         assertThat("banana", not(approver.isAsApproved()));
@@ -30,6 +26,10 @@ public class ApprovalsRuleTest {
     @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.approve("banana");
         assertThat("kumquat", not(approver.isAsApproved()));
+    }
+
+    @Test public void squirrels_away_the_test_name_for_us() {
+        assertEquals("squirrels_away_the_test_name_for_us", approver.testName());
     }
 
 }
