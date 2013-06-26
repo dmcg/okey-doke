@@ -103,4 +103,8 @@ public class ApprovalsRule extends TestWatchman {
             }
         };
     }
+
+    public File approvedFile() {
+        return fileFor(testName());
+    }
 }
