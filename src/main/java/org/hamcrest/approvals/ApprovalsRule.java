@@ -5,15 +5,13 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.approvals.internal.IO;
 import org.hamcrest.core.IsEqual;
-import org.junit.rules.TestWatchman;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestWatcher;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.Matchers.equalTo;
 
-public class ApprovalsRule extends TestWatchman {
+public class ApprovalsRule extends TestWatcher {
 
     private final String srcRoot;
     private final Object test;
@@ -26,12 +24,8 @@ public class ApprovalsRule extends TestWatchman {
     }
 
     @Override
-    public void starting(FrameworkMethod method) {
-        testName = method.getName();
-    }
-
-    public void forgetApproval() {
-        approvedFileFor(testName()).delete();
+    public void starting(org.junit.runner.Description description) {
+        testName = description.getMethodName();
     }
 
     public <T> Matcher<T> isAsApproved() {
