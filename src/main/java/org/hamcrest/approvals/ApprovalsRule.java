@@ -9,8 +9,6 @@ import org.junit.runners.model.FrameworkMethod;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -32,7 +30,7 @@ public class ApprovalsRule extends TestWatchman {
     }
 
     public void forgetApproval() {
-        fileFor(testName()).delete();
+        approvedFileFor(testName()).delete();
     }
 
     public <T> Matcher<T> isAsApproved() {
@@ -49,23 +47,46 @@ public class ApprovalsRule extends TestWatchman {
 
     private <T> Matcher <T> isAsApproved(String testname) {
         String approved = readApproved(testname);
-        return (Matcher<T>) (approved == null ? noApproval(testname) : equalTo(approved));
-    }
-
-    private File fileFor(String testname) {
-        return new File(new File(srcRoot, test.getClass().getPackage().getName().replaceAll("\\.", "/")), testname + ".approved");
+        return matches(approved);
     }
 
     private void writeApproved(Object approved, String testname) throws IOException {
         byte[] bytes = approved.toString().getBytes();
-        IO.writeBytes(fileFor(testname), bytes);
+        IO.writeBytes(approvedFileFor(testname), bytes);
     }
 
     private String readApproved(String testname) {
-        File approvalFile = fileFor(testname);
+        File approvalFile = approvedFileFor(testname);
         return !(approvalFile.exists() && approvalFile.isFile()) ?
                 null : new String(IO.readBytes(approvalFile));
     }
+
+    private <T> Matcher<T> matches(final Object approved) {
+        return new TypeSafeDiagnosingMatcher<T>() {
+            @Override
+            protected boolean matchesSafely(T thing, Description description) {
+                try {
+                    IO.writeBytes(actualFile(), thing.toString().getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                if (approved == null) {
+                    description.appendText("No approved thing was found");
+                    return false;
+                } else if (approved.equals(thing)) {
+                    return true;
+                } else {
+                    description.appendText("Expected :" + approved);
+                    description.appendText("Actual   :" + thing);
+                    return false;
+                }
+            }
+
+            public void describeTo(Description description) {
+            }
+        };
+    }
+
 
     private static <T> Matcher<T> noApproval(final String testname) {
         return new TypeSafeDiagnosingMatcher<T>() {
@@ -105,6 +126,23 @@ public class ApprovalsRule extends TestWatchman {
     }
 
     public File approvedFile() {
-        return fileFor(testName());
+        return approvedFileFor(testName());
     }
+
+    private File approvedFileFor(String testname) {
+        return fileFor(testname, ".approved");
+    }
+
+    public File actualFile() {
+        return actualFileFor(testName());
+    }
+
+    private File actualFileFor(String testname) {
+        return fileFor(testname, ".actual");
+    }
+
+    private File fileFor(String testname, String suffix) {
+        return new File(new File(srcRoot, test.getClass().getPackage().getName().replaceAll("\\.", "/")), testname + suffix);
+    }
+
 }

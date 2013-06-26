@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 public class ApprovalsRuleTest {
 
-    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("src/test/java", this), CleanDirectoryRule.AFTER_TOO);
+    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("src/test/java", this), false);
     @Rule public final ApprovalsRule approver = new ApprovalsRule("src/test/java", this);
 
     @Test public void doesnt_match_where_no_approved_result() {
@@ -54,15 +54,48 @@ public class ApprovalsRuleTest {
         Assert.assertThat("banana", approver.isAsApproved());
     }
 
-    @Test public void writes_approved_file_in_package() throws IOException {
+    @Test public void writes_files_in_package() throws IOException {
         assertEquals(
-                new File(dirForPackage("src/test/java", this), "writes_approved_file_in_package.approved"),
+                new File(dirForPackage("src/test/java", this), "writes_files_in_package.approved"),
                 approver.approvedFile());
+        assertEquals(
+                new File(dirForPackage("src/test/java", this), "writes_files_in_package.actual"),
+                approver.actualFile());
+    }
 
+    @Test public void files_lifecycle_when_approved() throws IOException {
         assertFalse(approver.approvedFile().exists());
+        assertFalse(approver.actualFile().exists());
 
-        approver.approve(this);
+        approver.approve("banana");
         assertTrue(approver.approvedFile().exists());
+        assertFalse(approver.actualFile().exists());
+
+        assertThat("banana", approver.isAsApproved());
+        assertTrue(approver.approvedFile().exists());
+        assertTrue(approver.actualFile().exists());
+    }
+
+    @Test public void files_lifecycle_when_not_approved() throws IOException {
+        assertFalse(approver.approvedFile().exists());
+        assertFalse(approver.actualFile().exists());
+
+        assertThat("banana", not(approver.isAsApproved()));
+        assertFalse(approver.approvedFile().exists());
+        assertTrue(approver.actualFile().exists());
+    }
+
+    @Test public void files_lifecycle_when_not_matching_approved() throws IOException {
+        assertFalse(approver.approvedFile().exists());
+        assertFalse(approver.actualFile().exists());
+
+        approver.approve("banana");
+        assertTrue(approver.approvedFile().exists());
+        assertFalse(approver.actualFile().exists());
+
+        assertThat("kumquat", not(approver.isAsApproved()));
+        assertTrue(approver.approvedFile().exists());
+        assertTrue(approver.actualFile().exists());
     }
 
 }
