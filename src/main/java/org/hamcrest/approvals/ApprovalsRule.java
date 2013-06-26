@@ -76,6 +76,12 @@ public class ApprovalsRule extends TestWatcher {
                 writeActual(thing, testname);
                 return super.matches(thing);
             }
+
+            @Override
+            public void describeMismatch(Object item, Description description) {
+                System.err.println(toApproveText());
+                super.describeMismatch(item, description);
+            }
         };
     }
 
@@ -84,7 +90,8 @@ public class ApprovalsRule extends TestWatcher {
             @Override
             protected boolean matchesSafely(T thing, Description description) {
                 writeActual(thing, testname);
-                description.appendText("No approved thing was found");
+                description.appendText("No approved thing was found.");
+                description.appendText(toApproveText());
                 return false;
             }
 
@@ -116,6 +123,10 @@ public class ApprovalsRule extends TestWatcher {
 
     private File fileFor(String testname, String suffix) {
         return new File(new File(srcRoot, test.getClass().getPackage().getName().replaceAll("\\.", "/")), testname + suffix);
+    }
+
+    private String toApproveText() {
+        return String.format("To approve...\ncp %s %s", actualFile(), approvedFile());
     }
 
 }
