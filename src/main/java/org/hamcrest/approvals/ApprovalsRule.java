@@ -3,6 +3,7 @@ package org.hamcrest.approvals;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.approvals.internal.ForceApprovalMatcher;
 import org.hamcrest.approvals.internal.IO;
 import org.hamcrest.core.IsEqual;
 import org.junit.rules.TestWatcher;
@@ -40,6 +41,18 @@ public class ApprovalsRule extends TestWatcher {
         return testName;
     }
 
+    public File approvedFile() {
+        return approvedFileFor(testName());
+    }
+
+    public <T> Matcher<T> FORCE_APPROVAL() {
+        return FORCE_APPROVAL(testName());
+    }
+
+    public <T> Matcher<T> FORCE_APPROVAL(final String testname) {
+        return new ForceApprovalMatcher<T>(this, testname);
+    }
+
     private <T> Matcher <T> isAsApproved(String testname) {
         String approved = readApproved(testname);
         return (Matcher<T>) (approved == null ? noApproval(testname) : matches(approved, testname));
@@ -63,18 +76,8 @@ public class ApprovalsRule extends TestWatcher {
                 writeActual(thing, testname);
                 return super.matches(thing);
             }
-
         };
     }
-
-    private <T> void writeActual(T thing, String testname) {
-        try {
-            IO.writeBytes(actualFileFor(testname), thing.toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private <T> Matcher<T> noApproval(final String testname) {
         return new TypeSafeDiagnosingMatcher<T>() {
@@ -91,31 +94,12 @@ public class ApprovalsRule extends TestWatcher {
         };
     }
 
-    public <T> Matcher<T> FORCE_APPROVAL() {
-        return FORCE_APPROVAL(testName());
-    }
-
-    public <T> Matcher<T> FORCE_APPROVAL(final String testname) {
-        return new TypeSafeDiagnosingMatcher<T>() {
-            @Override
-            protected boolean matchesSafely(T s, Description description) {
-                try {
-                    approve(s);
-                } catch (IOException e) {
-                    description.appendText("Couldn't force approval for ").appendValue(testname);
-                    return false;
-                }
-                return true;
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("FORCING APPROVAL OF ").appendValue(testName);
-            }
-        };
-    }
-
-    public File approvedFile() {
-        return approvedFileFor(testName());
+    private <T> void writeActual(T thing, String testname) {
+        try {
+            IO.writeBytes(actualFileFor(testname), thing.toString().getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private File approvedFileFor(String testname) {
