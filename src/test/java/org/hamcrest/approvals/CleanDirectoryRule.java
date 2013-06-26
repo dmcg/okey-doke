@@ -13,6 +13,10 @@ public class CleanDirectoryRule extends ExternalResource {
     private final File dir;
     private final boolean cleanAfterToo;
 
+    public CleanDirectoryRule(File dir) {
+        this(dir, false);
+    }
+
     public CleanDirectoryRule(File dir, boolean cleanAfterToo) {
         this.dir = dir;
         this.cleanAfterToo = cleanAfterToo;

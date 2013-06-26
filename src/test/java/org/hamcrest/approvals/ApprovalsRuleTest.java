@@ -16,7 +16,8 @@ import static org.junit.Assert.*;
 
 public class ApprovalsRuleTest {
 
-    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("src/test/java", this), false);
+    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("src/test/java", this));
+
     @Rule public final ApprovalsRule approver = new ApprovalsRule("src/test/java", this);
 
     @Test public void doesnt_match_where_no_approved_result() {
