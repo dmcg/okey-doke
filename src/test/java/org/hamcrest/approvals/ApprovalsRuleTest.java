@@ -1,6 +1,5 @@
 package org.hamcrest.approvals;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -8,7 +7,6 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.approvals.Approvals.*;
 import static org.junit.Assert.assertEquals;
 
 public class ApprovalsRuleTest {
@@ -19,13 +17,19 @@ public class ApprovalsRuleTest {
         assertEquals("squirrels_away_the_test_name_for_us", approver.testName());
     }
 
-    @Test public void acts_as_source_of_approval() throws IOException {
+    @Test public void doesnt_match_where_no_approved_result() {
         approver.forgetApproval();
-        assertThat("banana", not(approver.isApproved()));
+        assertThat("banana", not(approver.isAsApproved()));
+    }
 
+    @Test public void matches_when_approved_result_matches() throws IOException {
         approver.approve("banana");
-        assertThat("banana", approver.isApproved());
-        assertThat("kumquat", not(approver.isApproved()));
+        assertThat("banana", approver.isAsApproved());
+    }
+
+    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+        approver.approve("banana");
+        assertThat("kumquat", not(approver.isAsApproved()));
     }
 
 }
