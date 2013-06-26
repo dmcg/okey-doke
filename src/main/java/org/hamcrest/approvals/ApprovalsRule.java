@@ -71,4 +71,26 @@ public class ApprovalsRule extends TestWatchman {
         };
     }
 
+    public <T> Matcher<T> FORCE_APPROVAL() {
+        return FORCE_APPROVAL(testName());
+    }
+
+    public <T> Matcher<T> FORCE_APPROVAL(final String testname) {
+        return new TypeSafeDiagnosingMatcher<T>() {
+            @Override
+            protected boolean matchesSafely(T s, Description description) {
+                try {
+                    approve(s);
+                } catch (IOException e) {
+                    description.appendText("Couldn't force approval for ").appendValue(testname);
+                    return false;
+                }
+                return true;
+            }
+
+            public void describeTo(Description description) {
+                description.appendText("FORCING APPROVAL OF ").appendValue(testName);
+            }
+        };
+    }
 }
