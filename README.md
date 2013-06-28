@@ -2,7 +2,7 @@ hamcrest-approvals
 ==================
 
 Approval Testing for JUnit - like http://approvaltests.sourceforge.net/ but more Java'y
-and more the SimpleThingThatCouldPossiblyWork.
+and more the SimplestThingThatCouldPossiblyWork.
 
 There are two modes of operation, exemplified by
 
