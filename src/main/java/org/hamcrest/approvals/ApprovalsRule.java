@@ -6,27 +6,15 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.approvals.internal.ForceApprovalMatcher;
 import org.hamcrest.approvals.internal.IO;
 import org.hamcrest.core.IsEqual;
-import org.junit.rules.TestWatcher;
 
 import java.io.File;
 import java.io.IOException;
 
 
-public class ApprovalsRule extends TestWatcher {
-
-    private final String srcRoot;
-
-    private String testName;
-    private Class<?> testClass;
+public class ApprovalsRule extends TestRememberer {
 
     public ApprovalsRule(String srcRoot) {
-        this.srcRoot = srcRoot;
-    }
-
-    @Override
-    public void starting(org.junit.runner.Description description) {
-        testName = description.getDisplayName();
-        testClass = description.getTestClass();
+        super(srcRoot);
     }
 
     public <T> Matcher<T> isAsApproved() {
@@ -35,10 +23,6 @@ public class ApprovalsRule extends TestWatcher {
 
     public void approve(Object approved) throws IOException {
         writeApproved(approved, testName());
-    }
-
-    public String testName() {
-        return testName;
     }
 
     public File approvedFile() {
@@ -122,19 +106,11 @@ public class ApprovalsRule extends TestWatcher {
     }
 
     private File fileFor(String testname, String suffix) {
-        return new File(dirForPackage(srcRoot, testClass), testname + suffix);
+        return new File(dirForPackage(sourceRoot, testClass), testname + suffix);
     }
 
     private String toApproveText() {
         return String.format("\nTo approve...\ncp %s %s", actualFile(), approvedFile());
-    }
-
-    public static File dirForPackage(String srcRoot, Object o) {
-        return new File(new File(srcRoot), packageFor(o).getName().replaceAll("\\.", "/"));
-    }
-
-    private static Package packageFor(Object o) {
-        return (o instanceof Class) ? ((Class) o).getPackage() : o.getClass().getPackage();
     }
 
 

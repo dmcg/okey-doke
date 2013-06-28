@@ -1,6 +1,7 @@
 package org.hamcrest.approvals;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -9,13 +10,10 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleTest {
 
-    /*
-        NB IntelliJ seems to see this as a failure if the .approved file isn't there, but looses the output that tells you.
-        I think its a bug in their test reported for multiple theories, as one theory is fine.
-     */
+    // Note that this test is very simple because we can approve the output, and any tweaks we make to it
 
-    @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java");
-
+    @ClassRule public static final TheoryApprovalsRule theoryRule = new TheoryApprovalsRule("src/test/java");
+    @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
     @DataPoints
     public static String[] data() {
