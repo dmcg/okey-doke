@@ -26,7 +26,7 @@ public class ApprovalsRule extends TestWatcher {
 
     @Override
     public void starting(org.junit.runner.Description description) {
-        testName = description.getMethodName();
+        testName = description.getDisplayName();
     }
 
     public <T> Matcher<T> isAsApproved() {
@@ -122,11 +122,20 @@ public class ApprovalsRule extends TestWatcher {
     }
 
     private File fileFor(String testname, String suffix) {
-        return new File(new File(srcRoot, test.getClass().getPackage().getName().replaceAll("\\.", "/")), testname + suffix);
+        return new File(dirForPackage(srcRoot, test), testname + suffix);
     }
 
     private String toApproveText() {
-        return String.format("To approve...\ncp %s %s", actualFile(), approvedFile());
+        return String.format("\nTo approve...\ncp %s %s", actualFile(), approvedFile());
     }
+
+    public static File dirForPackage(String srcRoot, Object o) {
+        return new File(new File(srcRoot), packageFor(o).getName().replaceAll("\\.", "/"));
+    }
+
+    private static Package packageFor(Object o) {
+        return (o instanceof Class) ? ((Class) o).getPackage() : o.getClass().getPackage();
+    }
+
 
 }

@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExternalResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +15,9 @@ import static org.junit.Assert.*;
 
 public class ApprovalsRuleTest {
 
-    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("src/test/java", this));
+    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("target/approvals", this));
 
-    @Rule public final ApprovalsRule approver = new ApprovalsRule("src/test/java", this);
+    @Rule public final ApprovalsRule approver = new ApprovalsRule("target/approvals", this);
 
     @Test public void doesnt_match_where_no_approved_result() {
         assertThat("banana", not(approver.isAsApproved()));
@@ -64,10 +63,10 @@ public class ApprovalsRuleTest {
 
     @Test public void writes_files_in_package() throws IOException {
         assertEquals(
-                new File(dirForPackage("src/test/java", this), "writes_files_in_package.approved"),
+                new File(dirForPackage("target/approvals", this), "writes_files_in_package(org.hamcrest.approvals.ApprovalsRuleTest).approved"),
                 approver.approvedFile());
         assertEquals(
-                new File(dirForPackage("src/test/java", this), "writes_files_in_package.actual"),
+                new File(dirForPackage("target/approvals", this), "writes_files_in_package(org.hamcrest.approvals.ApprovalsRuleTest).actual"),
                 approver.actualFile());
     }
 

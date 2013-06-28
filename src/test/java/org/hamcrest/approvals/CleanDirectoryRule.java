@@ -1,6 +1,5 @@
 package org.hamcrest.approvals;
 
-import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 
 import java.io.File;
@@ -24,6 +23,7 @@ public class CleanDirectoryRule extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
+        dir.mkdirs();
         clean();
     }
 
@@ -45,6 +45,10 @@ public class CleanDirectoryRule extends ExternalResource {
     }
 
     public static File dirForPackage(String srcRoot, Object o) {
-        return new File(new File(srcRoot), o.getClass().getPackage().getName().replaceAll("\\.", "/"));
+        return new File(new File(srcRoot), packageFor(o).getName().replaceAll("\\.", "/"));
+    }
+
+    private static Package packageFor(Object o) {
+        return (o instanceof Class) ? ((Class) o).getPackage() : o.getClass().getPackage();
     }
 }

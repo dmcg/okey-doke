@@ -11,6 +11,7 @@ public class IO {
         RandomAccessFile raf = null;
         try {
             raf = new RandomAccessFile(file, "rw");
+            raf.setLength(0);
             raf.write(bytes);
         } finally {
             closeQuietly(raf);
