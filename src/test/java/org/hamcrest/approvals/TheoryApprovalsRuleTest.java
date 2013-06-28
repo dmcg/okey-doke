@@ -7,10 +7,11 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 @RunWith(Theories.class)
-public class MultipleTheoryApprovalsRuleTest {
+public class TheoryApprovalsRuleTest {
 
     /*
-        NB IntelliJ seems to see this as a failure if the .approved file isn't there, but looses the output that tells you
+        NB IntelliJ seems to see this as a failure if the .approved file isn't there, but looses the output that tells you.
+        I think its a bug in their test reported for multiple theories, as one theory is fine.
      */
 
     @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java");
