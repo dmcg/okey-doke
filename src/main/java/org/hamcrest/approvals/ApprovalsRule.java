@@ -15,18 +15,18 @@ import java.io.IOException;
 public class ApprovalsRule extends TestWatcher {
 
     private final String srcRoot;
-    private final Object test;
 
     private String testName;
+    private Class<?> testClass;
 
-    public ApprovalsRule(String srcRoot, Object test) {
+    public ApprovalsRule(String srcRoot) {
         this.srcRoot = srcRoot;
-        this.test = test;
     }
 
     @Override
     public void starting(org.junit.runner.Description description) {
         testName = description.getDisplayName();
+        testClass = description.getTestClass();
     }
 
     public <T> Matcher<T> isAsApproved() {
@@ -122,7 +122,7 @@ public class ApprovalsRule extends TestWatcher {
     }
 
     private File fileFor(String testname, String suffix) {
-        return new File(dirForPackage(srcRoot, test), testname + suffix);
+        return new File(dirForPackage(srcRoot, testClass), testname + suffix);
     }
 
     private String toApproveText() {

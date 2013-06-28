@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class SingleTheoryApprovalsRuleTest {
 
-    @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java", SingleTheoryApprovalsRuleTest.class);
+    @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java");
 
 
     @DataPoints

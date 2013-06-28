@@ -13,7 +13,7 @@ public class MultipleTheoryApprovalsRuleTest {
         NB IntelliJ seems to see this as a failure if the .approved file isn't there, but looses the output that tells you
      */
 
-    @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java", MultipleTheoryApprovalsRuleTest.class);
+    @ClassRule public static final TheoryApprovalsRule approver = new TheoryApprovalsRule("src/test/java");
 
 
     @DataPoints

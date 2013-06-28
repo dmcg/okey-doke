@@ -11,8 +11,8 @@ public class TheoryApprovalsRule extends ApprovalsRule {
 
     private List<Object[]> results = new ArrayList<Object[]>();
 
-    public TheoryApprovalsRule(String sourceRoot, Object test) {
-        super(sourceRoot, test);
+    public TheoryApprovalsRule(String sourceRoot) {
+        super(sourceRoot);
     }
 
     public void lockDown(Object result, Object... arguments) {
