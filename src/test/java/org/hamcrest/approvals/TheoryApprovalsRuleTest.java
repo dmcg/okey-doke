@@ -28,7 +28,7 @@ public class TheoryApprovalsRuleTest {
 
     @Theory
     public void string_length(String s) {
-        approver.lockDown(s.length(), s.length());
+        approver.lockDown(s.length(), s);
     }
 
 

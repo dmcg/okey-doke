@@ -1,6 +1,0 @@
-string_length(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [5] -> 5
-string_length(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [6] -> 6
-string_length(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [8] -> 8
-legacyMethod_output(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [apple, 5] -> apple5
-legacyMethod_output(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [banana, 6] -> banana6
-legacyMethod_output(org.hamcrest.approvals.TheoryApprovalsRuleTest) : [cucumber, 8] -> cucumber8

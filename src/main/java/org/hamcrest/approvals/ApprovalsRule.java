@@ -37,7 +37,7 @@ public class ApprovalsRule extends TestRememberer {
         return new ForceApprovalMatcher<T>(this, testname);
     }
 
-    private <T> Matcher <T> isAsApproved(String testname) {
+    public <T> Matcher <T> isAsApproved(String testname) {
         String approved = readApproved(testname);
         return (Matcher<T>) (approved == null ? noApproval(testname) : matches(approved, testname));
     }
@@ -63,7 +63,7 @@ public class ApprovalsRule extends TestRememberer {
 
             @Override
             public void describeMismatch(Object item, Description description) {
-                System.err.println(toApproveText());
+                System.err.println(toApproveText(testname));
                 super.describeMismatch(item, description);
             }
         };
@@ -75,7 +75,7 @@ public class ApprovalsRule extends TestRememberer {
             protected boolean matchesSafely(T thing, Description description) {
                 writeActual(thing, testname);
                 description.appendText("No approved thing was found.");
-                description.appendText(toApproveText());
+                description.appendText(toApproveText(testname));
                 return false;
             }
 
@@ -109,8 +109,8 @@ public class ApprovalsRule extends TestRememberer {
         return new File(dirForPackage(sourceRoot, testClass), testname + suffix);
     }
 
-    private String toApproveText() {
-        return String.format("\nTo approve...\ncp %s %s", actualFile(), approvedFile());
+    private String toApproveText(String testname) {
+        return String.format("\nTo approve...\ncp %s %s", actualFileFor(testname), approvedFileFor(testname));
     }
 
 
