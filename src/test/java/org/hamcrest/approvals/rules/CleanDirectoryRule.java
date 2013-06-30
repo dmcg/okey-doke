@@ -1,4 +1,4 @@
-package org.hamcrest.approvals;
+package org.hamcrest.approvals.rules;
 
 import org.junit.rules.ExternalResource;
 

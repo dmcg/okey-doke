@@ -1,5 +1,6 @@
 package org.hamcrest.approvals;
 
+import org.hamcrest.approvals.rules.CleanDirectoryRule;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.approvals.CleanDirectoryRule.dirForPackage;
+import static org.hamcrest.approvals.rules.CleanDirectoryRule.dirForPackage;
 import static org.junit.Assert.*;
 
 public class ApprovalsRuleTest {
