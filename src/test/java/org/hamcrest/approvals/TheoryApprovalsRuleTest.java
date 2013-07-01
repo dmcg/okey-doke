@@ -9,8 +9,6 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.fail;
-
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleTest {
 
@@ -26,6 +24,11 @@ public class TheoryApprovalsRuleTest {
     }
 
     @Theory
+    public void string_length(String s) {
+        approver.lockDown(s.length(), s);
+    }
+
+    @Theory
     public void legacyMethod_output(String s) {
         approver.lockDown(legacyMethod(s, s.length()), s, s.length());
     }
@@ -36,30 +39,30 @@ public class TheoryApprovalsRuleTest {
     }
 
     @Theory
-    public void legacyMethod_output_reflectively_wrong_parameter_types(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        try {
-            approver.lockDownReflectively(this, "legacyMethod", s.length(), s);
-            fail("expected exception");
-        } catch (IllegalArgumentException expected) {
-        }
+    public void legacyMethod_output_reflectively_overloaded(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        approver.lockDownReflectively(this, "legacyMethod", s);
     }
 
     @Theory
-    public void legacyMethod_output_reflectively_wrong_method_name(String s) throws InvocationTargetException, IllegalAccessException {
-        try {
-            approver.lockDownReflectively(this, "noSuchMethod", s, s.length());
-            fail("expected exception");
-        } catch (NoSuchMethodException expected) {
-        }
+    public void legacyMethod_output_reflectively_overloaded2(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        approver.lockDownReflectively(this, "legacyMethod", s, s);
     }
 
     @Theory
-    public void string_length(String s) {
-        approver.lockDown(s.length(), s);
+    public void can_pass_class_for_static_methods(String s) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        approver.lockDownReflectively(this.getClass(), "legacyMethod", s, s.length());
     }
 
-    public String legacyMethod(String s, int i) {
+    public static String legacyMethod(String s, int i) {
         return s + i;
+    }
+
+    public static String legacyMethod(String s1, Object s2) {
+        return s1 + s2;
+    }
+
+    public static String legacyMethod(String s) {
+        return s;
     }
 
 }

@@ -71,18 +71,41 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-            Method method = findMethodNamed(object, methodName);
-            Object result = method.invoke(object, arguments);
-            lockDown(result, arguments);
-        }
-
-        private Method findMethodNamed(Object object, String methodName) throws NoSuchMethodException {
-            Class<? extends Object> objectClass = object.getClass();
-            for (Method method : objectClass.getMethods()) {
-                if (method.getName().equals(methodName))
-                    return method;
+            List<Method> methods = findMethods(classFor(object), methodName, arguments);
+            for (Method method : methods) {
+                try {
+                    Object result = method.invoke(object, arguments);
+                    lockDown(result, arguments);
+                    return;
+                } catch (IllegalArgumentException wrongArguments) {
+                    // ho hum, try the next
+                }
             }
             throw new NoSuchMethodException(methodName);
+        }
+
+        private Class<? extends Object> classFor(Object object) {
+            return object instanceof Class ? (Class<? extends Object>) object : object.getClass();
+        }
+
+        List<Method> findMethods(Class<? extends Object> objectClass, String methodName, Object... arguments) {
+            List<Method> result = new ArrayList<Method>(2);
+
+            for (Method method : objectClass.getMethods()) {
+                if (methodMatches(method, methodName, arguments))
+                    result.add(method);
+            }
+            return result;
+        }
+
+        private boolean methodMatches(Method method, String methodName, Object[] arguments) {
+            if (!method.getName().equals(methodName))
+                return false;
+            return areCompatible(method.getParameterTypes(), arguments);
+        }
+
+        private boolean areCompatible(Class[] parameterTypes, Object[] arguments) {
+            return parameterTypes.length == arguments.length;
         }
 
 
