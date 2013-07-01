@@ -10,5 +10,6 @@ There are two modes of operation, exemplified by
 2. TheoryApprovalsRule - do the same thing for all combinations of JUnit @Data and @Theory
 
 three modes of operation, including such diverse elements as
+
 3. QuickCheckTest - for easy testing of legacy code.
 
