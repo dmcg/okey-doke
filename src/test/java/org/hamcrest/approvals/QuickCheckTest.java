@@ -1,26 +1,20 @@
 package org.hamcrest.approvals;
 
 import com.pholser.junit.quickcheck.ForAll;
-import com.pholser.junit.quickcheck.generator.InRange;
+import com.pholser.junit.quickcheck.generator.ValuesOf;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-@Ignore("WIP")
 @RunWith(org.junit.contrib.theories.Theories.class)
 public class QuickCheckTest {
-
-    /*
-      This seems like a good idea, but junit-quickcheck generators aren't stable
-     */
 
     @ClassRule public static final TheoryApprovalsRule theoryRule = new TheoryApprovalsRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
     @org.junit.contrib.theories.Theory
-    public void legacyMethod_output(@ForAll(sampleSize = 3) Strings s, @ForAll(sampleSize = 3) @InRange(minInt = 0, maxInt = 2) int i, @ForAll(sampleSize = 2) boolean b) {
-        approver.lockDown(legacyMethod(s.name(), i, b), s.name(), i, b);
+    public void legacyMethod_output(@ForAll @ValuesOf Strings s, @ForAll @ValuesOf Ints  i, @ForAll @ValuesOf boolean b) {
+        approver.lockDown(legacyMethod(s.name(), i.value, b), s.name(), i.value, b);
     }
 
 
@@ -29,6 +23,16 @@ public class QuickCheckTest {
     }
 
     public static enum Strings {
-        apple, banana, kumquat
+        apple, banana, kumquat;
+    }
+
+    public static enum Ints {
+        minus_one(-1), zero(0), one(1), two(2), forty_two(42);
+
+        public  final int value;
+
+        Ints(int value) {
+            this.value = value;
+        }
     }
 }
