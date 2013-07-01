@@ -7,6 +7,10 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.Assert.fail;
+
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleTest {
 
@@ -27,10 +31,32 @@ public class TheoryApprovalsRuleTest {
     }
 
     @Theory
+    public void legacyMethod_output_reflectively(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        approver.lockDownReflectively(this, "legacyMethod", s, s.length());
+    }
+
+    @Theory
+    public void legacyMethod_output_reflectively_wrong_parameter_types(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        try {
+            approver.lockDownReflectively(this, "legacyMethod", s.length(), s);
+            fail("expected exception");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Theory
+    public void legacyMethod_output_reflectively_wrong_method_name(String s) throws InvocationTargetException, IllegalAccessException {
+        try {
+            approver.lockDownReflectively(this, "noSuchMethod", s, s.length());
+            fail("expected exception");
+        } catch (NoSuchMethodException expected) {
+        }
+    }
+
+    @Theory
     public void string_length(String s) {
         approver.lockDown(s.length(), s);
     }
-
 
     public String legacyMethod(String s, int i) {
         return s + i;

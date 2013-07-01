@@ -2,6 +2,8 @@ package org.hamcrest.approvals;
 
 import org.junit.runner.Description;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,22 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         public void lockDown(Object result, Object... arguments) {
             results.get(theory).append(formatted(result, arguments));
         }
+
+        public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+            Method method = findMethodNamed(object, methodName);
+            Object result = method.invoke(object, arguments);
+            lockDown(result, arguments);
+        }
+
+        private Method findMethodNamed(Object object, String methodName) throws NoSuchMethodException {
+            Class<? extends Object> objectClass = object.getClass();
+            for (Method method : objectClass.getMethods()) {
+                if (method.getName().equals(methodName))
+                    return method;
+            }
+            throw new NoSuchMethodException(methodName);
+        }
+
 
         private String formatted(Object result, Object[] parameters) {
             StringBuilder myResult = new StringBuilder();
