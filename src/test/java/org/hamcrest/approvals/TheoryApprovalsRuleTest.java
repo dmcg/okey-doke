@@ -17,11 +17,7 @@ public class TheoryApprovalsRuleTest {
     @ClassRule public static final TheoryApprovalsRule theoryRule = new TheoryApprovalsRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
-    @DataPoints
-    public static String[] data() {
-        return new String[] {
-                "apple", "banana", "cucumber" };
-    }
+    @DataPoints public static final String[] FRUITS = { "apple", "banana", "cucumber" };
 
     @Theory
     public void string_length(String s) {

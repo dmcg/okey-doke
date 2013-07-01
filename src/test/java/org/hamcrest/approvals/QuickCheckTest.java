@@ -1,39 +1,38 @@
 package org.hamcrest.approvals;
 
-import com.pholser.junit.quickcheck.ForAll;
-import com.pholser.junit.quickcheck.generator.ValuesOf;
 import org.junit.ClassRule;
 import org.junit.Rule;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.InvocationTargetException;
 
-@RunWith(org.junit.contrib.theories.Theories.class)
+@RunWith(Theories.class)
 public class QuickCheckTest {
 
     @ClassRule public static final TheoryApprovalsRule theoryRule = new TheoryApprovalsRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
-    @org.junit.contrib.theories.Theory
-    public void legacyMethod_output(@ForAll @ValuesOf Strings s, @ForAll @ValuesOf Ints  i, @ForAll @ValuesOf boolean b) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        approver.lockDownReflectively(this, "legacyMethod", s.name(), i.value, b);
+    @DataPoints public static final Fruit[] FRUITs = Fruit.values();
+    @DataPoints public static final Animal[] ANIMALS = Animal.values();
+    @DataPoints public static final int[] INTS = { -1, 0, 1, 2, 42 };
+
+    @Theory
+    public void legacyMethod_output(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        approver.lockDownReflectively(this, "legacyMethod", fruit.name(), animal.name(), i);
     }
 
-    public String legacyMethod(String s, int i, boolean b) {
-        return s + i + b;
+    public String legacyMethod(String fruitName, String animalName, int i) {
+        return String.format("%s %s eating %ss", i, fruitName, animalName);
     }
 
-    public static enum Strings {
+    private static enum Fruit {
         apple, banana, kumquat;
     }
 
-    public static enum Ints {
-        minus_one(-1), zero(0), one(1), two(2), forty_two(42);
-
-        public  final int value;
-
-        Ints(int value) {
-            this.value = value;
-        }
+    private static enum Animal {
+        bear, cat, dog;
     }
 }

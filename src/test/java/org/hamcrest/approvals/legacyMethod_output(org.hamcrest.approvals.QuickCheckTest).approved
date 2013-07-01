@@ -1,30 +1,45 @@
-[apple, -1, false] -> apple-1false
-[apple, -1, true] -> apple-1true
-[apple, 0, false] -> apple0false
-[apple, 0, true] -> apple0true
-[apple, 1, false] -> apple1false
-[apple, 1, true] -> apple1true
-[apple, 2, false] -> apple2false
-[apple, 2, true] -> apple2true
-[apple, 42, false] -> apple42false
-[apple, 42, true] -> apple42true
-[banana, -1, false] -> banana-1false
-[banana, -1, true] -> banana-1true
-[banana, 0, false] -> banana0false
-[banana, 0, true] -> banana0true
-[banana, 1, false] -> banana1false
-[banana, 1, true] -> banana1true
-[banana, 2, false] -> banana2false
-[banana, 2, true] -> banana2true
-[banana, 42, false] -> banana42false
-[banana, 42, true] -> banana42true
-[kumquat, -1, false] -> kumquat-1false
-[kumquat, -1, true] -> kumquat-1true
-[kumquat, 0, false] -> kumquat0false
-[kumquat, 0, true] -> kumquat0true
-[kumquat, 1, false] -> kumquat1false
-[kumquat, 1, true] -> kumquat1true
-[kumquat, 2, false] -> kumquat2false
-[kumquat, 2, true] -> kumquat2true
-[kumquat, 42, false] -> kumquat42false
-[kumquat, 42, true] -> kumquat42true
+[apple, bear, -1] -> -1 apple eating bears
+[apple, bear, 0] -> 0 apple eating bears
+[apple, bear, 1] -> 1 apple eating bears
+[apple, bear, 2] -> 2 apple eating bears
+[apple, bear, 42] -> 42 apple eating bears
+[apple, cat, -1] -> -1 apple eating cats
+[apple, cat, 0] -> 0 apple eating cats
+[apple, cat, 1] -> 1 apple eating cats
+[apple, cat, 2] -> 2 apple eating cats
+[apple, cat, 42] -> 42 apple eating cats
+[apple, dog, -1] -> -1 apple eating dogs
+[apple, dog, 0] -> 0 apple eating dogs
+[apple, dog, 1] -> 1 apple eating dogs
+[apple, dog, 2] -> 2 apple eating dogs
+[apple, dog, 42] -> 42 apple eating dogs
+[banana, bear, -1] -> -1 banana eating bears
+[banana, bear, 0] -> 0 banana eating bears
+[banana, bear, 1] -> 1 banana eating bears
+[banana, bear, 2] -> 2 banana eating bears
+[banana, bear, 42] -> 42 banana eating bears
+[banana, cat, -1] -> -1 banana eating cats
+[banana, cat, 0] -> 0 banana eating cats
+[banana, cat, 1] -> 1 banana eating cats
+[banana, cat, 2] -> 2 banana eating cats
+[banana, cat, 42] -> 42 banana eating cats
+[banana, dog, -1] -> -1 banana eating dogs
+[banana, dog, 0] -> 0 banana eating dogs
+[banana, dog, 1] -> 1 banana eating dogs
+[banana, dog, 2] -> 2 banana eating dogs
+[banana, dog, 42] -> 42 banana eating dogs
+[kumquat, bear, -1] -> -1 kumquat eating bears
+[kumquat, bear, 0] -> 0 kumquat eating bears
+[kumquat, bear, 1] -> 1 kumquat eating bears
+[kumquat, bear, 2] -> 2 kumquat eating bears
+[kumquat, bear, 42] -> 42 kumquat eating bears
+[kumquat, cat, -1] -> -1 kumquat eating cats
+[kumquat, cat, 0] -> 0 kumquat eating cats
+[kumquat, cat, 1] -> 1 kumquat eating cats
+[kumquat, cat, 2] -> 2 kumquat eating cats
+[kumquat, cat, 42] -> 42 kumquat eating cats
+[kumquat, dog, -1] -> -1 kumquat eating dogs
+[kumquat, dog, 0] -> 0 kumquat eating dogs
+[kumquat, dog, 1] -> 1 kumquat eating dogs
+[kumquat, dog, 2] -> 2 kumquat eating dogs
+[kumquat, dog, 42] -> 42 kumquat eating dogs
