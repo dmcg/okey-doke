@@ -1,8 +1,8 @@
 package org.hamcrest.approvals;
 
+import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class TheoryApprovalsRule extends ApprovalsRule {
     }
 
     public TheoryApprover approver() {
-        return new TheoryApprover(sourceRoot);
+        return new TheoryApprover();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         List<Throwable> errors = new ArrayList<Throwable>();
         for (Map.Entry<Description, StringBuilder> entry : results.entrySet()) {
             String actual = entry.getValue().toString();
-            String testName = testNameFor(entry.getKey());
+            String testName = Naming.testNameFor(entry.getKey());
             try {
                 assertApproved(actual, testName);
             } catch (Throwable t) {
@@ -49,13 +49,9 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         else throw new RuntimeException(t);
     }
 
-    public class TheoryApprover extends TestRememberer {
+    public class TheoryApprover extends TestWatcher {
 
         private Description theory;
-
-        public TheoryApprover(File sourceRoot) {
-            super(sourceRoot);
-        }
 
         @Override
         public void starting(Description description) {
@@ -106,7 +102,6 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         private boolean areCompatible(Class[] parameterTypes, Object[] arguments) {
             return parameterTypes.length == arguments.length;
         }
-
 
         private String formatted(Object result, Object[] parameters) {
             StringBuilder myResult = new StringBuilder();

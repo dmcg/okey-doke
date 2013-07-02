@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.approvals.rules.CleanDirectoryRule.dirForPackage;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ApprovalsRuleTest {
 
@@ -58,42 +59,4 @@ public class ApprovalsRuleTest {
                 approver.actualFile());
     }
 
-    @Test public void files_lifecycle_when_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
-
-        approver.approve("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
-
-        approver.assertApproved("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
-    }
-
-    @Test public void files_lifecycle_when_not_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
-
-        try {
-            approver.assertApproved("banana");
-        } catch (AssertionError expected) {}
-        assertFalse(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
-    }
-
-    @Test public void files_lifecycle_when_not_matching_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
-
-        approver.approve("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
-
-        try {
-            approver.assertApproved("kumquat");
-        } catch (AssertionError expected) {}
-        assertTrue(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
-    }
 }
