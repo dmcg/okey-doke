@@ -1,7 +1,7 @@
 package org.hamcrest.approvals;
 
 import org.hamcrest.approvals.rules.CleanDirectoryRule;
-import org.junit.Assert;
+import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,45 +21,34 @@ public class ApprovalsRuleTest {
     @Rule public final ApprovalsRule approver = new ApprovalsRule("target/approvals");
 
     @Test public void doesnt_match_where_no_approved_result() {
-        assertThat("banana", not(approver.isAsApproved()));
+        try {
+            approver.assertApproved("banana");
+            fail();
+        } catch (AssertionError expected) {}
     }
 
     @Test public void matches_when_approved_result_matches() throws IOException {
         approver.approve("banana");
-        assertThat("banana", approver.isAsApproved());
+        approver.assertApproved("banana");
     }
 
     @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.approve("banana");
-        assertThat("kumquat", not(approver.isAsApproved()));
+        try {
+            approver.assertApproved("kumquat");
+            fail();
+        } catch (ComparisonFailure expected) {}
     }
 
-    @Test public void look_at_the_nice_messages_from_hamcrest() throws IOException {
-        try {
-            Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
-            fail("Unexpected non-assertion");
-        } catch (AssertionError expected) {
-            System.out.println(expected);
-        }
-
-        approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
-        try {
-            Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
-            fail("Unexpected non-assertion");
-        } catch (AssertionError expected) {
-            System.out.println(expected);
-        }
+    @Ignore("Unignore to see no approval in IDE")
+    @Test public void see_how_my_IDE_reports_no_approval() throws IOException {
+        approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 
     @Ignore("Unignore to see failure report in IDE")
     @Test public void see_how_my_IDE_reports_diffs() throws IOException {
         approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
-        Assert.assertThat("Deliberate failure - Jackdaws peck my big sphincter of quartz", approver.isAsApproved());
-    }
-
-    @Test public void can_force_approval_by_editing_the_matcher() throws IOException {
-        Assert.assertThat("banana", approver.FORCE_APPROVAL());
-        Assert.assertThat("banana", approver.isAsApproved());
+        approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 
     @Test public void writes_files_in_package() throws IOException {
@@ -105,5 +94,4 @@ public class ApprovalsRuleTest {
         assertTrue(approver.approvedFile().exists());
         assertTrue(approver.actualFile().exists());
     }
-
 }

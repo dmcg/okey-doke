@@ -31,7 +31,7 @@ public class TheoryApprovalsRule extends ApprovalsRule {
             String actual = entry.getValue().toString();
             String testName = entry.getKey().getDisplayName();
             try {
-                assertThat(actual, isAsApproved(testName));
+                assertThat(actual, Matchers.isAsApproved(this, testName));
             } catch (Throwable t) {
                 errors.add(t);
             }

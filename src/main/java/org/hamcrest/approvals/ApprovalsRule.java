@@ -1,14 +1,13 @@
 package org.hamcrest.approvals;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.approvals.internal.ForceApprovalMatcher;
 import org.hamcrest.approvals.internal.IO;
-import org.hamcrest.core.IsEqual;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class ApprovalsRule extends TestRememberer {
@@ -17,8 +16,32 @@ public class ApprovalsRule extends TestRememberer {
         super(srcRoot);
     }
 
+    public void assertApproved(String actual) {
+        assertApproved(actual, testName());
+    }
+
+    public void assertApproved(String actual, String testname) {
+        writeActual(actual, testname);
+        String approved = readApproved(testName());
+        if (approved == null) {
+            throw new AssertionError("No approved thing was found.\n" + toApproveText(testname));
+        } else {
+            try {
+                assertEquals(approved, actual);
+                return;
+            } catch (AssertionError e) {
+                System.err.println(toApproveText(testname));
+                throw e;
+            }
+        }
+    }
+
     public <T> Matcher<T> isAsApproved() {
         return isAsApproved(testName());
+    }
+
+    public <T> Matcher<T> isAsApproved(String testname) {
+        return Matchers.isAsApproved(this, testname);
     }
 
     public void approve(Object approved) throws IOException {
@@ -37,57 +60,20 @@ public class ApprovalsRule extends TestRememberer {
         return new ForceApprovalMatcher<T>(this, testname);
     }
 
-    public <T> Matcher <T> isAsApproved(String testname) {
-        String approved = readApproved(testname);
-        return (Matcher<T>) (approved == null ? noApproval(testname) : matches(approved, testname));
-    }
-
     private void writeApproved(Object approved, String testname) throws IOException {
         byte[] bytes = approved.toString().getBytes();
         IO.writeBytes(approvedFileFor(testname), bytes);
     }
 
-    private String readApproved(String testname) {
+    String readApproved(String testname) {
         File approvalFile = approvedFileFor(testname);
         return !(approvalFile.exists() && approvalFile.isFile()) ?
                 null : new String(IO.readBytes(approvalFile));
     }
 
-    private <T> Matcher<T> matches(final T approved, final String testname) {
-        return new IsEqual<T>(approved) {
-            @Override
-            public boolean matches(Object thing) {
-                writeActual(thing, testname);
-                return super.matches(thing);
-            }
-
-            @Override
-            public void describeMismatch(Object item, Description description) {
-                System.err.println(toApproveText(testname));
-                super.describeMismatch(item, description);
-            }
-        };
-    }
-
-    private <T> Matcher<T> noApproval(final String testname) {
-        return new TypeSafeDiagnosingMatcher<T>() {
-            @Override
-            protected boolean matchesSafely(T thing, Description description) {
-                writeActual(thing, testname);
-                description.appendText("No approved thing was found.");
-                description.appendText(toApproveText(testname));
-                return false;
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("An approved thing for ").appendValue(testname);
-            }
-        };
-    }
-
-    private <T> void writeActual(T thing, String testname) {
+    <T> void writeActual(T actual, String testname) {
         try {
-            IO.writeBytes(actualFileFor(testname), thing.toString().getBytes());
+            IO.writeBytes(actualFileFor(testname), actual.toString().getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -109,7 +95,7 @@ public class ApprovalsRule extends TestRememberer {
         return new File(dirForPackage(sourceRoot, testClass), testname + suffix);
     }
 
-    private String toApproveText(String testname) {
+    String toApproveText(String testname) {
         return String.format("\nTo approve...\ncp %s %s", actualFileFor(testname), approvedFileFor(testname));
     }
 
