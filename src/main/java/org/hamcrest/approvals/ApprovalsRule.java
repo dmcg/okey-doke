@@ -1,7 +1,5 @@
 package org.hamcrest.approvals;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.approvals.internal.ForceApprovalMatcher;
 import org.hamcrest.approvals.internal.IO;
 
 import java.io.File;
@@ -36,28 +34,12 @@ public class ApprovalsRule extends TestRememberer {
         }
     }
 
-    public <T> Matcher<T> isAsApproved() {
-        return isAsApproved(testName());
-    }
-
-    public <T> Matcher<T> isAsApproved(String testname) {
-        return Matchers.isAsApproved(this, testname);
-    }
-
     public void approve(Object approved) throws IOException {
         writeApproved(approved, testName());
     }
 
     public File approvedFile() {
         return approvedFileFor(testName());
-    }
-
-    public <T> Matcher<T> FORCE_APPROVAL() {
-        return FORCE_APPROVAL(testName());
-    }
-
-    public <T> Matcher<T> FORCE_APPROVAL(final String testname) {
-        return new ForceApprovalMatcher<T>(this, testname);
     }
 
     private void writeApproved(Object approved, String testname) throws IOException {

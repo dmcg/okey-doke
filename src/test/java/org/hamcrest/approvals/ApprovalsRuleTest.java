@@ -9,8 +9,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.approvals.rules.CleanDirectoryRule.dirForPackage;
 import static org.junit.Assert.*;
 
@@ -68,7 +66,7 @@ public class ApprovalsRuleTest {
         assertTrue(approver.approvedFile().exists());
         assertFalse(approver.actualFile().exists());
 
-        assertThat("banana", approver.isAsApproved());
+        approver.assertApproved("banana");
         assertTrue(approver.approvedFile().exists());
         assertTrue(approver.actualFile().exists());
     }
@@ -77,7 +75,9 @@ public class ApprovalsRuleTest {
         assertFalse(approver.approvedFile().exists());
         assertFalse(approver.actualFile().exists());
 
-        assertThat("banana", not(approver.isAsApproved()));
+        try {
+            approver.assertApproved("banana");
+        } catch (AssertionError expected) {}
         assertFalse(approver.approvedFile().exists());
         assertTrue(approver.actualFile().exists());
     }
@@ -90,7 +90,9 @@ public class ApprovalsRuleTest {
         assertTrue(approver.approvedFile().exists());
         assertFalse(approver.actualFile().exists());
 
-        assertThat("kumquat", not(approver.isAsApproved()));
+        try {
+            approver.assertApproved("kumquat");
+        } catch (AssertionError expected) {}
         assertTrue(approver.approvedFile().exists());
         assertTrue(approver.actualFile().exists());
     }
