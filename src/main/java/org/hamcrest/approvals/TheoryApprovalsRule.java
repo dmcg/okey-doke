@@ -2,6 +2,7 @@ package org.hamcrest.approvals;
 
 import org.junit.runner.Description;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class TheoryApprovalsRule extends ApprovalsRule {
 
         private Description theory;
 
-        public TheoryApprover(String sourceRoot) {
+        public TheoryApprover(File sourceRoot) {
             super(sourceRoot);
         }
 

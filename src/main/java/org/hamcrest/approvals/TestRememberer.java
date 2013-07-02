@@ -7,17 +7,17 @@ import java.io.File;
 
 public class TestRememberer extends TestWatcher {
 
-    protected final String sourceRoot;
+    protected final File sourceRoot;
 
     protected String testName;
     protected Class<?> testClass;
 
-    public TestRememberer(String sourceRoot) {
+    public TestRememberer(File sourceRoot) {
         this.sourceRoot = sourceRoot;
     }
 
-    public static File dirForPackage(String srcRoot, Object o) {
-        return new File(new File(srcRoot), packageFor(o).getName().replaceAll("\\.", "/"));
+    public static File dirForPackage(File srcRoot, Object o) {
+        return new File(srcRoot, packageFor(o).getName().replaceAll("\\.", "/"));
     }
 
     private static Package packageFor(Object o) {

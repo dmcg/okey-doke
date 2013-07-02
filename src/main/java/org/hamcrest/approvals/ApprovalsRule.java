@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class ApprovalsRule extends TestRememberer {
 
     public ApprovalsRule(String srcRoot) {
-        super(srcRoot);
+        super(new File(srcRoot));
     }
 
     public void assertApproved(String actual) {
