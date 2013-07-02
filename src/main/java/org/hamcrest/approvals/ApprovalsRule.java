@@ -22,7 +22,7 @@ public class ApprovalsRule extends TestRememberer {
 
     public void assertApproved(String actual, String testname) {
         writeActual(actual, testname);
-        String approved = readApproved(testName());
+        String approved = readApproved(testname);
         if (approved == null) {
             throw new AssertionError("No approved thing was found.\n" + toApproveText(testname));
         } else {

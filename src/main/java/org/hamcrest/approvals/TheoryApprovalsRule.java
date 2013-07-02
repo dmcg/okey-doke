@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 
 public class TheoryApprovalsRule extends ApprovalsRule {
 
@@ -29,9 +27,9 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         List<Throwable> errors = new ArrayList<Throwable>();
         for (Map.Entry<Description, StringBuilder> entry : results.entrySet()) {
             String actual = entry.getValue().toString();
-            String testName = entry.getKey().getDisplayName();
+            String testName = testNameFor(entry.getKey());
             try {
-                assertThat(actual, Matchers.isAsApproved(this, testName));
+                assertApproved(actual, testName);
             } catch (Throwable t) {
                 errors.add(t);
             }

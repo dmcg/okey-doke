@@ -53,10 +53,10 @@ public class ApprovalsRuleTest {
 
     @Test public void writes_files_in_package() throws IOException {
         assertEquals(
-                new File(dirForPackage("target/approvals", this), "writes_files_in_package(org.hamcrest.approvals.ApprovalsRuleTest).approved"),
+                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.approved"),
                 approver.approvedFile());
         assertEquals(
-                new File(dirForPackage("target/approvals", this), "writes_files_in_package(org.hamcrest.approvals.ApprovalsRuleTest).actual"),
+                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.actual"),
                 approver.actualFile());
     }
 
