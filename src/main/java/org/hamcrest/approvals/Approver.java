@@ -7,15 +7,17 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+public class Approver {
+    private final File directory;
+    private final String testName;
 
-public class ApprovalsRule extends TestRememberer {
-
-    public ApprovalsRule(String srcRoot) {
-        super(srcRoot);
+    public Approver(File directory, String testName) {
+        this.directory = directory;
+        this.testName = testName;
     }
 
     public void assertApproved(String actual) {
-        assertApproved(actual, testName());
+        assertApproved(actual, testName);
     }
 
     public void assertApproved(String actual, String testname) {
@@ -35,11 +37,11 @@ public class ApprovalsRule extends TestRememberer {
     }
 
     public void approve(Object approved) throws IOException {
-        writeApproved(approved, testName());
+        writeApproved(approved, testName);
     }
 
     public File approvedFile() {
-        return approvedFileFor(testName());
+        return approvedFileFor(testName);
     }
 
     private void writeApproved(Object approved, String testname) throws IOException {
@@ -66,7 +68,7 @@ public class ApprovalsRule extends TestRememberer {
     }
 
     public File actualFile() {
-        return actualFileFor(testName());
+        return actualFileFor(testName);
     }
 
     private File actualFileFor(String testname) {
@@ -74,12 +76,10 @@ public class ApprovalsRule extends TestRememberer {
     }
 
     private File fileFor(String testname, String suffix) {
-        return new File(dirForPackage(sourceRoot, testClass), testname + suffix);
+        return new File(directory, testname + suffix);
     }
 
     String toApproveText(String testname) {
         return String.format("\nTo approve...\ncp %s %s", actualFileFor(testname), approvedFileFor(testname));
     }
-
-
 }
