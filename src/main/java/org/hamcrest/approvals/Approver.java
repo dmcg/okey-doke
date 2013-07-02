@@ -15,8 +15,8 @@ public class Approver {
         this.sourceOfApproval = sourceOfApproval;
     }
 
-    public Approver(String testName, File sourceRoot) {
-        this(testName, new FileSystemSourceOfApproval(sourceRoot));
+    public Approver(String testName, File sourceRoot, Class<?> test) {
+        this(testName, new FileSystemSourceOfApproval(sourceRoot, test.getPackage()));
     }
 
     public void assertApproved(String actual) {

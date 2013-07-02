@@ -13,6 +13,14 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this.directory = directory;
     }
 
+    public FileSystemSourceOfApproval(File root, Package packege) {
+        this(dirForPackage(root, packege));
+    }
+
+    private static File dirForPackage(File root, Package packege) {
+        return new File(root, packege.getName().replaceAll("\\.", "/"));
+    }
+
     @Override
     public void writeApproved(String testname, byte[] bytes) throws IOException {
         IO.writeBytes(approvedFileFor(testname), bytes);

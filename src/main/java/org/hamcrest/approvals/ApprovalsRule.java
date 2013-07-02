@@ -20,8 +20,8 @@ public class ApprovalsRule extends TestWatcher {
     protected void starting(Description description) {
         approver = new Approver(
                 Naming.testNameFor(description),
-                Naming.dirForPackage(sourceRoot, description.getTestClass())
-        );
+                sourceRoot,
+                description.getTestClass());
     }
 
     public void assertApproved(String actual) {
