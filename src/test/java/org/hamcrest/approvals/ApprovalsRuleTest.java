@@ -6,11 +6,9 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.approvals.rules.CleanDirectoryRule.dirForPackage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class ApprovalsRuleTest {
@@ -50,13 +48,13 @@ public class ApprovalsRuleTest {
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 
-    @Test public void writes_files_in_package() throws IOException {
-        assertEquals(
-                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.approved"),
-                approver.approvedFile());
-        assertEquals(
-                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.actual"),
-                approver.actualFile());
-    }
+//    @Test public void writes_files_in_package() throws IOException {
+//        assertEquals(
+//                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.approved"),
+//                approver.approvedFile());
+//        assertEquals(
+//                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.actual"),
+//                approver.actualFile());
+//    }
 
 }

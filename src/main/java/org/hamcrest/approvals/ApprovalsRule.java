@@ -18,8 +18,10 @@ public class ApprovalsRule extends TestWatcher {
 
     @Override
     protected void starting(Description description) {
-        approver = new Approver(Naming.dirForPackage(sourceRoot, description.getTestClass()),
-                Naming.testNameFor(description));
+        approver = new Approver(
+                Naming.testNameFor(description),
+                Naming.dirForPackage(sourceRoot, description.getTestClass())
+        );
     }
 
     public void assertApproved(String actual) {
@@ -33,13 +35,4 @@ public class ApprovalsRule extends TestWatcher {
     public void approve(Object approved) throws IOException {
         approver.approve(approved);
     }
-
-    public File approvedFile() {
-        return approver.approvedFile();
-    }
-
-    public File actualFile() {
-        return approver.actualFile();
-    }
-
 }

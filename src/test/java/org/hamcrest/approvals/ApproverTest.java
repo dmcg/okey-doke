@@ -14,7 +14,8 @@ public class ApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
 
-    private final Approver approver = new Approver(new File("target/approvals"), "testname");
+    private final FileSystemSourceOfApproval sourceOfApproval = new FileSystemSourceOfApproval(new File("target/approvals"));
+    private final Approver approver = new Approver("testname", sourceOfApproval);
 
     @Test public void doesnt_match_where_no_approved_result() {
         try {
@@ -36,51 +37,42 @@ public class ApproverTest {
         } catch (ComparisonFailure expected) {}
     }
 
-    @Test public void writes_files_in_package() throws IOException {
-        assertEquals(
-                new File("target/approvals", "testname.approved"),
-                approver.approvedFile());
-        assertEquals(
-                new File("target/approvals", "testname.actual"),
-                approver.actualFile());
-    }
-
     @Test public void files_lifecycle_when_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
+        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
 
         approver.approve("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
+        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
 
         approver.assertApproved("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
+        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 
     @Test public void files_lifecycle_when_not_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
+        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
 
         try {
             approver.assertApproved("banana");
         } catch (AssertionError expected) {}
-        assertFalse(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
+        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 
     @Test public void files_lifecycle_when_not_matching_approved() throws IOException {
-        assertFalse(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
+        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
 
         approver.approve("banana");
-        assertTrue(approver.approvedFile().exists());
-        assertFalse(approver.actualFile().exists());
+        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
 
         try {
             approver.assertApproved("kumquat");
         } catch (AssertionError expected) {}
-        assertTrue(approver.approvedFile().exists());
-        assertTrue(approver.actualFile().exists());
+        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 }
