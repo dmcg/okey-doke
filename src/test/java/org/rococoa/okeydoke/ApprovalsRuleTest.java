@@ -43,14 +43,4 @@ public class ApprovalsRuleTest {
         approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
-
-//    @Test public void writes_files_in_package() throws IOException {
-//        assertEquals(
-//                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.approved"),
-//                approver.approvedFile());
-//        assertEquals(
-//                new File(dirForPackage("target/approvals", this), "ApprovalsRuleTest.writes_files_in_package.actual"),
-//                approver.actualFile());
-//    }
-
 }
