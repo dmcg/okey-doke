@@ -4,11 +4,12 @@ import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.IOException;
 
 import static org.junit.Assert.fail;
-import static org.rococoa.okeydoke.CleanDirectoryRule.dirForPackage;
+import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
 
 public class ApprovalsRuleTest {
 

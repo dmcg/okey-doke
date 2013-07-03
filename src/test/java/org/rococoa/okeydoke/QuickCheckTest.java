@@ -9,10 +9,12 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
+
 @RunWith(Theories.class)
 public class QuickCheckTest {
 
-    @ClassRule public static final TheoryApprovalsRule theoryRule = TheoryApprovalsRule.fileSystemRule("src/test/java", "target");
+    @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java", "target/approvals");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
     @DataPoints public static final Fruit[] FRUITs = Fruit.values();

@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.testutils;
 
 import org.junit.rules.ExternalResource;
 
