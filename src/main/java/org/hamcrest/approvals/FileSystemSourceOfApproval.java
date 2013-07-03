@@ -7,10 +7,16 @@ import java.io.IOException;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
-    private final File directory;
+    private final File approvedDir;
+    private final File actualDir;
 
     public FileSystemSourceOfApproval(File directory) {
-        this.directory = directory;
+        this(directory, directory);
+    }
+
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
+        this.approvedDir = approvedDir;
+        this.actualDir = actualDir;
     }
 
     public FileSystemSourceOfApproval(File root, Package packege) {
@@ -48,15 +54,15 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     public File approvedFileFor(String testname) {
-        return fileFor(testname, ".approved");
+        return fileFor(approvedDir, testname, ".approved");
     }
 
     public File actualFileFor(String testname) {
-        return fileFor(testname, ".actual");
+        return fileFor(actualDir, testname, ".actual");
     }
 
-    private File fileFor(String testname, String suffix) {
-        return new File(directory, testname + suffix);
+    private File fileFor(File dir, String testname, String suffix) {
+        return new File(dir, testname + suffix);
     }
 
 
