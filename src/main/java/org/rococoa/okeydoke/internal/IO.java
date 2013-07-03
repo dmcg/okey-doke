@@ -1,4 +1,4 @@
-package org.hamcrest.approvals.internal;
+package org.rococoa.okeydoke.internal;
 
 import java.io.Closeable;
 import java.io.File;

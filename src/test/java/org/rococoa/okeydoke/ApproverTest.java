@@ -1,6 +1,5 @@
-package org.hamcrest.approvals;
+package org.rococoa.okeydoke;
 
-import org.hamcrest.approvals.rules.CleanDirectoryRule;
 import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.Test;

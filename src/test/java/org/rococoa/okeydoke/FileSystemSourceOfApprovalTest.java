@@ -1,4 +1,4 @@
-package org.hamcrest.approvals;
+package org.rococoa.okeydoke;
 
 import org.junit.Test;
 

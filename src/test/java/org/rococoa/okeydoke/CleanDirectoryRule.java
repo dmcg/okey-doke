@@ -1,4 +1,4 @@
-package org.hamcrest.approvals.rules;
+package org.rococoa.okeydoke;
 
 import org.junit.rules.ExternalResource;
 

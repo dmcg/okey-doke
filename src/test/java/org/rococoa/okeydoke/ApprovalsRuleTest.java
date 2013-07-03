@@ -1,6 +1,5 @@
-package org.hamcrest.approvals;
+package org.rococoa.okeydoke;
 
-import org.hamcrest.approvals.rules.CleanDirectoryRule;
 import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -8,8 +7,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.hamcrest.approvals.rules.CleanDirectoryRule.dirForPackage;
 import static org.junit.Assert.fail;
+import static org.rococoa.okeydoke.CleanDirectoryRule.dirForPackage;
 
 public class ApprovalsRuleTest {
 

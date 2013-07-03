@@ -1,6 +1,6 @@
-package org.hamcrest.approvals;
+package org.rococoa.okeydoke;
 
-import org.hamcrest.approvals.internal.IO;
+import org.rococoa.okeydoke.internal.IO;
 
 import java.io.File;
 import java.io.IOException;

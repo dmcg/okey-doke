@@ -1,4 +1,4 @@
-package org.hamcrest.approvals;
+package org.rococoa.okeydoke;
 
 import java.io.IOException;
 
