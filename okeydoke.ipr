@@ -1,5 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AntConfiguration">
+    <defaultAnt bundledAnt="true" />
+  </component>
+  <component name="CodeStyleManager">
+    <option name="USE_DEFAULT_CODE_STYLE_SCHEME" value="true" />
+    <option name="CODE_STYLE_SCHEME" value="" />
+  </component>
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+    </wildcardResourcePatterns>
+    <annotationProcessing enabled="false" useClasspath="true" />
+  </component>
+  <component name="DependencyValidationManager">
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
+  </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="EntryPointsManager">
+    <entry_points />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="PRINT_LINE_NUMBERS" value="false" />
+    <option name="OPEN_IN_BROWSER" value="false" />
+    <option name="OUTPUT_DIRECTORY" />
+  </component>
+  <component name="IdProvider" IDEtalkID="E2D7B85AE0131111660197E682B30CF4" />
+  <component name="ImportConfiguration">
+    <option name="VENDOR" />
+    <option name="RELEASE_TAG" />
+    <option name="LOG_MESSAGE" />
+    <option name="CHECKOUT_AFTER_IMPORT" value="true" />
+  </component>
+  <component name="JUnitProjectSettings">
+    <option name="TEST_RUNNER" value="UI" />
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" />
+    <option name="OPTION_SCOPE" value="protected" />
+    <option name="OPTION_HIERARCHY" value="false" />
+    <option name="OPTION_NAVIGATOR" value="false" />
+    <option name="OPTION_INDEX" value="false" />
+    <option name="OPTION_SEPARATE_INDEX" value="false" />
+    <option name="OPTION_USE_1_1" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_USE" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_VERSION" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="false" />
+    <option name="OPTION_DEPRECATED_LIST" value="false" />
+    <option name="OTHER_OPTIONS" />
+    <option name="HEAP_SIZE" />
+    <option name="OPEN_IN_BROWSER" value="false" />
+  </component>
+  <component name="JikesSettings">
+    <option name="DEBUGGING_INFO" value="true" />
+    <option name="DEPRECATION" value="true" />
+    <option name="GENERATE_NO_WARNINGS" value="false" />
+    <option name="GENERATE_MAKE_FILE_DEPENDENCIES" value="false" />
+    <option name="DO_FULL_DEPENDENCE_CHECK" value="false" />
+    <option name="IS_INCREMENTAL_MODE" value="false" />
+    <option name="IS_EMACS_ERRORS_MODE" value="true" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+    <option name="MAXIMUM_HEAP_SIZE" value="128" />
+  </component>
   <component name="Palette2">
     <group name="Swing">
       <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.png" removable="false" auto-create-binding="false" can-attach-label="false">
@@ -120,6 +185,15 @@
         <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
       </item>
     </group>
+  </component>
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/okeydoke.iml" filepath="$PROJECT_DIR$/okeydoke.iml" />
+    </modules>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" />
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
   </component>
 </project>
 
