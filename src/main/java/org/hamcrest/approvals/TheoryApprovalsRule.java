@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Use as an @ClassRule to automate approval of @Theories in JUnit
+ */
 public class TheoryApprovalsRule extends ApprovalsRule {
 
     private Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
@@ -49,6 +51,13 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         else throw new RuntimeException(t);
     }
 
+    @Override
+    protected void checkRuleState() {
+        if (approver == null)
+            throw new IllegalStateException("Somethings's wrong - check your " +
+                        getClass().getSimpleName() + " is an @ClassRule field");
+    }
+
     public class TheoryApprover extends TestWatcher {
 
         private Description theory;
@@ -62,7 +71,10 @@ public class TheoryApprovalsRule extends ApprovalsRule {
         }
 
         public void lockDown(Object result, Object... arguments) {
-            results.get(theory).append(formatted(result, arguments));
+            StringBuilder stringBuilder = results.get(theory);
+            if (stringBuilder == null)
+                throw new IllegalStateException("Something's wrong - check that I am an @Rule!");
+            stringBuilder.append(formatted(result, arguments));
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {

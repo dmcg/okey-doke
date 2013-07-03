@@ -6,11 +6,13 @@ import org.junit.runner.Description;
 import java.io.File;
 import java.io.IOException;
 
-
+/**
+ * Use as an @Rule to automate approvals in JUnit.
+ */
 public class ApprovalsRule extends TestWatcher {
 
     protected final File sourceRoot;
-    private Approver approver;
+    protected Approver approver;
 
     public ApprovalsRule(String srcRoot) {
         sourceRoot = new File(srcRoot);
@@ -20,19 +22,29 @@ public class ApprovalsRule extends TestWatcher {
     protected void starting(Description description) {
         approver = new Approver(
                 Naming.testNameFor(description),
-                sourceRoot,
-                description.getTestClass());
+                new FileSystemSourceOfApproval(sourceRoot, description.getTestClass().getPackage()));
     }
 
     public void assertApproved(String actual) {
-        approver.assertApproved(actual);
+        _approver().assertApproved(actual);
     }
 
     public void assertApproved(String actual, String testname) {
-        approver.assertApproved(actual, testname);
+        _approver().assertApproved(actual, testname);
     }
 
     public void approve(Object approved) throws IOException {
-        approver.approve(approved);
+        _approver().approve(approved);
+    }
+
+    private Approver _approver() {
+        checkRuleState();
+        return approver;
+    }
+
+    protected void checkRuleState() {
+        if (approver == null)
+            throw new IllegalStateException("Somethings's wrong - check your " +
+                    getClass().getSimpleName() + " is an @Rule field");
     }
 }
