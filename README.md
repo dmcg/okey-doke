@@ -8,6 +8,6 @@ Now with 100% less hamcrest ("Always dispose of the difficult bit in the title")
 
 There are two modes of operation, exemplified by
 
-1. [ApprovalsRuleTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/hamcrest/approvals/ApprovalsRuleTest.java) - compare current thing with an approved version and fail with a diff if they aren't the same.
-2. [QuickCheckTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/hamcrest/approvals/QuickCheckTest.java) - for easy testing of legacy code.
+1. [ApprovalsRuleTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/ApprovalsRuleTest.java) - compare current thing with an approved version and fail with a diff if they aren't the same.
+2. [QuickCheckTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/QuickCheckTest.java) - for easy testing of legacy code.
 
