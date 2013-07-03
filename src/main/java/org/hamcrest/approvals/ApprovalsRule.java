@@ -9,21 +9,29 @@ import java.io.IOException;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class ApprovalsRule extends TestWatcher {
+public abstract class ApprovalsRule extends TestWatcher {
 
-    protected final File sourceRoot;
     protected Approver approver;
 
-    public ApprovalsRule(String srcRoot) {
-        sourceRoot = new File(srcRoot);
+    public static ApprovalsRule fileSystemRule(final String sourceRoot) {
+        return new ApprovalsRule() {
+            @Override
+            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
+                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage());
+            }
+        };
     }
 
     @Override
     protected void starting(Description description) {
-        approver = new Approver(
-                Naming.testNameFor(description),
-                new FileSystemSourceOfApproval(sourceRoot, description.getTestClass().getPackage()));
+        approver = createApprover(Naming.testNameFor(description), description.getTestClass());
     }
+
+    protected Approver createApprover(String testName, Class<?> testClass) {
+        return new Approver(testName, createSourceOfApproval(testClass));
+    }
+
+    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
     public void assertApproved(String actual) {
         _approver().assertApproved(actual);

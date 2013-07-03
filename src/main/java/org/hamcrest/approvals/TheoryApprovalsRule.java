@@ -3,6 +3,7 @@ package org.hamcrest.approvals;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,12 +14,28 @@ import java.util.Map;
 /**
  * Use as an @ClassRule to automate approval of @Theories in JUnit
  */
-public class TheoryApprovalsRule extends ApprovalsRule {
+public abstract class TheoryApprovalsRule extends ApprovalsRule {
 
     private Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
 
-    public TheoryApprovalsRule(String sourceRoot) {
-        super(sourceRoot);
+    public static TheoryApprovalsRule fileSystemRule(final String sourceRoot) {
+        return new TheoryApprovalsRule() {
+            @Override
+            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
+                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage());
+            }
+        };
+    }
+
+    public static TheoryApprovalsRule fileSystemRule(final String sourceRoot, final String outDir) {
+        return new TheoryApprovalsRule() {
+            @Override
+            protected SourceOfApproval createSourceOfApproval(Class<?> testClass) {
+                return new FileSystemSourceOfApproval(
+                        FileSystemSourceOfApproval.dirForPackage(new File(sourceRoot), testClass.getPackage()),
+                        new File(outDir));
+            }
+        };
     }
 
     public TheoryApprover approver() {

@@ -23,7 +23,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this(dirForPackage(root, packege));
     }
 
-    private static File dirForPackage(File root, Package packege) {
+    public static File dirForPackage(File root, Package packege) {
         return new File(root, packege.getName().replaceAll("\\.", "/"));
     }
 

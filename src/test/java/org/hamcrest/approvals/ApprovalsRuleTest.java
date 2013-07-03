@@ -15,7 +15,7 @@ public class ApprovalsRuleTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("target/approvals", this));
 
-    @Rule public final ApprovalsRule approver = new ApprovalsRule("target/approvals");
+    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 
     @Test public void doesnt_match_where_no_approved_result() {
         try {

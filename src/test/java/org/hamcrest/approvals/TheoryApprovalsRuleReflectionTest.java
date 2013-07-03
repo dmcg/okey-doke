@@ -13,7 +13,7 @@ public class TheoryApprovalsRuleReflectionTest {
 
     // Here we show what happens when reflection goes bad
 
-    private final TheoryApprovalsRule.TheoryApprover approver = new TheoryApprovalsRule("src/test/java").approver();
+    private final TheoryApprovalsRule.TheoryApprover approver = TheoryApprovalsRule.fileSystemRule("src/test/java").approver();
 
     @Test
     public void legacyMethod_output_reflectively_no_such_method_name() throws InvocationTargetException, IllegalAccessException {
