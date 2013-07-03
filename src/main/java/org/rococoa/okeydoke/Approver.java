@@ -3,6 +3,7 @@ package org.rococoa.okeydoke;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class Approver {
@@ -19,18 +20,24 @@ public class Approver {
         this(testName, new FileSystemSourceOfApproval(sourceRoot, test.getPackage()));
     }
 
-    public void assertApproved(String actual) {
+    public void assertApproved(Object actual) {
         assertApproved(actual, testName);
     }
 
-    public void assertApproved(String actual, String testname) {
-        sourceOfApproval.writeActual(testname, String.valueOf(actual).getBytes());
-        String approved = sourceOfApproval.readApproved(testname);
+    public void assertApproved(Object actual, String testname) {
+        byte[] actualAsBytes = representationOf(actual);
+        sourceOfApproval.writeActual(testname, actualAsBytes);
+        byte[] approved = sourceOfApproval.readApproved(testname);
         if (approved == null) {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
-                assertEquals(approved, actual);
+                if (actual instanceof String) {
+                    // nasty hack for now
+                    assertEquals(new String(approved), (String)actual);
+                } else {
+                    assertArrayEquals(approved, actualAsBytes);
+                }
                 return;
             } catch (AssertionError e) {
                 System.err.println(sourceOfApproval.toApproveText(testname));
@@ -39,8 +46,12 @@ public class Approver {
         }
     }
 
+    private byte[] representationOf(Object actual) {
+        return String.valueOf(actual).getBytes();
+    }
+
     public void approve(Object approved) throws IOException {
-        sourceOfApproval.writeApproved(testName, String.valueOf(approved).getBytes());
+        sourceOfApproval.writeApproved(testName, representationOf(approved));
     }
 
 }

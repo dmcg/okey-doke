@@ -14,6 +14,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this(directory, directory);
     }
 
+    public FileSystemSourceOfApproval(File srcRoot, Package packege, File actualDir) {
+        this(dirForPackage(srcRoot, packege), actualDir);
+    }
+
     public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
@@ -33,10 +37,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public String readApproved(String testname) {
+    public byte[] readApproved(String testname) {
         File approvalFile = approvedFileFor(testname);
         return !(approvalFile.exists() && approvalFile.isFile()) ?
-                null : new String(IO.readBytes(approvalFile));
+                null : IO.readBytes(approvalFile);
     }
 
     @Override

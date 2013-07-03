@@ -17,11 +17,9 @@ public class ApprovalsRuleTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 
-    @Test public void doesnt_match_where_no_approved_result() {
-        try {
-            approver.assertApproved("banana");
-            fail();
-        } catch (AssertionError expected) {}
+    @Test(expected = AssertionError.class)
+    public void doesnt_match_where_no_approved_result() {
+        approver.assertApproved("banana");
     }
 
     @Test public void matches_when_approved_result_matches() throws IOException {
@@ -29,12 +27,10 @@ public class ApprovalsRuleTest {
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test(expected = AssertionError.class)
+    public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.approve("banana");
-        try {
-            approver.assertApproved("kumquat");
-            fail();
-        } catch (ComparisonFailure expected) {}
+        approver.assertApproved("kumquat");
     }
 
     @Ignore("Unignore to see no approval in IDE")
