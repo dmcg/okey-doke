@@ -34,7 +34,7 @@ public class Approver {
             try {
                 if (actual instanceof String) {
                     // nasty hack for now
-                    assertEquals(new String(approved), (String)actual);
+                    assertEquals(new String(approved), actual);
                 } else {
                     assertArrayEquals(approved, actualAsBytes);
                 }
@@ -47,6 +47,8 @@ public class Approver {
     }
 
     private byte[] representationOf(Object actual) {
+        if (actual instanceof byte[])
+            return (byte[]) actual;
         return String.valueOf(actual).getBytes();
     }
 
