@@ -8,7 +8,17 @@ public interface SourceOfApproval {
 
     public byte[] readApproved(String testname);
 
-    public void writeActual(String testname, byte[] bytes);
-
     public String toApproveText(String testname);
+
+    CompareResult writeAndCompare(String testname, byte[] actualAsBytes);
+
+    public class CompareResult {
+        public final AssertionError errorOrNull;
+        public final byte[] approvedOrNull;
+
+        public CompareResult(AssertionError errorOrNull, byte[] approvedOrNull) {
+            this.errorOrNull = errorOrNull;
+            this.approvedOrNull = approvedOrNull;
+        }
+    }
 }

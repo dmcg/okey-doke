@@ -44,7 +44,14 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public void writeActual(String testname, byte[] bytes) {
+    public CompareResult writeAndCompare(String testname, byte[] actual) {
+        writeActual(testname, actual);
+
+        // we're not going to try to compare, just return approved
+        return new CompareResult(null, readApproved(testname));
+    }
+
+    protected void writeActual(String testname, byte[] bytes) {
         try {
             IO.writeBytes(actualFileFor(testname), bytes);
         } catch (IOException e) {

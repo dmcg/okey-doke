@@ -1,10 +1,10 @@
 package org.rococoa.okeydoke;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.rococoa.okeydoke.SourceOfApproval.CompareResult;
 
 public class Approver {
 
@@ -16,34 +16,39 @@ public class Approver {
         this.sourceOfApproval = sourceOfApproval;
     }
 
-    public Approver(String testName, File sourceRoot, Class<?> test) {
-        this(testName, new FileSystemSourceOfApproval(sourceRoot, test.getPackage()));
-    }
-
     public void assertApproved(Object actual) {
         assertApproved(actual, testName);
     }
 
     public void assertApproved(Object actual, String testname) {
         byte[] actualAsBytes = representationOf(actual);
-        sourceOfApproval.writeActual(testname, actualAsBytes);
-        byte[] approved = sourceOfApproval.readApproved(testname);
-        if (approved == null) {
+
+        CompareResult approval = sourceOfApproval.writeAndCompare(testname, actualAsBytes);
+
+        if (approval.errorOrNull != null) {
+            // sourceOfApproval has done the comparison for us
+            reportFailure(testname);
+            throw approval.errorOrNull;
+        } else if (approval.approvedOrNull == null) {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
                 if (actual instanceof String) {
                     // nasty hack for now
-                    assertEquals(new String(approved), actual);
+                    assertEquals(new String(approval.approvedOrNull), actual);
                 } else {
-                    assertArrayEquals(approved, actualAsBytes);
+                    assertArrayEquals(approval.approvedOrNull, actualAsBytes);
                 }
                 return;
             } catch (AssertionError e) {
-                System.err.println(sourceOfApproval.toApproveText(testname));
+                reportFailure(testname);
                 throw e;
             }
         }
+    }
+
+    private void reportFailure(String testname) {
+        System.err.println(sourceOfApproval.toApproveText(testname));
     }
 
     private byte[] representationOf(Object actual) {
