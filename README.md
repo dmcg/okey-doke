@@ -2,7 +2,8 @@ okey-doke
 =========
 
 Approval Testing for JUnit - like http://approvaltests.sourceforge.net/ but more Java'y
-and more the SimplestThingThatCouldPossiblyWork.
+and more the SimplestThingThatCouldPossiblyWork. A [helping hand](http://youtu.be/EbqaxWjIgOg) for many testing problems.
+
 
 There are two modes of operation, exemplified by
 
