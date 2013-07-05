@@ -37,4 +37,22 @@ public class ApproverTest {
             assertEquals("banana", expected.getExpected());
         }
     }
+
+    @Test public void approve_binary() throws IOException {
+        try {
+            approver.assertBinaryApproved("banana".getBytes());
+            fail();
+        } catch (AssertionError expected) {
+        }
+
+        approver.approveBinary("banana".getBytes());
+        approver.assertBinaryApproved("banana".getBytes());
+
+        try {
+            approver.assertBinaryApproved("kumquat".getBytes());
+            fail();
+        } catch (AssertionError expected) {
+        }
+
+    }
 }

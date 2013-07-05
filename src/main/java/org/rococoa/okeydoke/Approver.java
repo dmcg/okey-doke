@@ -58,7 +58,43 @@ public class Approver {
     }
 
     public void approve(Object approved) throws IOException {
-        sourceOfApproval.writeApproved(testName, representationOf(approved));
+        approve(approved, testName);
+    }
+
+    public void approve(Object approved, String testname) throws IOException {
+        sourceOfApproval.writeApproved(testname, representationOf(approved));
+    }
+
+    public void assertBinaryApproved(byte[] actualAsBytes) {
+        assertBinaryApproved(actualAsBytes, testName);
+    }
+
+    public void assertBinaryApproved(byte[] actualAsBytes, String testname) {
+        CompareResult approval = sourceOfApproval.writeAndCompare(testname, actualAsBytes);
+
+        if (approval.errorOrNull != null) {
+            // sourceOfApproval has done the comparison for us
+            reportFailure(testname);
+            throw approval.errorOrNull;
+        } else if (approval.approvedOrNull == null) {
+            throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
+        } else {
+            try {
+                assertArrayEquals(approval.approvedOrNull, actualAsBytes);
+                return;
+            } catch (AssertionError e) {
+                reportFailure(testname);
+                throw e;
+            }
+        }
+    }
+
+    public void approveBinary(byte[] approved) throws IOException {
+        approveBinary(approved, testName);
+    }
+
+    public void approveBinary(byte[] approved, String testname) throws IOException {
+        sourceOfApproval.writeApproved(testname, approved);
     }
 
 }
