@@ -1,6 +1,7 @@
 package org.rococoa.okeydoke;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class Approver {
     }
 
     public void assertApproved(Object actual, String testname) {
-        CompareResult approval = sourceOfApproval.writeAndCompare(testname, representationOf(actual).getBytes());
+        CompareResult approval = sourceOfApproval.writeAndCompare(testname, stringFor(actual).getBytes());
 
         if (approval.errorOrNull != null) {
             // sourceOfApproval has done the comparison for us
@@ -31,7 +32,7 @@ public class Approver {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
-                assertEquals(new String(approval.approvedOrNull), String.valueOf(actual));
+                assertEquals(new String(approval.approvedOrNull), stringFor(actual));
                 return;
             } catch (AssertionError e) {
                 reportFailure(testname);
@@ -44,8 +45,25 @@ public class Approver {
         System.err.println(sourceOfApproval.toApproveText(testname));
     }
 
-    private String representationOf(Object actual) {
+    private String stringFor(Object actual) {
+        if (actual.getClass().isArray())
+            return stringFor((Object[]) actual);
+        if (actual instanceof Iterable)
+            return stringFor((Iterable) actual);
         return String.valueOf(actual);
+    }
+
+    private String stringFor(Iterable iterable) {
+        StringBuilder result = new StringBuilder("[");
+        for (Object o : iterable) {
+            result.append("\"").append(stringFor(o)).append("\",");
+        }
+        result.deleteCharAt(result.length() - 1).append("]");
+        return result.toString();
+    }
+
+    private String stringFor(Object[] iterable) {
+        return stringFor(Arrays.asList(iterable));
     }
 
     public void approve(Object approved) throws IOException {
@@ -53,7 +71,7 @@ public class Approver {
     }
 
     public void approve(Object approved, String testname) throws IOException {
-        sourceOfApproval.writeApproved(testname, representationOf(approved).getBytes());
+        sourceOfApproval.writeApproved(testname, stringFor(approved).getBytes());
     }
 
     public void assertBinaryApproved(byte[] actualAsBytes) {
