@@ -21,9 +21,7 @@ public class Approver {
     }
 
     public void assertApproved(Object actual, String testname) {
-        byte[] actualAsBytes = representationOf(actual);
-
-        CompareResult approval = sourceOfApproval.writeAndCompare(testname, actualAsBytes);
+        CompareResult approval = sourceOfApproval.writeAndCompare(testname, representationOf(actual).getBytes());
 
         if (approval.errorOrNull != null) {
             // sourceOfApproval has done the comparison for us
@@ -33,12 +31,7 @@ public class Approver {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
-                if (actual instanceof String) {
-                    // nasty hack for now
-                    assertEquals(new String(approval.approvedOrNull), actual);
-                } else {
-                    assertArrayEquals(approval.approvedOrNull, actualAsBytes);
-                }
+                assertEquals(new String(approval.approvedOrNull), String.valueOf(actual));
                 return;
             } catch (AssertionError e) {
                 reportFailure(testname);
@@ -51,10 +44,8 @@ public class Approver {
         System.err.println(sourceOfApproval.toApproveText(testname));
     }
 
-    private byte[] representationOf(Object actual) {
-        if (actual instanceof byte[])
-            return (byte[]) actual;
-        return String.valueOf(actual).getBytes();
+    private String representationOf(Object actual) {
+        return String.valueOf(actual);
     }
 
     public void approve(Object approved) throws IOException {
@@ -62,7 +53,7 @@ public class Approver {
     }
 
     public void approve(Object approved, String testname) throws IOException {
-        sourceOfApproval.writeApproved(testname, representationOf(approved));
+        sourceOfApproval.writeApproved(testname, representationOf(approved).getBytes());
     }
 
     public void assertBinaryApproved(byte[] actualAsBytes) {
