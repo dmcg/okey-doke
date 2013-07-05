@@ -22,6 +22,15 @@ public abstract class ApprovalsRule extends TestWatcher {
         };
     }
 
+    public static ApprovalsRule fileSystemRule(final String sourceRoot, final String actualDir) {
+        return new ApprovalsRule() {
+            @Override
+            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
+                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage(), new File(actualDir));
+            }
+        };
+    }
+
     @Override
     protected void starting(Description description) {
         approver = createApprover(Naming.testNameFor(description), description.getTestClass());
@@ -33,11 +42,11 @@ public abstract class ApprovalsRule extends TestWatcher {
 
     protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
-    public void assertApproved(String actual) {
+    public void assertApproved(Object actual) {
         _approver().assertApproved(actual);
     }
 
-    public void assertApproved(String actual, String testname) {
+    public void assertApproved(Object actual, String testname) {
         _approver().assertApproved(actual, testname);
     }
 
