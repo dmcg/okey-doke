@@ -1,7 +1,10 @@
 package org.rococoa.okeydoke;
 
-public interface Formatter {
-    String stringFor(Object actual);
+public interface Formatter<T> {
 
-    byte[] bytesFor(Object object);
+    T formatted(Object object);
+
+    byte[] bytesFor(T object);
+
+    T objectFor(byte[] bytes);
 }
