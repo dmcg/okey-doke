@@ -11,6 +11,7 @@ public class Approver {
 
     private final String testName;
     private final SourceOfApproval sourceOfApproval;
+    private final Formatter formatter = new StringFormatter();
 
     public Approver(String testName, SourceOfApproval sourceOfApproval) {
         this.testName = testName;
@@ -22,7 +23,7 @@ public class Approver {
     }
 
     public void assertApproved(Object actual, String testname) {
-        CompareResult approval = sourceOfApproval.writeAndCompare(testname, stringFor(actual).getBytes());
+        CompareResult approval = sourceOfApproval.writeAndCompare(testname, formatter.bytesFor(actual));
 
         if (approval.errorOrNull != null) {
             // sourceOfApproval has done the comparison for us
@@ -32,7 +33,7 @@ public class Approver {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
-                assertEquals(new String(approval.approvedOrNull), stringFor(actual));
+                assertEquals(new String(approval.approvedOrNull), formatter.stringFor(actual));
                 return;
             } catch (AssertionError e) {
                 reportFailure(testname);
@@ -45,33 +46,12 @@ public class Approver {
         System.err.println(sourceOfApproval.toApproveText(testname));
     }
 
-    private String stringFor(Object actual) {
-        if (actual.getClass().isArray())
-            return stringFor((Object[]) actual);
-        if (actual instanceof Iterable)
-            return stringFor((Iterable) actual);
-        return String.valueOf(actual);
-    }
-
-    private String stringFor(Iterable iterable) {
-        StringBuilder result = new StringBuilder("[");
-        for (Object o : iterable) {
-            result.append("\"").append(stringFor(o)).append("\",");
-        }
-        result.deleteCharAt(result.length() - 1).append("]");
-        return result.toString();
-    }
-
-    private String stringFor(Object[] iterable) {
-        return stringFor(Arrays.asList(iterable));
-    }
-
     public void approve(Object approved) throws IOException {
         approve(approved, testName);
     }
 
     public void approve(Object approved, String testname) throws IOException {
-        sourceOfApproval.writeApproved(testname, stringFor(approved).getBytes());
+        sourceOfApproval.writeApproved(testname, formatter.bytesFor(approved));
     }
 
     public void assertBinaryApproved(byte[] actualAsBytes) {
@@ -104,6 +84,36 @@ public class Approver {
 
     public void approveBinary(byte[] approved, String testname) throws IOException {
         sourceOfApproval.writeApproved(testname, approved);
+    }
+
+    private static class StringFormatter implements Formatter {
+
+        @Override
+        public String stringFor(Object actual) {
+            if (actual.getClass().isArray())
+                return stringFor((Object[]) actual);
+            if (actual instanceof Iterable)
+                return stringFor((Iterable) actual);
+            return String.valueOf(actual);
+        }
+
+        public String stringFor(Iterable iterable) {
+            StringBuilder result = new StringBuilder("[");
+            for (Object o : iterable) {
+                result.append("\"").append(stringFor(o)).append("\",");
+            }
+            result.deleteCharAt(result.length() - 1).append("]");
+            return result.toString();
+        }
+
+        public String stringFor(Object[] iterable) {
+            return stringFor(Arrays.asList(iterable));
+        }
+
+        @Override
+        public byte[] bytesFor(Object object) {
+            return stringFor(object).getBytes();
+        }
     }
 
 }
