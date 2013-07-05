@@ -31,17 +31,6 @@ public abstract class ApprovalsRule extends TestWatcher {
         };
     }
 
-    @Override
-    protected void starting(Description description) {
-        approver = createApprover(Naming.testNameFor(description), description.getTestClass());
-    }
-
-    protected Approver createApprover(String testName, Class<?> testClass) {
-        return new Approver(testName, createSourceOfApproval(testClass));
-    }
-
-    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
-
     public void assertApproved(Object actual) {
         _approver().assertApproved(actual);
     }
@@ -53,6 +42,17 @@ public abstract class ApprovalsRule extends TestWatcher {
     public void approve(Object approved) throws IOException {
         _approver().approve(approved);
     }
+
+    @Override
+    protected void starting(Description description) {
+        approver = createApprover(Naming.testNameFor(description), description.getTestClass());
+    }
+
+    protected Approver createApprover(String testName, Class<?> testClass) {
+        return new Approver(testName, createSourceOfApproval(testClass));
+    }
+
+    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
     private Approver _approver() {
         checkRuleState();
