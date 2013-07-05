@@ -10,6 +10,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     private final File approvedDir;
     private final File actualDir;
 
+    public static FileSystemSourceOfApproval in(String directory) {
+        return new FileSystemSourceOfApproval(new File(directory));
+    }
+
     public FileSystemSourceOfApproval(File directory) {
         this(directory, directory);
     }
