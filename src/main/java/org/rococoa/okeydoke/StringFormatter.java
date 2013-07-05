@@ -1,5 +1,7 @@
 package org.rococoa.okeydoke;
 
+import org.junit.Assert;
+
 import java.util.Arrays;
 
 public class StringFormatter implements Formatter<String> {
@@ -12,6 +14,11 @@ public class StringFormatter implements Formatter<String> {
     @Override
     public String objectFor(byte[] bytes) {
         return new String(bytes);
+    }
+
+    @Override
+    public void assertEquals(String expected, String actual) {
+        Assert.assertEquals(expected, actual);
     }
 
     @Override
