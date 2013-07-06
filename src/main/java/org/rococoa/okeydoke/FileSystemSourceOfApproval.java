@@ -1,9 +1,6 @@
 package org.rococoa.okeydoke;
 
-import org.rococoa.okeydoke.internal.IO;
-
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
@@ -42,31 +39,20 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public void writeApproved(String testname, byte[] bytes) throws IOException {
-        IO.writeBytes(approvedFileFor(testname), bytes);
+    public OutputStream approvedOutputFor(String testname) throws IOException {
+        return new BufferedOutputStream(new FileOutputStream(approvedFileFor(testname)));
     }
 
     @Override
-    public byte[] readApproved(String testname) {
+    public OutputStream actualOutputFor(String testname) throws IOException {
+        return new BufferedOutputStream(new FileOutputStream(actualFileFor(testname)));
+    }
+
+    @Override
+    public InputStream approvedInputOrNullFor(String testname) throws FileNotFoundException {
         File approvalFile = approvedFileFor(testname);
         return !(approvalFile.exists() && approvalFile.isFile()) ?
-                null : IO.readBytes(approvalFile);
-    }
-
-    @Override
-    public CompareResult writeAndCompare(String testname, byte[] actual) {
-        writeActual(testname, actual);
-
-        // we're not going to try to compare, just return approved
-        return new CompareResult(null, readApproved(testname));
-    }
-
-    protected void writeActual(String testname, byte[] bytes) {
-        try {
-            IO.writeBytes(actualFileFor(testname), bytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                null : new BufferedInputStream(new FileInputStream(approvalFile));
     }
 
     @Override

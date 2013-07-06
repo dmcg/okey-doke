@@ -18,7 +18,7 @@ public class ApproverTest {
     private final Approver approver = new Approver("testname", FileSystemSourceOfApproval.in("target/approvals"));
 
     @Test(expected = AssertionError.class)
-    public void doesnt_match_where_no_approved_result() {
+    public void doesnt_match_where_no_approved_result() throws IOException {
         approver.assertApproved("banana");
     }
 

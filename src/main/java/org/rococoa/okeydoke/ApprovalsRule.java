@@ -31,11 +31,11 @@ public abstract class ApprovalsRule extends TestWatcher {
         };
     }
 
-    public void assertApproved(Object actual) {
+    public void assertApproved(Object actual) throws IOException {
         _approver().assertApproved(actual);
     }
 
-    public void assertApproved(Object actual, String testname) {
+    public void assertApproved(Object actual, String testname) throws IOException {
         _approver().assertApproved(actual, testname);
     }
 

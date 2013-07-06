@@ -1,5 +1,9 @@
 package org.rococoa.okeydoke;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * Converts Object's to, and byte[] to and from, a type that can be compared.
  *
@@ -12,9 +16,8 @@ public interface Formatter<T> {
 
     T formatted(Object object);
 
-    byte[] bytesFor(T object);
-
-    T objectFor(byte[] bytes);
+    void writeTo(T object, OutputStream os) throws IOException;
+    T readFrom(InputStream is) throws IOException;
 
     void assertEquals(T expected, T actual);
 }

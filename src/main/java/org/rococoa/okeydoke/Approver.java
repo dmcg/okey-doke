@@ -1,8 +1,10 @@
 package org.rococoa.okeydoke;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import static org.rococoa.okeydoke.SourceOfApproval.CompareResult;
+import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
 public class Approver {
 
@@ -16,11 +18,11 @@ public class Approver {
         this.sourceOfApproval = sourceOfApproval;
     }
 
-    public void assertApproved(Object actual) {
+    public void assertApproved(Object actual) throws IOException {
         assertApproved(actual, testName);
     }
 
-    public void assertApproved(Object actual, String testname) {
+    public void assertApproved(Object actual, String testname) throws IOException {
         assertApproved(actual, testname, formatter);
     }
 
@@ -29,14 +31,19 @@ public class Approver {
     }
 
     public void approve(Object approved, String testname) throws IOException {
-        sourceOfApproval.writeApproved(testname, formatter.bytesFor(approved));
+        OutputStream outputStream = sourceOfApproval.approvedOutputFor(testname);
+        try {
+            formatter.writeTo(approved, outputStream);
+        } finally {
+            closeQuietly(outputStream);
+        }
     }
 
-    public void assertBinaryApproved(byte[] actual) {
+    public void assertBinaryApproved(byte[] actual) throws IOException {
         assertBinaryApproved(actual, testName);
     }
 
-    public void assertBinaryApproved(byte[] actual, String testname) {
+    public void assertBinaryApproved(byte[] actual, String testname) throws IOException {
         assertApproved(actual, testname, binaryFormatter);
     }
 
@@ -45,23 +52,35 @@ public class Approver {
     }
 
     public void approveBinary(byte[] approved, String testname) throws IOException {
-        sourceOfApproval.writeApproved(testname, approved);
+        OutputStream outputStream = sourceOfApproval.approvedOutputFor(testname);
+        writeAndClose(approved, outputStream);
     }
 
-    public void assertApproved(Object actual, String testname, Formatter aFormatter) {
-        CompareResult approval = sourceOfApproval.writeAndCompare(
-                testname,
-                aFormatter.bytesFor(aFormatter.formatted(actual)));
+    private void writeAndClose(byte[] approved, OutputStream outputStream) throws IOException {
+        try {
+            outputStream.write(approved);
+        } finally {
+            closeQuietly(outputStream);
+        }
+    }
 
-        if (approval.errorOrNull != null) {
-            // sourceOfApproval has done the comparison for us
-            reportFailure(testname);
-            throw approval.errorOrNull;
-        } else if (approval.approvedOrNull == null) {
+    public void assertApproved(Object actual, String testname, Formatter aFormatter) throws IOException {
+        Object formattedActual = aFormatter.formatted(actual);
+
+        OutputStream actualOutput = sourceOfApproval.actualOutputFor(testname);
+        try {
+            aFormatter.writeTo(formattedActual, actualOutput);
+        } finally {
+            closeQuietly(actualOutput);
+        }
+
+        InputStream approvedInputOrNull = sourceOfApproval.approvedInputOrNullFor(testname);
+
+        if (approvedInputOrNull == null) {
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
         } else {
             try {
-                aFormatter.assertEquals(aFormatter.objectFor(approval.approvedOrNull), aFormatter.formatted(actual));
+                aFormatter.assertEquals(aFormatter.readFrom(approvedInputOrNull), formattedActual);
                 return;
             } catch (AssertionError e) {
                 reportFailure(testname);

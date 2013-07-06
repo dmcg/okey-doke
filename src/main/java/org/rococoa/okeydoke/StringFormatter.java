@@ -2,18 +2,18 @@ package org.rococoa.okeydoke;
 
 import org.junit.Assert;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 public class StringFormatter implements Formatter<String> {
 
     @Override
-    public byte[] bytesFor(String object) {
-        return object.getBytes();
-    }
-
-    @Override
-    public String objectFor(byte[] bytes) {
-        return new String(bytes);
+    public String readFrom(InputStream is) throws IOException {
+        byte[] buf = new byte[is.available()]; // TODO - suss
+        is.read(buf);
+        return new String(buf);
     }
 
     @Override
@@ -28,6 +28,11 @@ public class StringFormatter implements Formatter<String> {
         if (actual instanceof Iterable)
             return stringFor((Iterable) actual);
         return String.valueOf(actual);
+    }
+
+    @Override
+    public void writeTo(String s, OutputStream os) throws IOException {
+        os.write(s.getBytes());
     }
 
     private String stringFor(Iterable iterable) {

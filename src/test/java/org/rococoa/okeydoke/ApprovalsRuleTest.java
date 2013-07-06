@@ -1,6 +1,5 @@
 package org.rococoa.okeydoke;
 
-import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -8,7 +7,6 @@ import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.IOException;
 
-import static org.junit.Assert.fail;
 import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
 
 public class ApprovalsRuleTest {
@@ -18,7 +16,7 @@ public class ApprovalsRuleTest {
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 
     @Test(expected = AssertionError.class)
-    public void doesnt_match_where_no_approved_result() {
+    public void doesnt_match_where_no_approved_result() throws IOException {
         approver.assertApproved("banana");
     }
 
