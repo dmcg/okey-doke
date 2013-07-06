@@ -21,7 +21,7 @@ public class Approver {
     }
 
     public void assertApproved(Object actual, String testname) {
-        assertApproved(testname, formatter, actual);
+        assertApproved(actual, testname, formatter);
     }
 
     public void approve(Object approved) throws IOException {
@@ -37,7 +37,7 @@ public class Approver {
     }
 
     public void assertBinaryApproved(byte[] actual, String testname) {
-        assertApproved(testname, binaryFormatter, actual);
+        assertApproved(actual, testname, binaryFormatter);
     }
 
     public void approveBinary(byte[] approved) throws IOException {
@@ -48,7 +48,7 @@ public class Approver {
         sourceOfApproval.writeApproved(testname, approved);
     }
 
-    protected void assertApproved(String testname, Formatter aFormatter, Object actual) {
+    public void assertApproved(Object actual, String testname, Formatter aFormatter) {
         CompareResult approval = sourceOfApproval.writeAndCompare(
                 testname,
                 aFormatter.bytesFor(aFormatter.formatted(actual)));
