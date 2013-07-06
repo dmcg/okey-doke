@@ -39,20 +39,23 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public OutputStream approvedOutputFor(String testname) throws IOException {
+    public OutputStream outputForApproved(String testname) throws IOException {
         return new BufferedOutputStream(new FileOutputStream(approvedFileFor(testname)));
     }
 
     @Override
-    public OutputStream actualOutputFor(String testname) throws IOException {
+    public OutputStream outputForActual(String testname) throws IOException {
         return new BufferedOutputStream(new FileOutputStream(actualFileFor(testname)));
     }
 
     @Override
-    public InputStream approvedInputOrNullFor(String testname) throws FileNotFoundException {
-        File approvalFile = approvedFileFor(testname);
-        return !(approvalFile.exists() && approvalFile.isFile()) ?
-                null : new BufferedInputStream(new FileInputStream(approvalFile));
+    public InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
+        return InputStreamOrNullFor(approvedFileFor(testname));
+    }
+
+    @Override
+    public InputStream inputOrNullForActual(String testname) throws IOException {
+        return InputStreamOrNullFor(actualFileFor(testname));
     }
 
     @Override
@@ -79,4 +82,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     private File fileFor(File dir, String testname, String suffix) {
         return new File(dir, testname + suffix);
     }
+
+    private InputStream InputStreamOrNullFor(File file) throws FileNotFoundException {
+        return !(file.exists() && file.isFile()) ?
+                null : new BufferedInputStream(new FileInputStream(file));
+    }
+
 }

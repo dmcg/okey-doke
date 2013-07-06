@@ -6,11 +6,13 @@ import java.io.OutputStream;
 
 public interface SourceOfApproval {
 
-    public OutputStream approvedOutputFor(String testname) throws IOException;
+    public OutputStream outputForApproved(String testname) throws IOException;
 
-    public OutputStream actualOutputFor(String testname) throws IOException;
+    public OutputStream outputForActual(String testname) throws IOException;
 
-    public InputStream approvedInputOrNullFor(String testname) throws IOException;
+    public InputStream inputOrNullForApproved(String testname) throws IOException;
+
+    public InputStream inputOrNullForActual(String testname) throws IOException;
 
     public String toApproveText(String testname);
 

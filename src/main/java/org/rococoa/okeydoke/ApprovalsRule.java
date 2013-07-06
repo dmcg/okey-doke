@@ -5,6 +5,7 @@ import org.junit.runner.Description;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * Use as an @Rule to automate approvals in JUnit.
@@ -63,5 +64,9 @@ public abstract class ApprovalsRule extends TestWatcher {
         if (approver == null)
             throw new IllegalStateException("Somethings's wrong - check your " +
                     getClass().getSimpleName() + " is an @Rule field");
+    }
+
+    public PrintStream printStream() throws IOException {
+        return approver.printStream();
     }
 }

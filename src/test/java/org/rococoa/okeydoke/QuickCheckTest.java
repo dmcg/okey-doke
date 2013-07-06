@@ -11,6 +11,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
 
+/**
+ * Here we show how to use Theories and DataPoints to push all combinations of parameters into an approver
+ * and then lockDown the results.
+ */
 @RunWith(Theories.class)
 public class QuickCheckTest {
 
