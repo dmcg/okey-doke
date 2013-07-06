@@ -31,12 +31,7 @@ public class Approver {
     }
 
     public void approve(Object approved, String testname) throws IOException {
-        OutputStream outputStream = sourceOfApproval.approvedOutputFor(testname);
-        try {
-            formatter.writeTo(approved, outputStream);
-        } finally {
-            closeQuietly(outputStream);
-        }
+        writeAndClose(approved, formatter, sourceOfApproval.approvedOutputFor(testname));
     }
 
     public void assertBinaryApproved(byte[] actual) throws IOException {
@@ -52,27 +47,13 @@ public class Approver {
     }
 
     public void approveBinary(byte[] approved, String testname) throws IOException {
-        OutputStream outputStream = sourceOfApproval.approvedOutputFor(testname);
-        writeAndClose(approved, outputStream);
-    }
-
-    private void writeAndClose(byte[] approved, OutputStream outputStream) throws IOException {
-        try {
-            outputStream.write(approved);
-        } finally {
-            closeQuietly(outputStream);
-        }
+        writeAndClose(approved, binaryFormatter, sourceOfApproval.approvedOutputFor(testname));
     }
 
     public void assertApproved(Object actual, String testname, Formatter aFormatter) throws IOException {
         Object formattedActual = aFormatter.formatted(actual);
 
-        OutputStream actualOutput = sourceOfApproval.actualOutputFor(testname);
-        try {
-            aFormatter.writeTo(formattedActual, actualOutput);
-        } finally {
-            closeQuietly(actualOutput);
-        }
+        writeAndClose(formattedActual, aFormatter, sourceOfApproval.actualOutputFor(testname));
 
         InputStream approvedInputOrNull = sourceOfApproval.approvedInputOrNullFor(testname);
 
@@ -86,6 +67,14 @@ public class Approver {
                 reportFailure(testname);
                 throw e;
             }
+        }
+    }
+
+    private void writeAndClose(Object formattedActual, Formatter aFormatter, OutputStream actualOutput) throws IOException {
+        try {
+            aFormatter.writeTo(formattedActual, actualOutput);
+        } finally {
+            closeQuietly(actualOutput);
         }
     }
 
