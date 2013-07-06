@@ -49,10 +49,11 @@ public class ApproverTest {
         approver.assertBinaryApproved("banana".getBytes());
 
         try {
-            approver.assertBinaryApproved("kumquat".getBytes());
+            approver.assertBinaryApproved("bnana".getBytes());
             fail();
-        } catch (AssertionError expected) {
+        } catch (ComparisonFailure failure) {
+            assertEquals("62 6E 61 6E 61", failure.getActual());
+            assertEquals("62 61 6E 61 6E 61", failure.getExpected());
         }
-
     }
 }

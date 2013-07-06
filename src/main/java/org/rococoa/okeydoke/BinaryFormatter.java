@@ -1,7 +1,11 @@
 package org.rococoa.okeydoke;
 
 import org.junit.Assert;
+import org.rococoa.okeydoke.internal.HexDump;
 
+/**
+ * This Formatter reads and writes raw bytes, but compares a hex dump.
+ */
 public class BinaryFormatter implements Formatter<byte[]> {
 
     @Override
@@ -16,7 +20,7 @@ public class BinaryFormatter implements Formatter<byte[]> {
 
     @Override
     public void assertEquals(byte[] expected, byte[] actual) {
-        Assert.assertArrayEquals(expected, actual);
+        Assert.assertEquals(HexDump.format(expected), HexDump.format(actual));
     }
 
     @Override
