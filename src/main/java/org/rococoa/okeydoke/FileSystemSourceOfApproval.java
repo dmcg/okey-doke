@@ -75,16 +75,22 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     public File approvedFileFor(String testname) {
-        return fileFor(approvedDir, testname, ".approved");
+        return fileFor(approvedDir, testname, approvedExtension());
+    }
+
+    private String approvedExtension() {
+        return ".approved";
     }
 
     public File actualFileFor(String testname) {
-        return fileFor(actualDir, testname, ".actual");
+        return fileFor(actualDir, testname, actualExtension());
+    }
+
+    private String actualExtension() {
+        return ".actual";
     }
 
     private File fileFor(File dir, String testname, String suffix) {
         return new File(dir, testname + suffix);
     }
-
-
 }
