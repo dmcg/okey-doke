@@ -2,12 +2,9 @@ package org.rococoa.okeydoke;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.IOException;
 import java.io.PrintStream;
-
-import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
 
 public class CommentaryTest {
 
@@ -24,11 +21,21 @@ public class CommentaryTest {
     private void check(PrintStream printStream, String fruit, int count) throws IOException {
         printStream.println("Given " + fruit + " count " + count);
         printStream.print("I sing ");
-        approver.assertApproved(describe(fruit, count));
+        approver.assertApproved(new Song(fruit, count));
     }
 
-    private static String describe(String fruit, int count) {
-        return "yes we have " + count + " " + fruit + "(s)";
-    }
+    private class Song {
+        private final String fruit;
+        private final int count;
 
+        public Song(String fruit, int count) {
+            this.fruit = fruit;
+            this.count = count;
+        }
+
+        @Override
+        public String toString() {
+            return "yes we have " + count + " " + fruit + "(s)";
+        }
+    }
 }
