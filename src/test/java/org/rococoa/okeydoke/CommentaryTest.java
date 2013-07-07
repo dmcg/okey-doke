@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 public class CommentaryTest {
 
-    // TODO - needs an outer rule to check that approver.assertIsSatisfied() has been called
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java", "target/approvals");
 
     @Test
