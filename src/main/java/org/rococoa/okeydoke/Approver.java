@@ -13,7 +13,7 @@ public class Approver {
     private final SourceOfApproval sourceOfApproval;
     private final Formatter formatter;
 
-    private final OutputStream outputForActual;
+    private OutputStream osForActual;
 
     public Approver(String testName, SourceOfApproval sourceOfApproval) {
         this(testName,  sourceOfApproval, Formatters.stringFormatter());
@@ -24,7 +24,7 @@ public class Approver {
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
         try {
-            outputForActual = sourceOfApproval.outputForActual(testName);
+            osForActual = sourceOfApproval.outputForActual(testName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -32,20 +32,29 @@ public class Approver {
 
 
     public PrintStream printStream() throws IOException {
-        return new PrintStream(outputForActual);
+        return new PrintStream(osForActual);
+    }
+
+    public void writeFormatted(Object object) throws IOException {
+        writeFormatted(object, formatter);
+    }
+
+    public void writeFormatted(Object object, Formatter aFormatter) throws IOException {
+        aFormatter.writeTo(aFormatter.formatted(object), osForActual);
     }
 
     public void assertApproved(Object actual) throws IOException {
         assertApproved(actual, formatter);
     }
 
-    public void approve(Object approved) throws IOException {
-        writeAndClose(approved, formatter, sourceOfApproval.outputForApproved(testName));
+    public void assertApproved(Object actual, Formatter aFormatter) throws IOException {
+        writeFormatted(actual, aFormatter);
+        assertSatisfied();
     }
 
-    public void assertApproved(Object actual, Formatter aFormatter) throws IOException {
-
-        writeActual(actual, aFormatter);
+    public void assertSatisfied() throws IOException {
+        osForActual.close();
+        osForActual = null;
 
         InputStream inputForApprovedOrNull = sourceOfApproval.inputOrNullForApproved(testName);
         InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
@@ -56,7 +65,7 @@ public class Approver {
             throw new AssertionError("This is embarrassing - I've lost the actual I just wrote for " + testName);
 
         try {
-            aFormatter.assertEquals(aFormatter.readFrom(inputForApprovedOrNull), aFormatter.readFrom(inputForActualOrNull));
+            formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
             return;
         } catch (AssertionError e) {
             reportFailure(testName);
@@ -64,16 +73,17 @@ public class Approver {
         }
     }
 
-    private void writeActual(Object actual, Formatter aFormatter) throws IOException {
-        writeAndClose(aFormatter.formatted(actual), aFormatter, outputForActual);
-    }
-
-    private void writeAndClose(Object formattedActual, Formatter aFormatter, OutputStream output) throws IOException {
+    public void approve(Object approved) throws IOException {
+        OutputStream output = sourceOfApproval.outputForApproved(testName);
         try {
-            aFormatter.writeTo(formattedActual, output);
+            formatter.writeTo(approved, output);
         } finally {
             closeQuietly(output);
         }
+    }
+
+    public boolean satifactionChecked() {
+        return osForActual == null;
     }
 
     private void reportFailure(String testname) {

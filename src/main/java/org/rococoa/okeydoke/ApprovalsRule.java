@@ -32,17 +32,42 @@ public abstract class ApprovalsRule extends TestWatcher {
         };
     }
 
+    public PrintStream printStream() throws IOException {
+        return approver().printStream();
+    }
+
+    public void writeFormatted(Object o) throws IOException {
+        approver().writeFormatted(o);
+    }
+
     public void assertApproved(Object actual) throws IOException {
-        _approver().assertApproved(actual);
+        approver().assertApproved(actual);
+    }
+
+    public void assertSatisfied() throws IOException {
+        if (approver().satifactionChecked())
+            throw new IllegalStateException("I've got too much satisfaction");
+        approver().assertSatisfied();
     }
 
     public void approve(Object approved) throws IOException {
-        _approver().approve(approved);
+        approver().approve(approved);
     }
 
     @Override
     protected void starting(Description description) {
         approver = createApprover(Naming.testNameFor(description), description.getTestClass());
+    }
+
+    @Override
+    protected void succeeded(Description description) {
+        if (approver().satifactionChecked())
+            return;
+        try {
+            assertSatisfied();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected Approver createApprover(String testName, Class<?> testClass) {
@@ -51,7 +76,7 @@ public abstract class ApprovalsRule extends TestWatcher {
 
     protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
-    private Approver _approver() {
+    private Approver approver() {
         checkRuleState();
         return approver;
     }
@@ -60,9 +85,5 @@ public abstract class ApprovalsRule extends TestWatcher {
         if (approver == null)
             throw new IllegalStateException("Somethings's wrong - check your " +
                     getClass().getSimpleName() + " is an @Rule field");
-    }
-
-    public PrintStream printStream() throws IOException {
-        return approver.printStream();
     }
 }
