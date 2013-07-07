@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.PrintStream;
 
 public class CommentaryTest {
 
@@ -12,18 +11,16 @@ public class CommentaryTest {
 
     @Test
     public void can_describe_what_we_are_doing_before_assertion() throws IOException {
-        PrintStream printStream = approver.printStream();
-        printStream.println("As a greengrocer");
-        printStream.println("I want to sing");
-        check(printStream, "banana", 0);
-
+        Transcript transcript = approver.transcript();
+        transcript.appendLine("As a greengrocer").
+            appendLine("I want to sing");
+        check(transcript, "banana", 0);
         // the rule will check the actual output against approved
     }
 
-    private void check(PrintStream printStream, String fruit, int count) throws IOException {
-        printStream.println("Given " + fruit + " count " + count);
-        printStream.print("I sing ");
-        approver.writeFormatted(new Song(fruit, count));
+    private void check(Transcript transcript, String fruit, int count) throws IOException {
+        transcript.appendLine("Given " + fruit + " count " + count).
+            append("I sing ").appendFormatted(new Song(fruit, count));
     }
 
     private class Song {

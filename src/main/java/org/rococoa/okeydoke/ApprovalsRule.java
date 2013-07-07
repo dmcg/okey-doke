@@ -86,4 +86,8 @@ public abstract class ApprovalsRule extends TestWatcher {
             throw new IllegalStateException("Somethings's wrong - check your " +
                     getClass().getSimpleName() + " is an @Rule field");
     }
+
+    public Transcript transcript() {
+        return approver().transcript();
+    }
 }

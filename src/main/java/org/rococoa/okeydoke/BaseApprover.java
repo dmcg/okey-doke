@@ -26,7 +26,7 @@ public class BaseApprover<T> {
         }
     }
 
-    public PrintStream printStream() throws IOException {
+    public PrintStream printStream() {
         return new PrintStream(osForActual);
     }
 
@@ -78,6 +78,10 @@ public class BaseApprover<T> {
 
     public boolean satisfactionChecked() {
         return osForActual == null;
+    }
+
+    public Formatter<T> formatter() {
+        return formatter;
     }
 
     private void reportFailure(String testname) {
