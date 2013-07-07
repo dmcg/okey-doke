@@ -9,22 +9,27 @@ import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
 public class Approver {
 
-    private final Formatter formatter = Formatters.stringFormatter();
-    private final Formatter<byte[]> binaryFormatter = Formatters.binaryFormatter();
-
     private final String testName;
     private final SourceOfApproval sourceOfApproval;
+    private final Formatter formatter;
+
     private final OutputStream outputForActual;
 
     public Approver(String testName, SourceOfApproval sourceOfApproval) {
+        this(testName,  sourceOfApproval, Formatters.stringFormatter());
+    }
+
+    public Approver(String testName, SourceOfApproval sourceOfApproval, Formatter formatter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
+        this.formatter = formatter;
         try {
             outputForActual = sourceOfApproval.outputForActual(testName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public PrintStream printStream() throws IOException {
         return new PrintStream(outputForActual);
@@ -36,14 +41,6 @@ public class Approver {
 
     public void approve(Object approved) throws IOException {
         writeAndClose(approved, formatter, sourceOfApproval.outputForApproved(testName));
-    }
-
-    public void assertBinaryApproved(byte[] actual) throws IOException {
-        assertApproved(actual, binaryFormatter);
-    }
-
-    public void approveBinary(byte[] approved) throws IOException {
-        writeAndClose(approved, binaryFormatter, sourceOfApproval.outputForApproved(testName));
     }
 
     public void assertApproved(Object actual, Formatter aFormatter) throws IOException {
