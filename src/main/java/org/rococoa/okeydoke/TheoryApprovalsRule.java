@@ -14,9 +14,10 @@ import java.util.Map;
 /**
  * Use as an @ClassRule to automate approval of @Theories in JUnit
  */
-public abstract class TheoryApprovalsRule extends ApprovalsRule {
+public abstract class TheoryApprovalsRule extends TestWatcher {
 
     private Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
+    private SourceOfApproval sourceOfApproval;
 
     public static TheoryApprovalsRule fileSystemRule(final String sourceRoot) {
         return new TheoryApprovalsRule() {
@@ -42,14 +43,20 @@ public abstract class TheoryApprovalsRule extends ApprovalsRule {
         return new TheoryApprover();
     }
 
+    public void starting(Description description) {
+        sourceOfApproval = createSourceOfApproval(description.getTestClass());
+    }
+
+    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
+
     @Override
     protected void succeeded(Description description) {
         List<Throwable> errors = new ArrayList<Throwable>();
         for (Map.Entry<Description, StringBuilder> entry : results.entrySet()) {
-            String actual = entry.getValue().toString();
-            String testName = Naming.testNameFor(entry.getKey());
             try {
-                assertApproved(actual, testName);
+                String actual = entry.getValue().toString();
+                Approver approver = new Approver(Naming.testNameFor(entry.getKey()), sourceOfApproval);
+                approver.assertApproved(actual);
             } catch (Throwable t) {
                 errors.add(t);
             }
@@ -66,13 +73,6 @@ public abstract class TheoryApprovalsRule extends ApprovalsRule {
         else if (t instanceof RuntimeException)
             throw (RuntimeException) t;
         else throw new RuntimeException(t);
-    }
-
-    @Override
-    protected void checkRuleState() {
-        if (approver == null)
-            throw new IllegalStateException("Somethings's wrong - check your " +
-                        getClass().getSimpleName() + " is an @ClassRule field");
     }
 
     public class TheoryApprover extends TestWatcher {

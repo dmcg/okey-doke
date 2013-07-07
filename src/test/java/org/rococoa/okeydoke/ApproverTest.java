@@ -1,5 +1,6 @@
 package org.rococoa.okeydoke;
 
+import org.junit.Before;
 import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,8 +15,13 @@ import static org.junit.Assert.fail;
 public class ApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
+    private Approver approver;
 
-    private final Approver approver = new Approver("testname", FileSystemSourceOfApproval.in("target/approvals"));
+    @Before
+    public void createApproverInsideCleanDirectoryRule() {
+        // required because otherwise the directory is removed after the approver has created its file inside it
+        approver = new Approver("testname", FileSystemSourceOfApproval.in("target/approvals"));
+    }
 
     @Test(expected = AssertionError.class)
     public void doesnt_match_where_no_approved_result() throws IOException {
@@ -38,16 +44,18 @@ public class ApproverTest {
         }
     }
 
-    @Test public void approve_binary() throws IOException {
-        try {
-            approver.assertBinaryApproved("banana".getBytes());
-            fail();
-        } catch (AssertionError expected) {
-        }
+    @Test(expected = AssertionError.class)
+    public void binary_doesnt_match_where_no_approved_result() throws IOException {
+        approver.assertBinaryApproved("banana".getBytes());
+    }
 
+    @Test public void binary_matches_when_approved_result_matches() throws IOException {
         approver.approveBinary("banana".getBytes());
         approver.assertBinaryApproved("banana".getBytes());
+    }
 
+    @Test public void binary_doesnt_match_when_approved_result_doesnt_match() throws IOException {
+        approver.approveBinary("banana".getBytes());
         try {
             approver.assertBinaryApproved("bnana".getBytes());
             fail();
@@ -56,4 +64,5 @@ public class ApproverTest {
             assertEquals("62 61 6E 61 6E 61", failure.getExpected());
         }
     }
+
 }

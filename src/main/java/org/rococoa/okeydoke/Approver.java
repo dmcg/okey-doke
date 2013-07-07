@@ -9,86 +9,66 @@ import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
 public class Approver {
 
-    private final String testName;
-    private final SourceOfApproval sourceOfApproval;
     private final Formatter formatter = Formatters.stringFormatter();
     private final Formatter<byte[]> binaryFormatter = Formatters.binaryFormatter();
 
-    private OutputStream outputForActual;
+    private final String testName;
+    private final SourceOfApproval sourceOfApproval;
+    private final OutputStream outputForActual;
 
     public Approver(String testName, SourceOfApproval sourceOfApproval) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
-    }
-
-    public PrintStream printStream() throws IOException {
-        return new PrintStream(outputForActual());
-    }
-
-    public void assertApproved(Object actual) throws IOException {
-        assertApproved(actual, testName);
-    }
-
-    public void assertApproved(Object actual, String testname) throws IOException {
-        assertApproved(actual, testname, formatter);
-    }
-
-    public void approve(Object approved) throws IOException {
-        approve(approved, testName);
-    }
-
-    public void approve(Object approved, String testname) throws IOException {
-        writeAndClose(approved, formatter, sourceOfApproval.outputForApproved(testname));
-    }
-
-    public void assertBinaryApproved(byte[] actual) throws IOException {
-        assertBinaryApproved(actual, testName);
-    }
-
-    public void assertBinaryApproved(byte[] actual, String testname) throws IOException {
-        assertApproved(actual, testname, binaryFormatter);
-    }
-
-    public void approveBinary(byte[] approved) throws IOException {
-        approveBinary(approved, testName);
-    }
-
-    public void approveBinary(byte[] approved, String testname) throws IOException {
-        writeAndClose(approved, binaryFormatter, sourceOfApproval.outputForApproved(testname));
-    }
-
-    public void assertApproved(Object actual, String testname, Formatter aFormatter) throws IOException {
-
-        writeActual(actual, testname, aFormatter);
-        resetOutputForActual();
-
-        InputStream approvedInputOrNull = sourceOfApproval.inputOrNullForApproved(testname);
-        InputStream actualOutput = sourceOfApproval.inputOrNullForActual(testname);
-
-        if (approvedInputOrNull == null) {
-            throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testname));
-        } else {
-            try {
-                aFormatter.assertEquals(aFormatter.readFrom(approvedInputOrNull), aFormatter.readFrom(actualOutput));
-                return;
-            } catch (AssertionError e) {
-                reportFailure(testname);
-                throw e;
-            }
+        try {
+            outputForActual = sourceOfApproval.outputForActual(testName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void resetOutputForActual() {
-        outputForActual = null;
+    public PrintStream printStream() throws IOException {
+        return new PrintStream(outputForActual);
     }
 
-    private void writeActual(Object actual, String testname, Formatter aFormatter) throws IOException {
-        if (outputForActual != null && !this.testName.equals(testname))
-            throw new IllegalStateException("Once you've started using my PrintStream, you can only approve with the original test name");
+    public void assertApproved(Object actual) throws IOException {
+        assertApproved(actual, formatter);
+    }
 
-        OutputStream localOutputForActual = outputForActual != null ? outputForActual :
-                sourceOfApproval.outputForActual(testname);
-        writeAndClose(aFormatter.formatted(actual), aFormatter, localOutputForActual);
+    public void approve(Object approved) throws IOException {
+        writeAndClose(approved, formatter, sourceOfApproval.outputForApproved(testName));
+    }
+
+    public void assertBinaryApproved(byte[] actual) throws IOException {
+        assertApproved(actual, binaryFormatter);
+    }
+
+    public void approveBinary(byte[] approved) throws IOException {
+        writeAndClose(approved, binaryFormatter, sourceOfApproval.outputForApproved(testName));
+    }
+
+    public void assertApproved(Object actual, Formatter aFormatter) throws IOException {
+
+        writeActual(actual, aFormatter);
+
+        InputStream inputForApprovedOrNull = sourceOfApproval.inputOrNullForApproved(testName);
+        InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+
+        if (inputForApprovedOrNull == null)
+            throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testName));
+        if (inputForActualOrNull == null)
+            throw new AssertionError("This is embarrassing - I've lost the actual I just wrote for " + testName);
+
+        try {
+            aFormatter.assertEquals(aFormatter.readFrom(inputForApprovedOrNull), aFormatter.readFrom(inputForActualOrNull));
+            return;
+        } catch (AssertionError e) {
+            reportFailure(testName);
+            throw e;
+        }
+    }
+
+    private void writeActual(Object actual, Formatter aFormatter) throws IOException {
+        writeAndClose(aFormatter.formatted(actual), aFormatter, outputForActual);
     }
 
     private void writeAndClose(Object formattedActual, Formatter aFormatter, OutputStream output) throws IOException {
@@ -101,13 +81,6 @@ public class Approver {
 
     private void reportFailure(String testname) {
         System.err.println(sourceOfApproval.toApproveText(testname));
-    }
-
-    private OutputStream outputForActual() throws IOException {
-        if (outputForActual == null) {
-            outputForActual = sourceOfApproval.outputForActual(testName);
-        }
-        return outputForActual;
     }
 
 }

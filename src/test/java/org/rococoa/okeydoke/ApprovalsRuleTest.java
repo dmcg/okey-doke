@@ -3,15 +3,10 @@ package org.rococoa.okeydoke;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.IOException;
 
-import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
-
 public class ApprovalsRuleTest {
-
-    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("target/approvals", this));
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 

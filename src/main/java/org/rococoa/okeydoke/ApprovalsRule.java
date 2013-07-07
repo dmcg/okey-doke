@@ -36,10 +36,6 @@ public abstract class ApprovalsRule extends TestWatcher {
         _approver().assertApproved(actual);
     }
 
-    public void assertApproved(Object actual, String testname) throws IOException {
-        _approver().assertApproved(actual, testname);
-    }
-
     public void approve(Object approved) throws IOException {
         _approver().approve(approved);
     }

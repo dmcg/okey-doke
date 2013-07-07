@@ -11,8 +11,6 @@ import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
 
 public class CommentaryTest {
 
-    @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(dirForPackage("target/approvals", this));
-
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java", "target/approvals");
 
     @Test

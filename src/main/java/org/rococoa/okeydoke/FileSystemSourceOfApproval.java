@@ -40,12 +40,17 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public OutputStream outputForApproved(String testname) throws IOException {
-        return new BufferedOutputStream(new FileOutputStream(approvedFileFor(testname)));
+        return createAndOpenOutputStreamFor(approvedFileFor(testname));
+    }
+
+    private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
+        file.getParentFile().mkdirs();
+        return new BufferedOutputStream(new FileOutputStream(file));
     }
 
     @Override
     public OutputStream outputForActual(String testname) throws IOException {
-        return new BufferedOutputStream(new FileOutputStream(actualFileFor(testname)));
+        return createAndOpenOutputStreamFor(actualFileFor(testname));
     }
 
     @Override
