@@ -17,7 +17,7 @@ public class ApprovalsRuleTidiesUpTest {
     private final TestWatcher checkDelegateIsCheckedRule = new TestWatcher() {
         @Override
         protected void succeeded(Description description) {
-            if (!delegate.satifactionChecked())
+            if (!delegate.satisfactionChecked())
                 fail("Rule didn't check delegate's satisfaction");
         }
     };

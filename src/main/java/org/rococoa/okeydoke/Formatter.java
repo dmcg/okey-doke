@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Converts Object's to, and byte[] to and from, T - a type that can be compared.
+ * Converts Objects to, and byte[] to and from, T - a type that can be compared.
  *
  * Note that as the format conversion is only applied one way, it does not have to
  * be reversible - so don't worry too much about escaping etc.

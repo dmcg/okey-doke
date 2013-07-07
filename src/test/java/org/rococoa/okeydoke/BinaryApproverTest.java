@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 public class BinaryApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
-    private Approver approver;
+    private BinaryApprover approver;
 
     @Before
     public void createApproverInsideCleanDirectoryRule() {

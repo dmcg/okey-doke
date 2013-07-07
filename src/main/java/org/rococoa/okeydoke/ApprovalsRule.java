@@ -45,7 +45,7 @@ public abstract class ApprovalsRule extends TestWatcher {
     }
 
     public void assertSatisfied() throws IOException {
-        if (approver().satifactionChecked())
+        if (approver().satisfactionChecked())
             throw new IllegalStateException("I've got too much satisfaction");
         approver().assertSatisfied();
     }
@@ -61,7 +61,7 @@ public abstract class ApprovalsRule extends TestWatcher {
 
     @Override
     protected void succeeded(Description description) {
-        if (approver().satifactionChecked())
+        if (approver().satisfactionChecked())
             return;
         try {
             assertSatisfied();

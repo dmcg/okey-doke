@@ -16,6 +16,8 @@ public class CommentaryTest {
         printStream.println("As a greengrocer");
         printStream.println("I want to sing");
         check(printStream, "banana", 0);
+
+        // the rule will check the actual output against approved
     }
 
     private void check(PrintStream printStream, String fruit, int count) throws IOException {
