@@ -7,15 +7,15 @@ import java.io.PrintStream;
 
 import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
-public class BaseApprover<T> {
+public class BaseApprover<T, C> {
 
     private final String testName;
     private final SourceOfApproval sourceOfApproval;
-    private final Formatter<T> formatter;
+    private final Formatter<T, C> formatter;
 
     private OutputStream osForActual;
 
-    protected BaseApprover(String testName, SourceOfApproval sourceOfApproval, Formatter<T> formatter) {
+    protected BaseApprover(String testName, SourceOfApproval sourceOfApproval, Formatter<T, C> formatter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
@@ -30,19 +30,19 @@ public class BaseApprover<T> {
         return new PrintStream(osForActual);
     }
 
-    public void writeFormatted(Object object) throws IOException {
+    public void writeFormatted(T object) throws IOException {
         writeFormatted(object, formatter);
     }
 
-    public void writeFormatted(Object object, Formatter<T> aFormatter) throws IOException {
+    public void writeFormatted(T object, Formatter<T, C> aFormatter) throws IOException {
         aFormatter.writeTo(aFormatter.formatted(object), osForActual);
     }
 
-    public void assertApproved(Object actual) throws IOException {
+    public void assertApproved(T actual) throws IOException {
         assertApproved(actual, formatter);
     }
 
-    public void assertApproved(Object actual, Formatter<T> aFormatter) throws IOException {
+    public void assertApproved(T actual, Formatter<T, C> aFormatter) throws IOException {
         writeFormatted(actual, aFormatter);
         assertSatisfied();
     }
@@ -67,7 +67,7 @@ public class BaseApprover<T> {
         }
     }
 
-    public void approve(Object approved) throws IOException {
+    public void approve(T approved) throws IOException {
         OutputStream output = sourceOfApproval.outputForApproved(testName);
         try {
             formatter.writeTo(formatter.formatted(approved), output);
@@ -80,7 +80,7 @@ public class BaseApprover<T> {
         return osForActual == null;
     }
 
-    public Formatter<T> formatter() {
+    public Formatter<T, C> formatter() {
         return formatter;
     }
 

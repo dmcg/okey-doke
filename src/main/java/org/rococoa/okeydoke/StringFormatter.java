@@ -6,7 +6,10 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-public class StringFormatter implements Formatter<String> {
+/**
+ * The standard Formatter, formats Objects to Strings.
+ */
+public class StringFormatter implements Formatter<Object, String> {
 
     private static final int BUFFER_SIZE = 4 * 1024;
 

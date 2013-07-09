@@ -11,7 +11,7 @@ public interface Transcript {
 
     public Transcript appendFormatted(Object o);
 
-    public Transcript appendFormatted(Object o, Formatter<String> formatter);
+    public <T> Transcript appendFormatted(T o, Formatter<T,String> formatter);
 
     public Transcript endl();
 }

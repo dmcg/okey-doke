@@ -5,9 +5,9 @@ import java.io.PrintStream;
 public class StandardTranscript implements Transcript {
 
     private final PrintStream stream;
-    private final Formatter<String> formatter;
+    private final Formatter<Object, String> formatter;
 
-    public StandardTranscript(PrintStream stream, Formatter<String> formatter) {
+    public StandardTranscript(PrintStream stream, Formatter<Object, String> formatter) {
         this.stream = stream;
         this.formatter = formatter;
     }
@@ -31,7 +31,7 @@ public class StandardTranscript implements Transcript {
     }
 
     @Override
-    public Transcript appendFormatted(Object o, Formatter<String> aFormatter) {
+    public <T> Transcript appendFormatted(T o, Formatter<T, String> aFormatter) {
         append(aFormatter.formatted(o));
         return this;
     }

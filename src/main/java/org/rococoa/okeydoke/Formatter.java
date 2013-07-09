@@ -5,19 +5,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Converts Objects to, and byte[] to and from, T - a type that can be compared.
+ * Formats things of type T to things of type C (for comparison), that can be assertEquals'd,
+ * and reads and writes Os from streams.
  *
  * Note that as the format conversion is only applied one way, it does not have to
  * be reversible - so don't worry too much about escaping etc.
  *
- * @param <T> the type of the comparison.
+ * @param <C> the type of the comparison.
  */
-public interface Formatter<T> {
+public interface Formatter<T, C> {
 
-    T formatted(Object object);
+    C formatted(T object);
 
-    void writeTo(T object, OutputStream os) throws IOException;
-    T readFrom(InputStream is) throws IOException;
+    void writeTo(C object, OutputStream os) throws IOException;
+    C readFrom(InputStream is) throws IOException;
 
-    void assertEquals(T expected, T actual);
+    void assertEquals(C expected, C actual);
 }

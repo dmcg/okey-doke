@@ -10,7 +10,7 @@ import java.io.OutputStream;
 /**
  * This Formatter reads and writes raw bytes, but compares a hex dump.
  */
-public class BinaryFormatter implements Formatter<byte[]> {
+public class BinaryFormatter implements Formatter<byte[], byte[]> {
 
     @Override
     public byte[] readFrom(InputStream is) throws IOException {
@@ -25,8 +25,8 @@ public class BinaryFormatter implements Formatter<byte[]> {
     }
 
     @Override
-    public byte[] formatted(Object actual) {
-        return (byte[]) actual;
+    public byte[] formatted(byte[] actual) {
+        return actual;
     }
 
     @Override
