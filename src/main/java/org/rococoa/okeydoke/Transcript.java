@@ -1,5 +1,8 @@
 package org.rococoa.okeydoke;
 
+/**
+ * The transcript provides a way to write text into the approved output.
+ */
 public interface Transcript {
 
     public Transcript appendLine(String s);
