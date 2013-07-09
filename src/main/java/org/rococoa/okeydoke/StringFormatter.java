@@ -2,18 +2,23 @@ package org.rococoa.okeydoke;
 
 import org.junit.Assert;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 public class StringFormatter implements Formatter<String> {
 
+    private static final int BUFFER_SIZE = 4 * 1024;
+
+    private final Charset charset;
+
+    public StringFormatter(Charset charset) {
+        this.charset = charset;
+    }
+
     @Override
     public String readFrom(InputStream is) throws IOException {
-        byte[] buf = new byte[is.available()]; // TODO - suss
-        is.read(buf);
-        return new String(buf);
+        return readFully(new InputStreamReader(is, charset));
     }
 
     @Override
@@ -32,7 +37,7 @@ public class StringFormatter implements Formatter<String> {
 
     @Override
     public void writeTo(String s, OutputStream os) throws IOException {
-        os.write(s.getBytes());
+        os.write(s.getBytes(charset));
     }
 
     private String stringFor(Iterable iterable) {
@@ -46,5 +51,15 @@ public class StringFormatter implements Formatter<String> {
 
     private String stringFor(Object[] iterable) {
         return stringFor(Arrays.asList(iterable));
+    }
+
+    private static String readFully(Reader input) throws IOException {
+        StringBuilder result = new StringBuilder();
+        char[] buffer = new char[BUFFER_SIZE];
+        int charsRead;
+        while ((charsRead = input.read(buffer)) != -1) {
+            result.append(buffer, 0, charsRead);
+        }
+        return result.toString();
     }
 }
