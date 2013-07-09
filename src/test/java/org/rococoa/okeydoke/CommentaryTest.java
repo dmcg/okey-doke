@@ -14,13 +14,12 @@ public class CommentaryTest {
         Transcript transcript = approver.transcript();
         transcript.appendLine("As a greengrocer").
             appendLine("I want to sing");
-        check(transcript, "banana", 0);
-        // the rule will check the actual output against approved
-    }
 
-    private void check(Transcript transcript, String fruit, int count) throws IOException {
-        transcript.appendLine("Given " + fruit + " count " + count).
-            append("I sing ").appendFormatted(new Song(fruit, count));
+        String fruit = "banana";
+        int fruitCount = 0;
+
+        transcript.appendLine("Given " + fruit + " count " + fruitCount);
+        transcript.append("I sing ").appendFormatted(new Song(fruit, fruitCount));
     }
 
     private class Song {
