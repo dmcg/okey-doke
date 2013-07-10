@@ -16,5 +16,5 @@ public interface SourceOfApproval {
 
     public String toApproveText(String testname);
 
-
+    public void reportFailure(String testName, Throwable e);
 }

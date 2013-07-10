@@ -65,7 +65,12 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public String toApproveText(String testname) {
-        return String.format("\nTo approve...\ncp %s %s", actualFileFor(testname), approvedFileFor(testname));
+        return String.format("To approve...\ncp %s %s", actualFileFor(testname), approvedFileFor(testname));
+    }
+
+    @Override
+    public void reportFailure(String testname, Throwable e) {
+        System.err.format("To see differences...\ndiff %s %s\n", actualFileFor(testname), approvedFileFor(testname));
     }
 
     public File approvedFileFor(String testname) {

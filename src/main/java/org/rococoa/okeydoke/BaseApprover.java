@@ -62,7 +62,7 @@ public class BaseApprover<T, C> {
         try {
             formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
         } catch (AssertionError e) {
-            reportFailure(testName);
+            sourceOfApproval.reportFailure(testName, e);
             throw e;
         }
     }
@@ -83,9 +83,4 @@ public class BaseApprover<T, C> {
     public Formatter<T, C> formatter() {
         return formatter;
     }
-
-    private void reportFailure(String testname) {
-        System.err.println(sourceOfApproval.toApproveText(testname));
-    }
-
 }
