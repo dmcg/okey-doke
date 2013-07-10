@@ -19,24 +19,31 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
     private Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
     private SourceOfApproval sourceOfApproval;
 
-    public static TheoryApprovalsRule fileSystemRule(final String sourceRoot) {
+    public static TheoryApprovalsRule fileSystemRule(final File sourceRoot) {
         return new TheoryApprovalsRule() {
             @Override
             protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
-                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage());
+                return new FileSystemSourceOfApproval(sourceRoot, testClass.getPackage());
             }
         };
     }
 
-    public static TheoryApprovalsRule fileSystemRule(final String sourceRoot, final String outDir) {
+    public static TheoryApprovalsRule fileSystemRule(String sourceRoot) {
+        return fileSystemRule(new File(sourceRoot));
+    }
+
+    public static TheoryApprovalsRule fileSystemRule(final File sourceRoot, final File outDir) {
         return new TheoryApprovalsRule() {
             @Override
             protected SourceOfApproval createSourceOfApproval(Class<?> testClass) {
                 return new FileSystemSourceOfApproval(
-                        FileSystemSourceOfApproval.dirForPackage(new File(sourceRoot), testClass.getPackage()),
-                        new File(outDir));
+                        FileSystemSourceOfApproval.dirForPackage(sourceRoot, testClass.getPackage()),
+                        outDir);
             }
         };
+    }
+    public static TheoryApprovalsRule fileSystemRule(String sourceRoot, String outDir) {
+        return fileSystemRule(new File(sourceRoot), new File(outDir));
     }
 
     public TheoryApprover approver() {
