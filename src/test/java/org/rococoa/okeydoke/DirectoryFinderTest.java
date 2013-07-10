@@ -1,9 +1,7 @@
 package org.rococoa.okeydoke;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,14 +10,11 @@ import static org.junit.Assert.*;
 
 public class DirectoryFinderTest {
 
+    private final File ROOT = new TestDirectory(DirectoryFinderTest.class);
 
-    public static final File ROOT = new File("target/dirfinder");
-
-    @Rule public CleanDirectoryRule cleanDir = new CleanDirectoryRule(ROOT);
-
-    private static final File not_there = new File(ROOT, "not_there");
-    private static final File thereButAFile = new File(ROOT, "is_a_file");
-    private static final File there = new File(ROOT, "is_a_dir");
+    private final File not_there = new File(ROOT, "not_there");
+    private final File thereButAFile = new File(ROOT, "is_a_file");
+    private final File there = new File(ROOT, "is_a_dir");
 
     @Before
     public void setup() throws IOException {
