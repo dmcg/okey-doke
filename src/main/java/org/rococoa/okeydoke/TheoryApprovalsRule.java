@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public abstract class TheoryApprovalsRule extends TestWatcher {
 
-    private Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
+    private final Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
     private SourceOfApproval sourceOfApproval;
 
     public static TheoryApprovalsRule fileSystemRule(final File sourceRoot) {
@@ -115,11 +115,11 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
             throw new NoSuchMethodException(methodName);
         }
 
-        private Class<? extends Object> classFor(Object object) {
-            return object instanceof Class ? (Class<? extends Object>) object : object.getClass();
+        private Class<?> classFor(Object object) {
+            return object instanceof Class ? (Class<?>) object : object.getClass();
         }
 
-        List<Method> findMethods(Class<? extends Object> objectClass, String methodName, Object... arguments) {
+        List<Method> findMethods(Class<?> objectClass, String methodName, Object... arguments) {
             List<Method> result = new ArrayList<Method>(2);
 
             for (Method method : objectClass.getMethods()) {
@@ -151,7 +151,7 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
             for (Object parameter : parameters) {
                 result.append(String.valueOf(parameter)).append(", ");
             }
-            return result.substring(0, result.length() - 2).toString();
+            return result.substring(0, result.length() - 2);
         }
     }
 }
