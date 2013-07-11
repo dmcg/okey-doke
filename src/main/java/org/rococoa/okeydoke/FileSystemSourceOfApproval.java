@@ -6,26 +6,32 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private final File approvedDir;
     private final File actualDir;
+    private final String differ;
 
     public FileSystemSourceOfApproval(File directory) {
         this(directory, directory);
     }
 
-    public FileSystemSourceOfApproval(File srcRoot, Package packege, File actualDir) {
-        this(dirForPackage(srcRoot, packege), actualDir);
+    public FileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
+        this(dirForPackage(srcRoot, thePackage), actualDir);
     }
 
     public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
+        this(approvedDir, actualDir, "diff");
+    }
+
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
+        this.differ = differ;
     }
 
-    public FileSystemSourceOfApproval(File root, Package packege) {
-        this(dirForPackage(root, packege));
+    public FileSystemSourceOfApproval(File root, Package thePackage) {
+        this(dirForPackage(root, thePackage));
     }
 
-    public static File dirForPackage(File root, Package packege) {
-        return new File(root, packege.getName().replaceAll("\\.", "/"));
+    public static File dirForPackage(File root, Package thePackage) {
+        return new File(root, thePackage.getName().replaceAll("\\.", "/"));
     }
 
     @Override
@@ -60,7 +66,16 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public void reportFailure(String testname, Throwable e) {
-        System.err.format("To see differences...\ndiff %s %s\n", actualFileFor(testname), approvedFileFor(testname));
+        System.err.println("To see differences...");
+        System.err.println(diffCommandFor(actualFileFor(testname), approvedFileFor(testname)));
+    }
+
+    protected String diffCommandFor(File actual, File approved) {
+        return differ() + " '" + actual + "' '" + approved + "'";
+    }
+
+    protected String differ() {
+        return differ;
     }
 
     public File approvedFileFor(String testname) {
