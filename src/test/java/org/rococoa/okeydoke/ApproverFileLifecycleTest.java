@@ -22,7 +22,7 @@ public class ApproverFileLifecycleTest {
         // required because otherwise the directory is removed after the approver has created its file inside it
         assertFalse(sourceOfApproval.actualFileFor("testname").exists());
         approver = new Approver("testname", sourceOfApproval);
-        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
     }
 
     @Test public void approved() throws IOException {

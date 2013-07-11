@@ -43,4 +43,9 @@ public class ApproverTest {
             assertEquals("banana", expected.getExpected());
         }
     }
+
+    @Test public void can_assert_with_nothing_approved() throws IOException {
+        approver.approve("");
+        approver.assertSatisfied();
+    }
 }

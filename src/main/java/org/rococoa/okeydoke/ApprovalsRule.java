@@ -87,7 +87,7 @@ public abstract class ApprovalsRule extends TestWatcher {
                     getClass().getSimpleName() + " is an @Rule field");
     }
 
-    public Transcript transcript() {
+    public Transcript transcript() throws IOException {
         return approver().transcript();
     }
 }

@@ -28,14 +28,12 @@ public class ApprovalsRuleTidiesUpTest {
 
     @Test public void rule_will_check_satisfaction() throws IOException {
         approver.writeFormatted("banana");
-
     }
 
     private class PrecannedApprovalsRule extends ApprovalsRule {
         private final Approver delegate;
 
         public PrecannedApprovalsRule(Approver delegate) {
-            //To change body of created methods use File | Settings | File Templates.
             this.delegate = delegate;
         }
 
