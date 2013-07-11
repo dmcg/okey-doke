@@ -7,16 +7,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     private final File approvedDir;
     private final File actualDir;
 
-    public static FileSystemSourceOfApproval in(String directory) {
-        return new FileSystemSourceOfApproval(new File(directory));
-    }
-
-    public static FileSystemSourceOfApproval in(String srcRoot, Object o, String actualDir) {
-        return new FileSystemSourceOfApproval(
-                new File(srcRoot), o.getClass().getPackage(),
-                new File(actualDir));
-    }
-
     public FileSystemSourceOfApproval(File directory) {
         this(directory, directory);
     }

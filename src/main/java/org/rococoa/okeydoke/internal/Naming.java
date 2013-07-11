@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.internal;
 
 import org.junit.runner.Description;
 

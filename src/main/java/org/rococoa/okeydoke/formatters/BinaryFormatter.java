@@ -1,6 +1,7 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.formatters;
 
 import org.junit.Assert;
+import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.HexDump;
 
 import java.io.IOException;

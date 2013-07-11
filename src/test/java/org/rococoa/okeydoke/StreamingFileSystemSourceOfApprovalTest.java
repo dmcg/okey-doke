@@ -4,6 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.internal.ComparingOutputStream;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
+import org.rococoa.okeydoke.sources.StreamingFileSystemSourceOfApproval;
+import org.rococoa.okeydoke.util.TestDirectory;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,5 +1,6 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.sources;
 
+import org.rococoa.okeydoke.FileSystemSourceOfApproval;
 import org.rococoa.okeydoke.internal.ComparingOutputStream;
 
 import java.io.File;

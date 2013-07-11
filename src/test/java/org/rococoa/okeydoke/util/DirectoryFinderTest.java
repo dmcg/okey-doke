@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.util;
 
 import org.junit.Before;
 import org.junit.Test;

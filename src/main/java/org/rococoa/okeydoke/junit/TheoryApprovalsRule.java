@@ -4,8 +4,8 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.FileSystemSourceOfApproval;
-import org.rococoa.okeydoke.Naming;
 import org.rococoa.okeydoke.SourceOfApproval;
+import org.rococoa.okeydoke.internal.Naming;
 
 import java.io.File;
 import java.io.IOException;

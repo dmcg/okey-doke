@@ -1,5 +1,8 @@
 package org.rococoa.okeydoke;
 
+import org.rococoa.okeydoke.formatters.BinaryFormatter;
+import org.rococoa.okeydoke.formatters.StringFormatter;
+
 import java.nio.charset.Charset;
 
 public class Formatters {

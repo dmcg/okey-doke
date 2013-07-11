@@ -20,7 +20,7 @@ public class BinaryApproverTest {
     @Before
     public void createApproverInsideCleanDirectoryRule() {
         // required because otherwise the directory is removed after the approver has created its file inside it
-        approver = new BinaryApprover("testname", FileSystemSourceOfApproval.in("target/approvals"));
+        approver = new BinaryApprover("testname", Sources.in("target/approvals"));
     }
 
     @Test(expected = AssertionError.class)

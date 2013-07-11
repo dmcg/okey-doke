@@ -2,7 +2,7 @@ package org.rococoa.okeydoke.junit;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.rococoa.okeydoke.TestDirectory;
+import org.rococoa.okeydoke.util.TestDirectory;
 
 public class TestDirectoryRule extends TestWatcher {
 

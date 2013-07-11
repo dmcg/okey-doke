@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.formatters;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -7,7 +7,7 @@ import org.rococoa.okeydoke.junit.ApprovalsRule;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class FormatterTest {
+public class StringFormatterTest {
 
     // Test through the approvalsRule for now
 
