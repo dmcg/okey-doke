@@ -3,8 +3,8 @@ package org.rococoa.okeydoke.junit;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
-import org.rococoa.okeydoke.FileSystemSourceOfApproval;
-import org.rococoa.okeydoke.SourceOfApproval;
+import org.rococoa.okeydoke.ApproverFactories;
+import org.rococoa.okeydoke.ApproverFactory;
 import org.rococoa.okeydoke.internal.Naming;
 
 import java.io.File;
@@ -19,18 +19,15 @@ import java.util.Map;
 /**
  * Use as an @ClassRule to automate approval of @Theories in JUnit
  */
-public abstract class TheoryApprovalsRule extends TestWatcher {
+public class TheoryApprovalsRule extends TestWatcher {
 
     private final Map<Description, Approver> approvers = new HashMap<Description, Approver>();
-    private SourceOfApproval sourceOfApproval;
+    private final ApproverFactory factory;
 
-    public static TheoryApprovalsRule fileSystemRule(final File sourceRoot) {
-        return new TheoryApprovalsRule() {
-            @Override
-            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
-                return new FileSystemSourceOfApproval(sourceRoot, testClass.getPackage());
-            }
-        };
+    private Description description;
+
+    public static TheoryApprovalsRule fileSystemRule(File sourceRoot) {
+        return fileSystemRule(sourceRoot, sourceRoot);
     }
 
     public static TheoryApprovalsRule fileSystemRule(String sourceRoot) {
@@ -38,17 +35,15 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
     }
 
     public static TheoryApprovalsRule fileSystemRule(final File sourceRoot, final File outDir) {
-        return new TheoryApprovalsRule() {
-            @Override
-            protected SourceOfApproval createSourceOfApproval(Class<?> testClass) {
-                return new FileSystemSourceOfApproval(
-                        FileSystemSourceOfApproval.dirForPackage(sourceRoot, testClass.getPackage()),
-                        outDir);
-            }
-        };
+        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot, outDir));
     }
+
     public static TheoryApprovalsRule fileSystemRule(String sourceRoot, String outDir) {
         return fileSystemRule(new File(sourceRoot), new File(outDir));
+    }
+
+    public TheoryApprovalsRule(ApproverFactory factory) {
+        this.factory = factory;
     }
 
     public TheoryApprover approver() {
@@ -56,10 +51,8 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
     }
 
     public void starting(Description description) {
-        sourceOfApproval = createSourceOfApproval(description.getTestClass());
+        this.description = description;
     }
-
-    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
     @Override
     protected void succeeded(Description description) {
@@ -93,7 +86,7 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
         public void starting(Description description) {
             theory = description;
             if (!approvers.containsKey(description))
-                approvers.put(theory, new Approver(Naming.testNameFor(description), sourceOfApproval));
+                approvers.put(theory, factory.create(Naming.testNameFor(description), TheoryApprovalsRule.this.description.getTestClass()));
             super.starting(description);
         }
 

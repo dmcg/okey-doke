@@ -7,13 +7,21 @@ import java.io.File;
 public class Sources {
 
     public static FileSystemSourceOfApproval in(String directory) {
-        return new FileSystemSourceOfApproval(new File(directory), new File(directory), differ());
+        return in(new File(directory));
     }
 
-    public static FileSystemSourceOfApproval in(String srcRoot, Object o, String actualDir) {
+    private static FileSystemSourceOfApproval in(File directory) {
+        return new FileSystemSourceOfApproval(directory, directory, differ());
+    }
+
+    public static FileSystemSourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
+        return in(new File(srcRoot), thePackage, new File(actualDir));
+    }
+
+    public static FileSystemSourceOfApproval in(File srcRoot, Package thePackage, File actualDir) {
         return new FileSystemSourceOfApproval(
-                FileSystemSourceOfApproval.dirForPackage(new File(srcRoot), o.getClass().getPackage()),
-                new File(actualDir),
+                FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
+                actualDir,
                 differ());
     }
 

@@ -19,12 +19,12 @@ public class StreamingFileSystemSourceOfApprovalTest {
 
     private final StreamingFileSystemSourceOfApproval sourceOfApproval = new StreamingFileSystemSourceOfApproval(dir);
 
-    @Rule public ApprovalsRule rule = new ApprovalsRule() {
+    @Rule public ApprovalsRule rule = new ApprovalsRule(new ApproverFactory() {
         @Override
-        protected SourceOfApproval createSourceOfApproval(Class<?> testClass) {
-            return sourceOfApproval;
+        public Approver create(String testName, Class<?> testClass) {
+            return new Approver(testName, sourceOfApproval);
         }
-    };
+    });
 
     @Test public void compares_actual_to_approved_as_its_writing() throws IOException {
         Formatter formatter = rule.approver().formatter();

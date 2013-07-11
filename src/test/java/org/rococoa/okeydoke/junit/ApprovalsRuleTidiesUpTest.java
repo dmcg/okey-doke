@@ -6,7 +6,6 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
-import org.rococoa.okeydoke.SourceOfApproval;
 import org.rococoa.okeydoke.Sources;
 
 import java.io.IOException;
@@ -39,15 +38,12 @@ public class ApprovalsRuleTidiesUpTest {
         private final Approver delegate;
 
         public PrecannedApprovalsRule(Approver delegate) {
+            super(null);
             this.delegate = delegate;
         }
 
         @Override protected Approver createApprover(String testName, Class<?> testClass) {
             return delegate;
-        }
-
-        @Override protected SourceOfApproval createSourceOfApproval(Class<?> testClass) {
-            return null;
         }
     }
 }

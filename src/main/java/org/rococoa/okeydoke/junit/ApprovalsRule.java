@@ -3,8 +3,8 @@ package org.rococoa.okeydoke.junit;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
-import org.rococoa.okeydoke.FileSystemSourceOfApproval;
-import org.rococoa.okeydoke.SourceOfApproval;
+import org.rococoa.okeydoke.ApproverFactories;
+import org.rococoa.okeydoke.ApproverFactory;
 import org.rococoa.okeydoke.Transcript;
 import org.rococoa.okeydoke.internal.Naming;
 
@@ -15,26 +15,21 @@ import java.io.PrintStream;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public abstract class ApprovalsRule extends TestWatcher {
+public class ApprovalsRule extends TestWatcher {
 
     protected Approver approver;
+    private final ApproverFactory factory;
 
     public static ApprovalsRule fileSystemRule(final String sourceRoot) {
-        return new ApprovalsRule() {
-            @Override
-            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
-                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage());
-            }
-        };
+        return fileSystemRule(sourceRoot, sourceRoot);
     }
 
     public static ApprovalsRule fileSystemRule(final String sourceRoot, final String actualDir) {
-        return new ApprovalsRule() {
-            @Override
-            protected FileSystemSourceOfApproval createSourceOfApproval(Class<?> testClass) {
-                return new FileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage(), new File(actualDir));
-            }
-        };
+        return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot), new File(actualDir)));
+    }
+
+    public ApprovalsRule(ApproverFactory factory) {
+        this.factory = factory;
     }
 
     public PrintStream printStream() throws IOException {
@@ -76,10 +71,8 @@ public abstract class ApprovalsRule extends TestWatcher {
     }
 
     protected Approver createApprover(String testName, Class<?> testClass) {
-        return new Approver(testName, createSourceOfApproval(testClass));
+        return factory.create(testName, testClass);
     }
-
-    protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
     public Approver approver() {
         checkRuleState();

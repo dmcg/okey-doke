@@ -14,16 +14,16 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
         super(directory);
     }
 
-    public StreamingFileSystemSourceOfApproval(File srcRoot, Package packege, File actualDir) {
-        super(srcRoot, packege, actualDir);
+    public StreamingFileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
+        super(srcRoot, thePackage, actualDir);
     }
 
     public StreamingFileSystemSourceOfApproval(File approvedDir, File actualDir) {
         super(approvedDir, actualDir);
     }
 
-    public StreamingFileSystemSourceOfApproval(File root, Package packege) {
-        super(root, packege);
+    public StreamingFileSystemSourceOfApproval(File root, Package thePackage) {
+        super(root, thePackage);
     }
 
     @Override
