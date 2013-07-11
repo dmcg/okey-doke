@@ -1,6 +1,7 @@
 package org.rococoa.okeydoke;
 
 import org.rococoa.okeydoke.internal.ComparingOutputStream;
+import org.rococoa.okeydoke.internal.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +12,9 @@ import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
 public class BaseApprover<T, C> {
 
-    private final String testName;
-    private final SourceOfApproval sourceOfApproval;
-    private final Formatter<T, C> formatter;
+    protected final String testName;
+    protected final SourceOfApproval sourceOfApproval;
+    final Formatter<T, C> formatter;
 
     private OutputStream osForActual;
     private boolean done;
@@ -48,11 +49,15 @@ public class BaseApprover<T, C> {
     public void assertSatisfied() throws IOException {
         try {
             osForActual().close();
-
-            if (osForActual() instanceof ComparingOutputStream) {
-                checkUsingComparingOutputStream((ComparingOutputStream) osForActual());
-            } else {
-                checkByReading();
+            try {
+                if (osForActual() instanceof ComparingOutputStream) {
+                    checkUsingComparingOutputStream((ComparingOutputStream) osForActual());
+                } else {
+                    checkByReading();
+                }
+            } catch (AssertionError e) {
+                sourceOfApproval.reportFailure(testName, e);
+                throw e;
             }
         } finally {
             osForActual = null;
@@ -67,13 +72,13 @@ public class BaseApprover<T, C> {
         if (inputForApprovedOrNull == null)
             throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testName));
         if (inputForActualOrNull == null)
-            throw new AssertionError("This is embarrassing - I've lost the actual I just wrote for " + testName);
+            throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
 
         try {
             formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
-        } catch (AssertionError e) {
-            sourceOfApproval.reportFailure(testName, e);
-            throw e;
+        } finally {
+            IO.closeQuietly(inputForActualOrNull);
+            IO.closeQuietly(inputForApprovedOrNull);
         }
     }
 
