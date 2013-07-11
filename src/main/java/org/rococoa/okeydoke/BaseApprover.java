@@ -48,30 +48,39 @@ public class BaseApprover<T, C> {
     public void assertSatisfied() throws IOException {
         try {
             osForActual().close();
+
             if (osForActual() instanceof ComparingOutputStream) {
-                long mismatchPosition = ((ComparingOutputStream) osForActual()).firstMismatchPosition();
-                if (mismatchPosition != -1)
-                    throw new AssertionError("Streams differed at " + mismatchPosition);
-            }
-
-            InputStream inputForApprovedOrNull = sourceOfApproval.inputOrNullForApproved(testName);
-            InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
-
-            if (inputForApprovedOrNull == null)
-                throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testName));
-            if (inputForActualOrNull == null)
-                throw new AssertionError("This is embarrassing - I've lost the actual I just wrote for " + testName);
-
-            try {
-                formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
-            } catch (AssertionError e) {
-                sourceOfApproval.reportFailure(testName, e);
-                throw e;
+                checkUsingComparingOutputStream((ComparingOutputStream) osForActual());
+            } else {
+                checkByReading();
             }
         } finally {
             osForActual = null;
             done = true;
         }
+    }
+
+    private void checkByReading() throws IOException {
+        InputStream inputForApprovedOrNull = sourceOfApproval.inputOrNullForApproved(testName);
+        InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+
+        if (inputForApprovedOrNull == null)
+            throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testName));
+        if (inputForActualOrNull == null)
+            throw new AssertionError("This is embarrassing - I've lost the actual I just wrote for " + testName);
+
+        try {
+            formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
+        } catch (AssertionError e) {
+            sourceOfApproval.reportFailure(testName, e);
+            throw e;
+        }
+    }
+
+    private void checkUsingComparingOutputStream(ComparingOutputStream comparingOutputStream) throws IOException {
+        long mismatchPosition = comparingOutputStream.firstMismatchPosition();
+        if (mismatchPosition != -1)
+            throw new AssertionError("Streams differed at " + mismatchPosition);
     }
 
     public void approve(T approved) throws IOException {
