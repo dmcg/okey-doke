@@ -1,7 +1,8 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.junit;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.rococoa.okeydoke.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +77,7 @@ public abstract class ApprovalsRule extends TestWatcher {
 
     protected abstract SourceOfApproval createSourceOfApproval(Class<?> testClass);
 
-    private Approver approver() {
+    public Approver approver() {
         checkRuleState();
         return approver;
     }

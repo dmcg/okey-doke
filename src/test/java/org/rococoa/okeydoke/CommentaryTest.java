@@ -2,6 +2,7 @@ package org.rococoa.okeydoke;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.IOException;
 

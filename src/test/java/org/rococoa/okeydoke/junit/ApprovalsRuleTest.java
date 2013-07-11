@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.junit;
 
 import org.junit.Ignore;
 import org.junit.Rule;

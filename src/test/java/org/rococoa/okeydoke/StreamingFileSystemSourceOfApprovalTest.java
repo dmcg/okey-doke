@@ -3,6 +3,7 @@ package org.rococoa.okeydoke;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.internal.ComparingOutputStream;
+import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,7 +25,7 @@ public class StreamingFileSystemSourceOfApprovalTest {
     };
 
     @Test public void compares_actual_to_approved_as_its_writing() throws IOException {
-        Formatter formatter = rule.approver.formatter();
+        Formatter formatter = rule.approver().formatter();
         OutputStream osForApproved = sourceOfApproval.outputForApproved("testname");
         formatter.writeTo("long contents we don't want to read into memory", osForApproved);
         osForApproved.close();
@@ -60,7 +61,7 @@ public class StreamingFileSystemSourceOfApprovalTest {
         } catch (AssertionError expected) {
             assertEquals("Streams differed at 5", expected.getMessage());
         }
-       assertEquals("long CONTENTS we don't want to read into memory", rule.approver.readActual());
+       assertEquals("long CONTENTS we don't want to read into memory", rule.approver().readActual());
     }
 
 }

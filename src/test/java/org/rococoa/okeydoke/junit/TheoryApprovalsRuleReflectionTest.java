@@ -1,10 +1,10 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.junit;
 
 import org.junit.Test;
 import org.junit.experimental.theories.Theories;
 import org.junit.runner.RunWith;
 
-import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
+import static org.rococoa.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
 
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleReflectionTest {

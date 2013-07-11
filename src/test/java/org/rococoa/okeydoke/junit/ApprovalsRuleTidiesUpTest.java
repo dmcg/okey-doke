@@ -1,10 +1,13 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.junit;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.rococoa.okeydoke.Approver;
+import org.rococoa.okeydoke.FileSystemSourceOfApproval;
+import org.rococoa.okeydoke.SourceOfApproval;
 
 import java.io.IOException;
 
@@ -27,6 +30,8 @@ public class ApprovalsRuleTidiesUpTest {
     @Rule public final RuleChain rules = RuleChain.outerRule(checkDelegateIsCheckedRule).around(approver);
 
     @Test public void rule_will_check_satisfaction() throws IOException {
+        approver.approve("banana");
+
         approver.writeFormatted("banana");
     }
 

@@ -2,13 +2,10 @@ package org.rococoa.okeydoke;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
-import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
+import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.IOException;
 import java.util.Arrays;
-
-import static org.rococoa.okeydoke.testutils.CleanDirectoryRule.dirForPackage;
 
 public class FormatterTest {
 

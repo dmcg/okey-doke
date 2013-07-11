@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.junit;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
+import static org.rococoa.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
 
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleTest {
