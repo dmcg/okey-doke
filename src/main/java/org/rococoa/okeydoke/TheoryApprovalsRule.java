@@ -4,6 +4,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public abstract class TheoryApprovalsRule extends TestWatcher {
 
-    private final Map<Description, StringBuilder> results = new HashMap<Description, StringBuilder>();
+    private final Map<Description, Approver> approvers = new HashMap<Description, Approver>();
     private SourceOfApproval sourceOfApproval;
 
     public static TheoryApprovalsRule fileSystemRule(final File sourceRoot) {
@@ -59,11 +60,9 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
     @Override
     protected void succeeded(Description description) {
         List<Throwable> errors = new ArrayList<Throwable>();
-        for (Map.Entry<Description, StringBuilder> entry : results.entrySet()) {
+        for (Approver approver : approvers.values()) {
             try {
-                String actual = entry.getValue().toString();
-                Approver approver = new Approver(Naming.testNameFor(entry.getKey()), sourceOfApproval);
-                approver.assertApproved(actual);
+                approver.assertSatisfied();
             } catch (Throwable t) {
                 errors.add(t);
             }
@@ -89,19 +88,19 @@ public abstract class TheoryApprovalsRule extends TestWatcher {
         @Override
         public void starting(Description description) {
             theory = description;
-            if (!results.containsKey(description))
-                results.put(theory, new StringBuilder());
+            if (!approvers.containsKey(description))
+                approvers.put(theory, new Approver(Naming.testNameFor(description), sourceOfApproval));
             super.starting(description);
         }
 
-        public void lockDown(Object result, Object... arguments) {
-            StringBuilder stringBuilder = results.get(theory);
-            if (stringBuilder == null)
+        public void lockDown(Object result, Object... arguments) throws IOException {
+            Approver approver = approvers.get(theory);
+            if (approver == null)
                 throw new IllegalStateException("Something's wrong - check that I am an @Rule!");
-            stringBuilder.append(formatted(result, arguments));
+            approver.writeFormatted(formatted(result, arguments));
         }
 
-        public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
             List<Method> methods = findMethods(classFor(object), methodName, arguments);
             for (Method method : methods) {
                 try {

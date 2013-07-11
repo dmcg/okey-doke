@@ -7,6 +7,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
@@ -26,7 +27,7 @@ public class QuickCheckTest {
     @DataPoints public static final int[] INTS = { -1, 0, 1, 2, 42 };
 
     @Theory
-    public void legacyMethod_output(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void legacyMethod_output(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
         approver.lockDownReflectively(this, "legacyMethod", fruit.name(), animal.name(), i);
     }
 

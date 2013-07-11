@@ -7,6 +7,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.rococoa.okeydoke.TheoryApprovalsRule.fileSystemRule;
@@ -22,32 +23,32 @@ public class TheoryApprovalsRuleTest {
     @DataPoints public static final String[] FRUITS = { "apple", "banana", "cucumber" };
 
     @Theory
-    public void string_length(String s) {
+    public void string_length(String s) throws IOException {
         approver.lockDown(s.length(), s);
     }
 
     @Theory
-    public void legacyMethod_output(String s) {
+    public void legacyMethod_output(String s) throws IOException {
         approver.lockDown(legacyMethod(s, s.length()), s, s.length());
     }
 
     @Theory
-    public void legacyMethod_output_reflectively(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void legacyMethod_output_reflectively(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
         approver.lockDownReflectively(this, "legacyMethod", s, s.length());
     }
 
     @Theory
-    public void legacyMethod_output_reflectively_overloaded(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void legacyMethod_output_reflectively_overloaded(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
         approver.lockDownReflectively(this, "legacyMethod", s);
     }
 
     @Theory
-    public void legacyMethod_output_reflectively_overloaded2(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void legacyMethod_output_reflectively_overloaded2(String s) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
         approver.lockDownReflectively(this, "legacyMethod", s, s);
     }
 
     @Theory
-    public void can_pass_class_for_static_methods(String s) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void can_pass_class_for_static_methods(String s) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
         approver.lockDownReflectively(this.getClass(), "legacyMethod", s, s.length());
     }
 
