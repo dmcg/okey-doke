@@ -60,6 +60,7 @@ public class StreamingFileSystemSourceOfApprovalTest {
         } catch (AssertionError expected) {
             assertEquals("Streams differed at 5", expected.getMessage());
         }
+       assertEquals("long CONTENTS we don't want to read into memory", rule.approver.readActual());
     }
 
 }

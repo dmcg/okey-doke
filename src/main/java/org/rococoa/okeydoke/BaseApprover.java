@@ -105,4 +105,17 @@ public class BaseApprover<T, C> {
             osForActual = sourceOfApproval.outputForActual(testName);
         return osForActual;
     }
+
+    public C readActual() throws IOException {
+        InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+        try {
+            if (inputForActualOrNull == null)
+                throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
+            return formatter.readFrom(inputForActualOrNull);
+        } finally {
+            IO.closeQuietly(inputForActualOrNull);
+        }
+    }
+
+
 }

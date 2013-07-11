@@ -23,9 +23,11 @@ public class ComparingOutputStream extends FilterOutputStream {
     @Override
     public void write(int b) throws IOException {
         position++;
-        int read = is.read();
-        if (b != read && firstMismatchPosition == -1)
-            firstMismatchPosition = position;
+        if (firstMismatchPosition == -1) {
+            int read = is.read();
+            if (b != read)
+                firstMismatchPosition = position;
+        }
         super.write(b);
     }
 
@@ -36,8 +38,18 @@ public class ComparingOutputStream extends FilterOutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        for (int i = off; i < len; i++) {
-            write(b[i]);
+        if (firstMismatchPosition == -1) {
+            for (int i = off; i < len; i++) {
+                write(b[i]);
+            }
+        } else {
+            super.write(b, off, len);
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+        is.close();
+        super.close();
     }
 }

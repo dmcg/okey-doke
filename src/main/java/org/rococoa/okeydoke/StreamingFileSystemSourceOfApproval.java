@@ -28,8 +28,8 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
     @Override
     public OutputStream outputForActual(String testname) throws IOException {
         InputStream approvedOrNull = inputOrNullForApproved(testname);
-        if (approvedOrNull == null)
-            return super.outputForActual(testname);
-        return new ComparingOutputStream(super.outputForActual(testname), approvedOrNull);
+        return approvedOrNull == null ?
+            super.outputForActual(testname) :
+            new ComparingOutputStream(super.outputForActual(testname), approvedOrNull);
     }
 }
