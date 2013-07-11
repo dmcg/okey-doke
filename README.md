@@ -14,3 +14,6 @@ There are three modes of operation, exemplified by
 2. [CommentaryTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/CommentaryTest.java)
  - for producing approved files with interactions.
 
+I'll get round to publishing to Maven Central eventually, but in the meantime there are relatively up to date jar files
+[here](http://oneeyedmen.com/okeydoke).
+
