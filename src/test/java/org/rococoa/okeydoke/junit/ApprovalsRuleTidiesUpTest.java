@@ -7,6 +7,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.Sources;
+import org.rococoa.okeydoke.testutils.PrecannedApprovalsRule;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ public class ApprovalsRuleTidiesUpTest {
         }
     };
 
-    private final ApprovalsRule approver = new PrecannedApprovalsRule(delegate);
+    private final ApprovalsRule approver = PrecannedApprovalsRule.with(delegate);
 
     @Rule public final RuleChain rules = RuleChain.outerRule(checkDelegateIsCheckedRule).around(approver);
 
@@ -34,16 +35,4 @@ public class ApprovalsRuleTidiesUpTest {
         approver.writeFormatted("banana");
     }
 
-    private class PrecannedApprovalsRule extends ApprovalsRule {
-        private final Approver delegate;
-
-        public PrecannedApprovalsRule(Approver delegate) {
-            super(null);
-            this.delegate = delegate;
-        }
-
-        @Override protected Approver createApprover(String testName, Class<?> testClass) {
-            return delegate;
-        }
-    }
 }
