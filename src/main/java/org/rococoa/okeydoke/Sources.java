@@ -30,7 +30,7 @@ public class Sources {
         return override != null ? override : differFor(OperatingSystem.current());
     }
 
-    private static String differFor(OperatingSystem os) {
+    public static String differFor(OperatingSystem os) {
         switch (os) {
             case LINUX:
                 return "bcompare";

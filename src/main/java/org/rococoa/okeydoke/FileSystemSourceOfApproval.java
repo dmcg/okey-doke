@@ -12,26 +12,26 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this(directory, directory);
     }
 
-    public FileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
-        this(dirForPackage(srcRoot, thePackage), actualDir);
+    public FileSystemSourceOfApproval(File srcRoot, Package packege, File actualDir) {
+        this(dirForPackage(srcRoot, packege), actualDir);
     }
 
     public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
         this(approvedDir, actualDir, "diff");
     }
 
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
+    protected FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
         this.differ = differ;
     }
 
-    public FileSystemSourceOfApproval(File root, Package thePackage) {
-        this(dirForPackage(root, thePackage));
+    public FileSystemSourceOfApproval(File root, Package aPackage) {
+        this(dirForPackage(root, aPackage));
     }
 
-    public static File dirForPackage(File root, Package thePackage) {
-        return new File(root, thePackage.getName().replaceAll("\\.", "/"));
+    public static File dirForPackage(File root, Package aPackage) {
+        return new File(root, aPackage.getName().replaceAll("\\.", "/"));
     }
 
     @Override
