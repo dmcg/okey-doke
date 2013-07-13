@@ -3,7 +3,7 @@ package org.rococoa.okeydoke.sources;
 import java.io.File;
 import java.io.IOException;
 
-class PopupFileSystemSourceOfApproval extends FileSystemSourceOfApproval {
+public class PopupFileSystemSourceOfApproval extends FileSystemSourceOfApproval {
 
     public PopupFileSystemSourceOfApproval(File directory) {
         super(directory);

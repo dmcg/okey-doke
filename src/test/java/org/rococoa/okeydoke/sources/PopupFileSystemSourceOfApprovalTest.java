@@ -14,7 +14,7 @@ public class PopupFileSystemSourceOfApprovalTest {
 
     @Rule public final TestDirectoryRule testDirectory = new TestDirectoryRule();
 
-    @Ignore("manual")
+    @Ignore("UnIgnore to try me out")
     @Test public void test() throws IOException {
         Approver approver = new Approver("testname",
                 new PopupFileSystemSourceOfApproval(

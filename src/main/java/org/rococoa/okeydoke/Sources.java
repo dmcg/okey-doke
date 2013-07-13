@@ -2,32 +2,48 @@ package org.rococoa.okeydoke;
 
 import org.rococoa.okeydoke.internal.OperatingSystem;
 import org.rococoa.okeydoke.sources.FileSystemSourceOfApproval;
+import org.rococoa.okeydoke.sources.PopupFileSystemSourceOfApproval;
 
 import java.io.File;
 
 public class Sources {
 
-    public static FileSystemSourceOfApproval in(String directory) {
+    public static final String DIFFER_PROPERTY_NAME = "okeydoke.differ";
+    public static final String POPUP_PROPERTY_NAME = "okeydoke.popup";
+
+    public static SourceOfApproval in(String directory) {
         return in(new File(directory));
     }
 
-    private static FileSystemSourceOfApproval in(File directory) {
-        return new FileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current()));
+    private static SourceOfApproval in(File directory) {
+        return popup() ?
+            new PopupFileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current())) :
+            new FileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current()));
     }
 
-    public static FileSystemSourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
+    public static SourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
         return in(new File(srcRoot), thePackage, new File(actualDir));
     }
 
-    public static FileSystemSourceOfApproval in(File srcRoot, Package thePackage, File actualDir) {
-        return new FileSystemSourceOfApproval(
-                FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
-                actualDir,
-                differ());
+    public static SourceOfApproval in(File srcRoot, Package thePackage, File actualDir) {
+        return popup() ?
+            new PopupFileSystemSourceOfApproval(
+                    FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
+                    actualDir,
+                    differ()) :
+            new FileSystemSourceOfApproval(
+                    FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
+                    actualDir,
+                    differ());
+    }
+
+    private static boolean popup() {
+        String propertyValue = System.getProperty(POPUP_PROPERTY_NAME, "false");
+        return propertyValue.equals("") ? true : Boolean.valueOf(propertyValue);
     }
 
     private static String differ() {
-        String override = System.getProperty("okeydoke.differ");
+        String override = System.getProperty(DIFFER_PROPERTY_NAME);
         return override != null ? override : differFor(OperatingSystem.current());
     }
 

@@ -16,7 +16,7 @@ public class ApproverFileLifecycleTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
 
-    private final FileSystemSourceOfApproval sourceOfApproval = Sources.in("target/approvals");
+    private final FileSystemSourceOfApproval sourceOfApproval = (FileSystemSourceOfApproval) Sources.in("target/approvals");
     private Approver approver;
 
     @Before public void createApproverInsideCleanDirectoryRule() {
