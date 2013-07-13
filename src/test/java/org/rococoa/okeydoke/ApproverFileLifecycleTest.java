@@ -3,6 +3,7 @@ package org.rococoa.okeydoke;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.sources.FileSystemSourceOfApproval;
 import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;

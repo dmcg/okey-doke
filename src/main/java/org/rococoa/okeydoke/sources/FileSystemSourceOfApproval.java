@@ -1,4 +1,6 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.sources;
+
+import org.rococoa.okeydoke.SourceOfApproval;
 
 import java.io.*;
 
@@ -12,15 +14,15 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this(directory, directory);
     }
 
-    public FileSystemSourceOfApproval(File srcRoot, Package packege, File actualDir) {
-        this(dirForPackage(srcRoot, packege), actualDir);
+    public FileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
+        this(dirForPackage(srcRoot, thePackage), actualDir);
     }
 
     public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
         this(approvedDir, actualDir, "diff");
     }
 
-    protected FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
         this.differ = differ;

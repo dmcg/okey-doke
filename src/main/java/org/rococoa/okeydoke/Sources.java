@@ -1,6 +1,7 @@
 package org.rococoa.okeydoke;
 
 import org.rococoa.okeydoke.internal.OperatingSystem;
+import org.rococoa.okeydoke.sources.FileSystemSourceOfApproval;
 
 import java.io.File;
 
@@ -11,7 +12,7 @@ public class Sources {
     }
 
     private static FileSystemSourceOfApproval in(File directory) {
-        return new FileSystemSourceOfApproval(directory, directory, differ());
+        return new FileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current()));
     }
 
     public static FileSystemSourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
