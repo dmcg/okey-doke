@@ -19,7 +19,7 @@ import static org.rococoa.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
 @RunWith(Theories.class)
 public class QuickCheckTest {
 
-    @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java", "target/approvals");
+    @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
     @DataPoints public static final Fruit[] FRUITs = Fruit.values();

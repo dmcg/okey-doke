@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class CommentaryTest {
 
-    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java", "target/approvals");
+    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
     @Test
     public void can_describe_what_we_are_doing_before_assertion() throws IOException {

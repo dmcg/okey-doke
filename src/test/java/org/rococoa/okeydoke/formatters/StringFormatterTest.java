@@ -11,7 +11,7 @@ public class StringFormatterTest {
 
     // Test through the approvalsRule for now
 
-    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java", "target/approvals");
+    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
     @Test public void a_string_is_itself() throws IOException {
         approver.assertApproved("A String");
