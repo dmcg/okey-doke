@@ -1,11 +1,11 @@
-package org.rococoa.okeydoke.internal;
+package org.rococoa.okeydoke.sources;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ComparingOutputStream extends FilterOutputStream {
+public class ComparingOutputStream extends FilterOutputStream implements Snitch {
 
     private final InputStream is;
     private long position = -1;
@@ -14,10 +14,6 @@ public class ComparingOutputStream extends FilterOutputStream {
     public ComparingOutputStream(OutputStream out, InputStream is) {
         super(out);
         this.is = is;
-    }
-
-    public long firstMismatchPosition() {
-        return firstMismatchPosition;
     }
 
     @Override
@@ -51,5 +47,11 @@ public class ComparingOutputStream extends FilterOutputStream {
     public void close() throws IOException {
         is.close();
         super.close();
+    }
+
+    @Override
+    public void grassOnTransgressions() throws AssertionError {
+        if (firstMismatchPosition != -1)
+            throw new AssertionError("Streams differed at " + firstMismatchPosition);
     }
 }

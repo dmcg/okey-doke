@@ -1,7 +1,5 @@
 package org.rococoa.okeydoke.sources;
 
-import org.rococoa.okeydoke.internal.ComparingOutputStream;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

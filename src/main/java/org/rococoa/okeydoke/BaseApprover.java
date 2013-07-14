@@ -1,7 +1,7 @@
 package org.rococoa.okeydoke;
 
-import org.rococoa.okeydoke.internal.ComparingOutputStream;
 import org.rococoa.okeydoke.internal.IO;
+import org.rococoa.okeydoke.sources.Snitch;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,8 +50,8 @@ public class BaseApprover<T, C> {
         try {
             osForActual().close();
             try {
-                if (osForActual() instanceof ComparingOutputStream) {
-                    checkUsingComparingOutputStream((ComparingOutputStream) osForActual());
+                if (osForActual() instanceof Snitch) {
+                    ((Snitch) osForActual()).grassOnTransgressions();
                 } else {
                     checkByReading();
                 }
@@ -81,12 +81,6 @@ public class BaseApprover<T, C> {
             IO.closeQuietly(inputForActualOrNull);
             IO.closeQuietly(inputForApprovedOrNull);
         }
-    }
-
-    private void checkUsingComparingOutputStream(ComparingOutputStream comparingOutputStream) throws IOException {
-        long mismatchPosition = comparingOutputStream.firstMismatchPosition();
-        if (mismatchPosition != -1)
-            throw new AssertionError("Streams differed at " + mismatchPosition);
     }
 
     public void approve(T approved) throws IOException {
