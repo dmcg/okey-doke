@@ -4,7 +4,7 @@
 
     <groupId>com.oneeyedmen</groupId>
     <artifactId>okeydoke</artifactId>
-    <version>0.6.5</version>
+    <version>0.7.0</version>
     <packaging>jar</packaging>
 
     <name>okeydoke</name>
