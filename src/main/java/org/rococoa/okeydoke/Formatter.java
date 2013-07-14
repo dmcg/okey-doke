@@ -19,6 +19,8 @@ public interface Formatter<T, C> {
 
     void writeTo(C object, OutputStream os) throws IOException;
     C readFrom(InputStream is) throws IOException;
+    T emptyThing();
 
     void assertEquals(C expected, C actual);
+
 }

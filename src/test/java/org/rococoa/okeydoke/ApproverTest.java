@@ -15,17 +15,17 @@ import static org.junit.Assert.fail;
 public class ApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
-    private Approver approver;
+    private final Approver approver = new Approver("testname", Sources.in("target/approvals"));
 
-    @Before
-    public void createApproverInsideCleanDirectoryRule() {
-        // required because otherwise the directory is removed after the approver has created its file inside it
-        approver = new Approver("testname", Sources.in("target/approvals"));
-    }
-
-    @Test(expected = AssertionError.class)
+    @Test
     public void doesnt_match_where_no_approved_result() throws IOException {
-        approver.assertApproved("banana");
+        try {
+            approver.assertApproved("banana");
+            fail();
+        } catch (ComparisonFailure expected) {
+            assertEquals("banana", expected.getActual());
+            assertEquals("", expected.getExpected());
+        }
     }
 
     @Test public void matches_when_approved_result_matches() throws IOException {

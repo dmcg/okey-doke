@@ -67,20 +67,30 @@ public class BaseApprover<T, C> {
     }
 
     private void checkByReading() throws IOException {
-        InputStream inputForApprovedOrNull = sourceOfApproval.inputOrNullForApproved(testName);
-        InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
-
-        if (inputForApprovedOrNull == null)
-            throw new AssertionError("No approved thing was found.\n" + sourceOfApproval.toApproveText(testName));
-        if (inputForActualOrNull == null)
-            throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
-
         try {
-            formatter.assertEquals(formatter.readFrom(inputForApprovedOrNull), formatter.readFrom(inputForActualOrNull));
+            formatter.assertEquals(formatter.readFrom(inputForApproved()), formatter.readFrom(inputForActual()));
         } finally {
-            IO.closeQuietly(inputForActualOrNull);
-            IO.closeQuietly(inputForApprovedOrNull);
+            IO.closeQuietly(inputForActual());
+            IO.closeQuietly(inputForApproved());
         }
+    }
+
+    private InputStream inputForActual() throws IOException {
+        InputStream result = sourceOfApproval.inputOrNullForActual(testName);
+        if (result != null) {
+            return result;
+        }
+        throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
+            // Can happen if we have opened file early and then delete the directory
+    }
+
+    private InputStream inputForApproved() throws IOException {
+        InputStream existing = sourceOfApproval.inputOrNullForApproved(testName);
+        if (existing != null)
+            return existing;
+        approve(formatter.emptyThing());
+        return sourceOfApproval.inputOrNullForApproved(testName);
+
     }
 
     public void approve(T approved) throws IOException {

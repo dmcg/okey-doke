@@ -26,6 +26,11 @@ public class StringFormatter implements Formatter<Object, String> {
     }
 
     @Override
+    public Object emptyThing() {
+        return "";
+    }
+
+    @Override
     public void assertEquals(String expected, String actual) {
         Assert.assertEquals(expected, actual);
     }

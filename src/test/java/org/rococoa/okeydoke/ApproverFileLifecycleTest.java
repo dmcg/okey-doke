@@ -43,7 +43,7 @@ public class ApproverFileLifecycleTest {
         try {
             approver.assertApproved("banana");
         } catch (AssertionError expected) {}
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
         assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 

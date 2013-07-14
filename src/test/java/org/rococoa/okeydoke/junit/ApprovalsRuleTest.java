@@ -1,18 +1,28 @@
 package org.rococoa.okeydoke.junit;
 
+import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 public class ApprovalsRuleTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void doesnt_match_where_no_approved_result() throws IOException {
-        approver.assertApproved("banana");
+        try {
+            approver.assertApproved("banana");
+            fail();
+        } catch (ComparisonFailure expected) {
+            assertEquals("banana", expected.getActual());
+            assertEquals("", expected.getExpected());
+        }
     }
 
     @Test public void matches_when_approved_result_matches() throws IOException {
@@ -20,10 +30,15 @@ public class ApprovalsRuleTest {
         approver.assertApproved("banana");
     }
 
-    @Test(expected = AssertionError.class)
-    public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.approve("banana");
-        approver.assertApproved("kumquat");
+        try {
+            approver.assertApproved("kumquat");
+            fail();
+        } catch (ComparisonFailure expected) {
+            assertEquals("kumquat", expected.getActual());
+            assertEquals("banana", expected.getExpected());
+        }
     }
 
     @Ignore("Unignore to see no approval in IDE")
