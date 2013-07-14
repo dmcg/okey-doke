@@ -17,4 +17,6 @@ public interface SourceOfApproval {
     public String toApproveText(String testname);
 
     public void reportFailure(String testName, Throwable e);
+
+    public void removeActual(String testname) throws IOException;
 }

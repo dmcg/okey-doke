@@ -72,6 +72,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         System.err.println(diffCommandFor(actualFileFor(testname), approvedFileFor(testname)));
     }
 
+    @Override
+    public void removeActual(String testname) throws IOException {
+        actualFileFor(testname).delete(); // best efforts
+    }
+
     protected String diffCommandFor(File actual, File approved) {
         return differ() + " '" + actual + "' '" + approved + "'";
     }

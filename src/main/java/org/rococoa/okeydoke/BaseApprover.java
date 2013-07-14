@@ -55,6 +55,7 @@ public class BaseApprover<T, C> {
                 } else {
                     checkByReading();
                 }
+                sourceOfApproval.removeActual(testName);
             } catch (AssertionError e) {
                 sourceOfApproval.reportFailure(testName, e);
                 throw e;

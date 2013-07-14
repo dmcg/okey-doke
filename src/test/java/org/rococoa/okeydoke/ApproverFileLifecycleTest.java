@@ -34,6 +34,7 @@ public class ApproverFileLifecycleTest {
 
         approver.assertApproved("banana");
         assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
     }
 
     @Test public void not_approved() throws IOException {
@@ -43,6 +44,7 @@ public class ApproverFileLifecycleTest {
             approver.assertApproved("banana");
         } catch (AssertionError expected) {}
         assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 
     @Test public void not_matching_approved() throws IOException {
@@ -55,5 +57,6 @@ public class ApproverFileLifecycleTest {
             approver.assertApproved("kumquat");
         } catch (AssertionError expected) {}
         assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.actualFileFor("testname").exists());
     }
 }
