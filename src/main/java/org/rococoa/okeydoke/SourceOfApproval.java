@@ -14,8 +14,6 @@ public interface SourceOfApproval {
 
     public InputStream inputOrNullForActual(String testname) throws IOException;
 
-    public String toApproveText(String testname);
-
     public void reportFailure(String testName, Throwable e);
 
     public void removeActual(String testname) throws IOException;

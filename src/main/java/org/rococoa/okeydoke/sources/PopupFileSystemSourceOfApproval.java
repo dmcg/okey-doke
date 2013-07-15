@@ -27,12 +27,12 @@ public class PopupFileSystemSourceOfApproval extends FileSystemSourceOfApproval 
 
     @Override
     public void reportFailure(String testname, Throwable e) {
+        super.reportFailure(testname, e);
         try {
             Runtime.getRuntime().exec(new String[] {
                     differ(), actualFileFor(testname).getAbsolutePath(), approvedFileFor(testname).getAbsolutePath() });
         } catch (IOException x) {
             System.err.println("Failed to run differ : " + x);
-            super.reportFailure(testname, e);
         }
     }
 }
