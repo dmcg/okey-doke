@@ -22,13 +22,18 @@ public class QuickCheckTest {
     @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
-    @DataPoints public static final Fruit[] FRUITs = Fruit.values();
+    @DataPoints public static final Fruit[] FRUITS = Fruit.values();
     @DataPoints public static final Animal[] ANIMALS = Animal.values();
     @DataPoints public static final int[] INTS = { -1, 0, 1, 2, 42 };
 
     @Theory
-    public void legacyMethod_output(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+    public void legacyMethod_checked_reflectively(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
         approver.lockDownReflectively(this, "legacyMethod", fruit.name(), animal.name(), i);
+    }
+
+    @Theory
+    public void legacyMethod_checked_fluently(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+        approver.lockDown(this).legacyMethod(fruit.name(), animal.name(), i);
     }
 
     public String legacyMethod(String fruitName, String animalName, int i) {

@@ -5,7 +5,9 @@ import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.ApproverFactories;
 import org.rococoa.okeydoke.ApproverFactory;
+import org.rococoa.okeydoke.internal.MethodFinder;
 import org.rococoa.okeydoke.internal.Naming;
+import org.rococoa.okeydoke.junit.jmock.JMockLocker;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +22,11 @@ import java.util.Map;
  * Use as an @ClassRule to automate approval of @Theories in JUnit
  */
 public class TheoryApprovalsRule extends TestWatcher {
+
+    public static final String LIST_SEPARATOR = ", ";
+    private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
+
+    private final MethodFinder methodFinder = new MethodFinder();
 
     private final Map<Description, Approver> approvers = new HashMap<Description, Approver>();
     private final ApproverFactory factory;
@@ -90,19 +97,19 @@ public class TheoryApprovalsRule extends TestWatcher {
             super.starting(description);
         }
 
-        public void lockDown(Object result, Object... arguments) throws IOException {
+        public void lockDownResult(Object result, Object... arguments) throws IOException {
             Approver approver = approvers.get(theory);
             if (approver == null)
-                throw new IllegalStateException("Something's wrong - check that I am an @Rule!");
+                throw new IllegalStateException("Something is wrong - check that I am an @Rule!");
             approver.writeFormatted(formatted(result, arguments));
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
-            List<Method> methods = findMethods(classFor(object), methodName, arguments);
+            List<Method> methods = methodFinder.findMethods(methodFinder.classFor(object), methodName, arguments);
             for (Method method : methods) {
                 try {
                     Object result = method.invoke(object, arguments);
-                    lockDown(result, arguments);
+                    lockDownResult(result, arguments);
                     return;
                 } catch (IllegalArgumentException wrongArguments) {
                     // ho hum, try the next
@@ -111,28 +118,9 @@ public class TheoryApprovalsRule extends TestWatcher {
             throw new NoSuchMethodException(methodName);
         }
 
-        private Class<?> classFor(Object object) {
-            return object instanceof Class ? (Class<?>) object : object.getClass();
-        }
-
-        List<Method> findMethods(Class<?> objectClass, String methodName, Object... arguments) {
-            List<Method> result = new ArrayList<Method>(2);
-
-            for (Method method : objectClass.getMethods()) {
-                if (methodMatches(method, methodName, arguments))
-                    result.add(method);
-            }
-            return result;
-        }
-
-        private boolean methodMatches(Method method, String methodName, Object[] arguments) {
-            if (!method.getName().equals(methodName))
-                return false;
-            return areCompatible(method.getParameterTypes(), arguments);
-        }
-
-        private boolean areCompatible(Class[] parameterTypes, Object[] arguments) {
-            return parameterTypes.length == arguments.length;
+        // experimental
+        public <T> T lockDown(final T object) {
+            return JMockLocker.lockWithJMock(object, this);
         }
 
         private String formatted(Object result, Object[] parameters) {
@@ -145,9 +133,10 @@ public class TheoryApprovalsRule extends TestWatcher {
         private String formatted(Object[] parameters) {
             StringBuilder result = new StringBuilder();
             for (Object parameter : parameters) {
-                result.append(String.valueOf(parameter)).append(", ");
+                result.append(String.valueOf(parameter)).append(LIST_SEPARATOR);
             }
-            return result.substring(0, result.length() - 2);
+            return result.substring(0, result.length() - LIST_SEPARATOR_LENGTH);
         }
     }
+
 }

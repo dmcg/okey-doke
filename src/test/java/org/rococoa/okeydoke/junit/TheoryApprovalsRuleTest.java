@@ -24,12 +24,12 @@ public class TheoryApprovalsRuleTest {
 
     @Theory
     public void string_length(String s) throws IOException {
-        approver.lockDown(s.length(), s);
+        approver.lockDownResult(s.length(), s);
     }
 
     @Theory
     public void legacyMethod_output(String s) throws IOException {
-        approver.lockDown(legacyMethod(s, s.length()), s, s.length());
+        approver.lockDownResult(legacyMethod(s, s.length()), s, s.length());
     }
 
     @Theory

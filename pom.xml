@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.oneeyedmen</groupId>
+    <groupId>org.rococoa</groupId>
     <artifactId>okeydoke</artifactId>
     <version>0.7.0</version>
     <packaging>jar</packaging>
@@ -21,6 +21,22 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
         </dependency>
+
+        <!-- These are scoped as provided so that we don't depend on them
+             They are used only by JMockLocker -->
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-legacy</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
