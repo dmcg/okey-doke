@@ -1,7 +1,7 @@
 okey-doke
 =========
 
-Approval Testing for JUnit - like http://approvaltests.sourceforge.net/ but more Java'y
+An Approval Testing library for Java and JUnit - like http://approvaltests.sourceforge.net/ but more Java'y
 and more the SimplestThingThatCouldPossiblyWork. A [helping hand](http://youtu.be/EbqaxWjIgOg) for many testing problems.
 
 
