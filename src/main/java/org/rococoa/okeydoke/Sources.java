@@ -12,19 +12,19 @@ public class Sources {
     public static final String DIFFER_PROPERTY_NAME = "okeydoke.differ";
     public static final String POPUP_PROPERTY_NAME = "okeydoke.popup";
 
-    public static SourceOfApproval in(String directory) {
+    public static SourceOfApproval<File> in(String directory) {
         return in(new File(directory));
     }
 
-    private static SourceOfApproval in(File directory) {
+    private static SourceOfApproval<File> in(File directory) {
         return new FileSystemSourceOfApproval(directory, directory, reporter());
     }
 
-    public static SourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
+    public static SourceOfApproval<File> in(String srcRoot, Package thePackage, String actualDir) {
         return in(new File(srcRoot), thePackage, new File(actualDir));
     }
 
-    public static SourceOfApproval in(File srcRoot, Package thePackage, File actualDir) {
+    public static SourceOfApproval<File> in(File srcRoot, Package thePackage, File actualDir) {
         return new FileSystemSourceOfApproval(
                     FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
                     actualDir,

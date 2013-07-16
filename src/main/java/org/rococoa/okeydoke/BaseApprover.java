@@ -10,16 +10,16 @@ import java.io.PrintStream;
 
 import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
-public class BaseApprover<T, C> {
+public class BaseApprover<T, C, F> {
 
     protected final String testName;
-    protected final SourceOfApproval sourceOfApproval;
+    protected final SourceOfApproval<F> sourceOfApproval;
     final Formatter<T, C> formatter;
 
     private OutputStream osForActual;
     private boolean done;
 
-    protected BaseApprover(String testName, SourceOfApproval sourceOfApproval, Formatter<T, C> formatter) {
+    protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval, Formatter<T, C> formatter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
