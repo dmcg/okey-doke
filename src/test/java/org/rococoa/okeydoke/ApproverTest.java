@@ -16,6 +16,10 @@ public class ApproverTest {
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
     private final Approver approver = new Approver("testname", Sources.in("target/approvals"), Reporters.reporter());
 
+    /*
+      Note that you won't usually use an Approver directly - ApprovalsRule will manage it for you
+     */
+
     @Test
     public void doesnt_match_where_no_approved_result() throws IOException {
         try {
