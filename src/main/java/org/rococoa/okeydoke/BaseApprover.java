@@ -74,11 +74,13 @@ public class BaseApprover<T, C, F> {
     }
 
     private void checkByReading() throws IOException {
+        InputStream approved = inputForApproved();
+        InputStream actual = inputForActual();
         try {
-            formatter.assertEquals(formatter.readFrom(inputForApproved()), formatter.readFrom(inputForActual()));
+            formatter.assertEquals(formatter.readFrom(approved), formatter.readFrom(actual));
         } finally {
-            IO.closeQuietly(inputForActual());
-            IO.closeQuietly(inputForApproved());
+            IO.closeQuietly(actual);
+            IO.closeQuietly(approved);
         }
     }
 
