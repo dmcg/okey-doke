@@ -1,8 +1,6 @@
 package org.rococoa.okeydoke.sources;
 
-import org.rococoa.okeydoke.Reporter;
 import org.rococoa.okeydoke.SourceOfApproval;
-import org.rococoa.okeydoke.reporters.CommandLineReporter;
 
 import java.io.*;
 
@@ -10,10 +8,13 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
 
     private final File approvedDir;
     private final File actualDir;
-    private final Reporter<File> reporter;
 
     public FileSystemSourceOfApproval(File directory) {
         this(directory, directory);
+    }
+
+    public FileSystemSourceOfApproval(File root, Package aPackage) {
+        this(dirForPackage(root, aPackage));
     }
 
     public FileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
@@ -21,23 +22,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
     }
 
     public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
-        this(approvedDir, actualDir, "diff");
-    }
-
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
-        reporter = new CommandLineReporter(differ);
-    }
-
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir, Reporter<File> reporter) {
-        this.approvedDir = approvedDir;
-        this.actualDir = actualDir;
-        this.reporter = reporter;
-    }
-
-    public FileSystemSourceOfApproval(File root, Package aPackage) {
-        this(dirForPackage(root, aPackage));
     }
 
     public static File dirForPackage(File root, Package aPackage) {
@@ -67,11 +53,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
     @Override
     public InputStream inputOrNullForActual(String testname) throws IOException {
         return InputStreamOrNullFor(actualFor(testname));
-    }
-
-    @Override
-    public void reportFailure(String testname, Throwable e) {
-        reporter.reportFailure(actualFor(testname), approvedFor(testname), e);
     }
 
     @Override

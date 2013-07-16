@@ -18,8 +18,6 @@ public interface SourceOfApproval<F> {
 
     public InputStream inputOrNullForActual(String testname) throws IOException;
 
-    public void reportFailure(String testName, Throwable e);
-
     public void removeActual(String testname) throws IOException;
 
     public F approvedFor(String testname);
