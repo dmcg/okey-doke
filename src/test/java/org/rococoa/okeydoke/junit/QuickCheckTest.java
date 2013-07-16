@@ -41,10 +41,10 @@ public class QuickCheckTest {
     }
 
     private static enum Fruit {
-        apple, banana, kumquat;
+        apple, banana, kumquat
     }
 
     private static enum Animal {
-        bear, cat, dog;
+        bear, cat, dog
     }
 }

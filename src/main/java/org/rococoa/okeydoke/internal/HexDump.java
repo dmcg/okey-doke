@@ -17,7 +17,7 @@ public class HexDump {
     }
 
     public static String format(byte[] bytes, boolean spaces, boolean Oxs) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0, length = bytes.length; i < length; i++) {
             if (spaces && i != 0)
                 result.append(' ');
@@ -29,7 +29,7 @@ public class HexDump {
     public static String format(byte aByte, boolean Ox) {
         char top = DIGITS[ (aByte >> 4) & 0x0F ];
         char bottom = DIGITS[ aByte & 0x0F ];
-        return (Ox == true ? "0x" : "") + top + bottom;
+        return (Ox ? "0x" : "") + top + bottom;
     }
 
     public static String format(byte aByte) {

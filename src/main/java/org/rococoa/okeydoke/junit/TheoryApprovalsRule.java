@@ -71,10 +71,9 @@ public class TheoryApprovalsRule extends TestWatcher {
                 errors.add(t);
             }
         }
-        if (errors.isEmpty())
-            return;
-        else
+        if (!errors.isEmpty()) {
             rethrow(errors.get(0));
+        }
     }
 
     private void rethrow(Throwable t) {

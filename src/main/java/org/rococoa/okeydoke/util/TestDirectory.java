@@ -107,7 +107,7 @@ public class TestDirectory extends File {
         for (int i = 0; i < retryCount - 1 && !file.exists(); i++) {
             try {
                 delete(file);
-            } catch (IOException ignoredForNow) {}
+            } catch (IOException ignored) {}
             System.gc();
         }
         
