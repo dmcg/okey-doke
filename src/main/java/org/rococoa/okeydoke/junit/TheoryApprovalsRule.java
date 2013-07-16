@@ -34,7 +34,7 @@ public class TheoryApprovalsRule extends TestWatcher {
     private Description description;
 
     public static TheoryApprovalsRule fileSystemRule(File sourceRoot) {
-        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot, sourceRoot));
+        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot));
     }
 
     public static TheoryApprovalsRule fileSystemRule(String sourceRoot) {
