@@ -34,19 +34,11 @@ public class TheoryApprovalsRule extends TestWatcher {
     private Description description;
 
     public static TheoryApprovalsRule fileSystemRule(File sourceRoot) {
-        return fileSystemRule(sourceRoot, sourceRoot);
+        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot, sourceRoot));
     }
 
     public static TheoryApprovalsRule fileSystemRule(String sourceRoot) {
         return fileSystemRule(new File(sourceRoot));
-    }
-
-    public static TheoryApprovalsRule fileSystemRule(final File sourceRoot, final File outDir) {
-        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot, outDir));
-    }
-
-    public static TheoryApprovalsRule fileSystemRule(String sourceRoot, String outDir) {
-        return fileSystemRule(new File(sourceRoot), new File(outDir));
     }
 
     public TheoryApprovalsRule(ApproverFactory factory) {

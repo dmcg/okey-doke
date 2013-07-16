@@ -14,15 +14,19 @@ public class BaseApprover<T, C, F> {
 
     protected final String testName;
     protected final SourceOfApproval<F> sourceOfApproval;
-    final Formatter<T, C> formatter;
+    private final Formatter<T, C> formatter;
+    private final Reporter<F> reporter;
 
     private OutputStream osForActual;
     private boolean done;
 
-    protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval, Formatter<T, C> formatter) {
+    protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval,
+                           Formatter<T, C> formatter,
+                           Reporter<F> reporter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
+        this.reporter = reporter;
     }
 
     public PrintStream printStream() throws IOException {
@@ -57,7 +61,10 @@ public class BaseApprover<T, C, F> {
                 }
                 sourceOfApproval.removeActual(testName);
             } catch (AssertionError e) {
-                sourceOfApproval.reportFailure(testName, e);
+                reporter.reportFailure(
+                        sourceOfApproval.actualFor(testName),
+                        sourceOfApproval.approvedFor(testName),
+                        e);
                 throw e;
             }
         } finally {

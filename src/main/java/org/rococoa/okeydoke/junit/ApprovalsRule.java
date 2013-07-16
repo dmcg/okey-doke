@@ -21,11 +21,7 @@ public class ApprovalsRule extends TestWatcher {
     private final ApproverFactory factory;
 
     public static ApprovalsRule fileSystemRule(final String sourceRoot) {
-        return fileSystemRule(sourceRoot, sourceRoot);
-    }
-
-    public static ApprovalsRule fileSystemRule(final String sourceRoot, final String actualDir) {
-        return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot), new File(actualDir)));
+        return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot), new File(sourceRoot)));
     }
 
     public ApprovalsRule(ApproverFactory factory) {

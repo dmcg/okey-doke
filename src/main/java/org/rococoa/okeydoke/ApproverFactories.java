@@ -10,7 +10,9 @@ public class ApproverFactories {
         return new ApproverFactory() {
             @Override
             public Approver create(String testName, Class<?> testClass) {
-                return new Approver(testName, Sources.in(sourceRoot, testClass.getPackage(), outDir));
+                return new Approver(testName,
+                        Sources.in(sourceRoot, testClass.getPackage(), outDir),
+                        Reporters.reporter());
             }
         };
     }
@@ -20,7 +22,8 @@ public class ApproverFactories {
             @Override
             public Approver create(String testName, Class<?> testClass) {
                 return new Approver(testName,
-                        new StreamingFileSystemSourceOfApproval(sourceRoot, testClass.getPackage(), outDir));
+                        new StreamingFileSystemSourceOfApproval(sourceRoot, testClass.getPackage(), outDir),
+                        Reporters.reporter());
             }
         };
     }

@@ -1,6 +1,5 @@
 package org.rococoa.okeydoke;
 
-import org.junit.Before;
 import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import static org.junit.Assert.fail;
 public class BinaryApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
-    private final BinaryApprover approver = new BinaryApprover("testname", Sources.in("target/approvals"));
+    private final BinaryApprover approver = new BinaryApprover("testname", Sources.in("target/approvals"), Reporters.reporter());
 
     @Test
     public void doesnt_match_where_no_approved_result() throws IOException {

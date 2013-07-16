@@ -1,9 +1,7 @@
 package org.rococoa.okeydoke;
 
-import java.io.File;
+public interface Reporter<F> {
 
-public interface Reporter<T> {
-
-    public void reportFailure(File actual, File approved, Throwable e);
+    public void reportFailure(F actual, F approved, Throwable e);
 
 }

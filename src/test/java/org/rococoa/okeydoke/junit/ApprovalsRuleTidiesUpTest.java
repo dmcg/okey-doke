@@ -6,6 +6,7 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
+import org.rococoa.okeydoke.Reporters;
 import org.rococoa.okeydoke.Sources;
 import org.rococoa.okeydoke.testutils.PrecannedApprovalsRule;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.fail;
 
 public class ApprovalsRuleTidiesUpTest {
 
-    private final Approver delegate = new Approver("testname", Sources.in("target/approvals"));
+    private final Approver delegate = new Approver("testname", Sources.in("target/approvals"), Reporters.reporter());
 
     private final TestWatcher checkDelegateIsCheckedRule = new TestWatcher() {
         @Override
