@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.HexDump;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,9 +16,12 @@ public class BinaryFormatter implements Formatter<byte[], byte[]> {
 
     @Override
     public byte[] readFrom(InputStream is) throws IOException {
-        byte[] buf = new byte[is.available()];
-        is.read(buf);
-        return buf;
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        int read = 0;
+        while ((read = is.read()) != -1) {
+            result.write(read);
+        }
+        return result.toByteArray();
     }
 
     @Override
