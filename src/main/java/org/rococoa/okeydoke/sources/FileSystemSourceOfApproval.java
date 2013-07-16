@@ -1,14 +1,16 @@
 package org.rococoa.okeydoke.sources;
 
+import org.rococoa.okeydoke.Reporter;
 import org.rococoa.okeydoke.SourceOfApproval;
+import org.rococoa.okeydoke.reporters.CommandLineReporter;
 
 import java.io.*;
 
-public class FileSystemSourceOfApproval implements SourceOfApproval {
+public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
 
     private final File approvedDir;
     private final File actualDir;
-    private final String differ;
+    private final Reporter<File> reporter;
 
     public FileSystemSourceOfApproval(File directory) {
         this(directory, directory);
@@ -25,7 +27,13 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     public FileSystemSourceOfApproval(File approvedDir, File actualDir, String differ) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
-        this.differ = differ;
+        reporter = new CommandLineReporter(differ);
+    }
+
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, Reporter<File> reporter) {
+        this.approvedDir = approvedDir;
+        this.actualDir = actualDir;
+        this.reporter = reporter;
     }
 
     public FileSystemSourceOfApproval(File root, Package aPackage) {
@@ -38,7 +46,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public OutputStream outputForApproved(String testname) throws IOException {
-        return createAndOpenOutputStreamFor(approvedFileFor(testname));
+        return createAndOpenOutputStreamFor(approvedFor(testname));
     }
 
     private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
@@ -48,41 +56,31 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public OutputStream outputForActual(String testname) throws IOException {
-        return createAndOpenOutputStreamFor(actualFileFor(testname));
+        return createAndOpenOutputStreamFor(actualFor(testname));
     }
 
     @Override
     public InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
-        return InputStreamOrNullFor(approvedFileFor(testname));
+        return InputStreamOrNullFor(approvedFor(testname));
     }
 
     @Override
     public InputStream inputOrNullForActual(String testname) throws IOException {
-        return InputStreamOrNullFor(actualFileFor(testname));
+        return InputStreamOrNullFor(actualFor(testname));
     }
 
     @Override
     public void reportFailure(String testname, Throwable e) {
-        System.err.println("To see differences...");
-        System.err.println(diffCommandFor(actualFileFor(testname), approvedFileFor(testname)));
-        System.err.println("To approve...");
-        System.err.format("cp '%s' '%s'\n", actualFileFor(testname), approvedFileFor(testname));
+        reporter.reportFailure(actualFor(testname), approvedFor(testname), e);
     }
 
     @Override
     public void removeActual(String testname) throws IOException {
-        actualFileFor(testname).delete(); // best efforts
+        actualFor(testname).delete(); // best efforts
     }
 
-    protected String diffCommandFor(File actual, File approved) {
-        return differ() + " '" + actual + "' '" + approved + "'";
-    }
-
-    protected String differ() {
-        return differ;
-    }
-
-    public File approvedFileFor(String testname) {
+    @Override
+    public File approvedFor(String testname) {
         return fileFor(approvedDir, testname, approvedExtension());
     }
 
@@ -90,7 +88,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return ".approved";
     }
 
-    public File actualFileFor(String testname) {
+    @Override
+    public File actualFor(String testname) {
         return fileFor(actualDir, testname, actualExtension());
     }
 

@@ -16,9 +16,9 @@ public class FileSystemSourceOfApprovalTest {
     @Test public void writes_files_in_package() throws IOException {
         assertEquals(
                 new File("target/approvals", "testname.approved"),
-                sourceOfApproval.approvedFileFor("testname"));
+                sourceOfApproval.approvedFor("testname"));
         assertEquals(
                 new File("target/approvals", "testname.actual"),
-                sourceOfApproval.actualFileFor("testname"));
+                sourceOfApproval.actualFor("testname"));
     }
 }

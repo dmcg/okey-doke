@@ -1,8 +1,9 @@
 package org.rococoa.okeydoke;
 
 import org.rococoa.okeydoke.internal.OperatingSystem;
+import org.rococoa.okeydoke.reporters.CommandLineReporter;
+import org.rococoa.okeydoke.reporters.PopupReporter;
 import org.rococoa.okeydoke.sources.FileSystemSourceOfApproval;
-import org.rococoa.okeydoke.sources.PopupFileSystemSourceOfApproval;
 
 import java.io.File;
 
@@ -16,9 +17,7 @@ public class Sources {
     }
 
     private static SourceOfApproval in(File directory) {
-        return popup() ?
-            new PopupFileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current())) :
-            new FileSystemSourceOfApproval(directory, directory, differFor(OperatingSystem.current()));
+        return new FileSystemSourceOfApproval(directory, directory, reporter());
     }
 
     public static SourceOfApproval in(String srcRoot, Package thePackage, String actualDir) {
@@ -26,15 +25,14 @@ public class Sources {
     }
 
     public static SourceOfApproval in(File srcRoot, Package thePackage, File actualDir) {
-        return popup() ?
-            new PopupFileSystemSourceOfApproval(
+        return new FileSystemSourceOfApproval(
                     FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
                     actualDir,
-                    differ()) :
-            new FileSystemSourceOfApproval(
-                    FileSystemSourceOfApproval.dirForPackage(srcRoot, thePackage),
-                    actualDir,
-                    differ());
+                    reporter());
+    }
+
+    private static Reporter<File> reporter() {
+        return popup() ? new PopupReporter(differ()) : new CommandLineReporter(differ());
     }
 
     private static boolean popup() {

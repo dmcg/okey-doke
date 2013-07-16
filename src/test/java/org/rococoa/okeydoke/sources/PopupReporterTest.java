@@ -7,20 +7,21 @@ import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.Sources;
 import org.rococoa.okeydoke.internal.OperatingSystem;
 import org.rococoa.okeydoke.junit.TestDirectoryRule;
+import org.rococoa.okeydoke.reporters.PopupReporter;
 
 import java.io.IOException;
 
-public class PopupFileSystemSourceOfApprovalTest {
+public class PopupReporterTest {
 
     @Rule public final TestDirectoryRule testDirectory = new TestDirectoryRule();
 
     @Ignore("UnIgnore to try me out")
     @Test public void test() throws IOException {
         Approver approver = new Approver("testname",
-                new PopupFileSystemSourceOfApproval(
+                new FileSystemSourceOfApproval(
                     testDirectory.dir(),
                     testDirectory.dir(),
-                    Sources.differFor(OperatingSystem.current())));
+                    new PopupReporter(Sources.differFor(OperatingSystem.current()))));
 
         approver.approve("Now is the time for all good men to come to the aid of the party.");
         approver.assertApproved("Now isn't the time for all gods men to come to the aid of the party");
