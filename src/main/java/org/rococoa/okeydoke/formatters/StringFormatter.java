@@ -49,6 +49,10 @@ public class StringFormatter implements Formatter<Object, String> {
         os.write(s.getBytes(charset));
     }
 
+    public Charset getCharset() {
+        return charset;
+    }
+
     private String stringFor(Iterable iterable) {
         StringBuilder result = new StringBuilder("[");
         for (Object o : iterable) {
