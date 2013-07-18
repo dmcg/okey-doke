@@ -13,11 +13,11 @@ import java.io.IOException;
  */
 public class ApprovalsRule extends BaseApprovalsRule<Object, Approver> {
 
-    public static ApprovalsRule fileSystemRule(final String sourceRoot) {
+    public static ApprovalsRule fileSystemRule(String sourceRoot) {
         return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));
     }
 
-    public static ApprovalsRule streamingFileSystemRule(final String sourceRoot) {
+    public static ApprovalsRule streamingFileSystemRule(String sourceRoot) {
         return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));
     }
 
