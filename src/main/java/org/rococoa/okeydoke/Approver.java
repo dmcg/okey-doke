@@ -9,7 +9,7 @@ public class Approver extends BaseApprover<Object, String, File> {
         this(testName, sourceOfApproval, Formatters.stringFormatter(), reporter);
     }
 
-    public Approver(String testName, SourceOfApproval sourceOfApproval, Formatter<Object, String> formatter, Reporter<File> reporter) {
+    public Approver(String testName, SourceOfApproval<File> sourceOfApproval, Formatter<Object, String> formatter, Reporter<File> reporter) {
         super(testName, sourceOfApproval, formatter, reporter);
     }
 

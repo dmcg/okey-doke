@@ -1,5 +1,5 @@
 package org.rococoa.okeydoke;
 
-public interface ApproverFactory {
-    public Approver create(String testName, Class<?> testClass);
+public interface ApproverFactory extends BaseApproverFactory<Object, Approver> {
+    @Override public Approver create(String testName, Class<?> testClass);
 }

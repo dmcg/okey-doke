@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- *
  * @param <F> - the type of the storage of approved and actual
  */
 public interface SourceOfApproval<F> {
