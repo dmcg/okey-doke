@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class Approver extends BaseApprover<Object, String, File> {
 
-    public Approver(String testName, SourceOfApproval sourceOfApproval, Reporter<File> reporter) {
+    public Approver(String testName, SourceOfApproval<File> sourceOfApproval, Reporter<File> reporter) {
         this(testName, sourceOfApproval, Formatters.stringFormatter(), reporter);
     }
 
