@@ -17,6 +17,10 @@ public class ApprovalsRule extends BaseApprovalsRule<Object, Approver> {
         return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));
     }
 
+    public static ApprovalsRule streamingFileSystemRule(final String sourceRoot) {
+        return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));
+    }
+
     public ApprovalsRule(ApproverFactory factory) {
         super(factory);
     }
