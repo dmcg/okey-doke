@@ -4,7 +4,7 @@
 
     <groupId>org.rococoa</groupId>
     <artifactId>okeydoke</artifactId>
-    <version>0.8.0</version>
+    <version>0.8.1</version>
     <packaging>jar</packaging>
 
     <name>okeydoke</name>
