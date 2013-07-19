@@ -14,21 +14,8 @@ public class Sources {
         return new FileSystemSourceOfApproval(directory);
     }
 
-    public static SourceOfApproval<File> in(String srcRoot, Package thePackage) {
-        return in(new File(srcRoot), thePackage);
-    }
-
     public static SourceOfApproval<File> in(File srcRoot, Package thePackage) {
         return new FileSystemSourceOfApproval(srcRoot, thePackage);
     }
-
-    public static SourceOfApproval<File> in(String srcRoot, Package thePackage, String actualDir) {
-        return in(new File(srcRoot), thePackage, new File(actualDir));
-    }
-
-    public static SourceOfApproval<File> in(File srcRoot, Package thePackage, File actualDir) {
-        return new FileSystemSourceOfApproval(srcRoot, thePackage, actualDir);
-    }
-
 
 }

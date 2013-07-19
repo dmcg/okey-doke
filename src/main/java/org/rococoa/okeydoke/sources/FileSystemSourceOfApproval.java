@@ -6,24 +6,17 @@ import java.io.*;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
 
-    private final File approvedDir;
-    private final File actualDir;
+    private File approvedDir;
+    private File actualDir;
+    private String typeExtension = "";
 
     public FileSystemSourceOfApproval(File directory) {
-        this(directory, directory);
+        this.approvedDir = directory;
+        this.actualDir = directory;
     }
 
     public FileSystemSourceOfApproval(File root, Package aPackage) {
         this(dirForPackage(root, aPackage));
-    }
-
-    public FileSystemSourceOfApproval(File srcRoot, Package thePackage, File actualDir) {
-        this(dirForPackage(srcRoot, thePackage), actualDir);
-    }
-
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir) {
-        this.approvedDir = approvedDir;
-        this.actualDir = actualDir;
     }
 
     public static File dirForPackage(File root, Package aPackage) {
@@ -47,12 +40,12 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
 
     @Override
     public InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
-        return InputStreamOrNullFor(approvedFor(testname));
+        return inputStreamOrNullFor(approvedFor(testname));
     }
 
     @Override
     public InputStream inputOrNullForActual(String testname) throws IOException {
-        return InputStreamOrNullFor(actualFor(testname));
+        return inputStreamOrNullFor(actualFor(testname));
     }
 
     @Override
@@ -65,8 +58,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
         return fileFor(approvedDir, testname, approvedExtension());
     }
 
-    private String approvedExtension() {
-        return ".approved";
+    protected String approvedExtension() {
+        return ".approved" + typeExtension();
     }
 
     @Override
@@ -74,15 +67,29 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
         return fileFor(actualDir, testname, actualExtension());
     }
 
-    private String actualExtension() {
-        return ".actual";
+    public FileSystemSourceOfApproval withActualDirectory(File actualDirectory) {
+        this.actualDir = actualDirectory;
+        return this;
+    }
+
+    public FileSystemSourceOfApproval withTypeExtension(String typeExtension) {
+        this.typeExtension = typeExtension;
+        return this;
+    }
+
+    protected String actualExtension() {
+        return ".actual" + typeExtension();
+    }
+
+    protected String typeExtension() {
+        return typeExtension;
     }
 
     private File fileFor(File dir, String testname, String suffix) {
         return new File(dir, testname + suffix);
     }
 
-    private InputStream InputStreamOrNullFor(File file) throws FileNotFoundException {
+    private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {
         return !(file.exists() && file.isFile()) ?
                 null : new BufferedInputStream(new FileInputStream(file));
     }
