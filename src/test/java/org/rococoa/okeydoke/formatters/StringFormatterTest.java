@@ -29,5 +29,9 @@ public class StringFormatterTest {
         approver.assertApproved(Arrays.asList("one", "two", "three"));
     }
 
+    @Test public void null_is_printed() throws IOException {
+        approver.assertApproved(null);
+    }
+
 
 }

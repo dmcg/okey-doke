@@ -70,7 +70,7 @@ public class BaseApprovalsRule<T, A extends BaseApprover<T,?,?>> extends TestWat
 
     protected void checkRuleState() {
         if (approver == null)
-            throw new IllegalStateException("Somethings is wrong - check your " +
+            throw new IllegalStateException("Something is wrong - check your " +
                     getClass().getSimpleName() + " is an @Rule field");
     }
 }

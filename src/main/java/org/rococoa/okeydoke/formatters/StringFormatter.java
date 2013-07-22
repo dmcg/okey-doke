@@ -37,6 +37,8 @@ public class StringFormatter implements Formatter<Object, String> {
 
     @Override
     public String formatted(Object actual) {
+        if (actual == null)
+            return representationOfNull();
         if (actual.getClass().isArray())
             return stringFor((Object[]) actual);
         if (actual instanceof Iterable)
@@ -51,6 +53,10 @@ public class StringFormatter implements Formatter<Object, String> {
 
     public Charset getCharset() {
         return charset;
+    }
+
+    protected String representationOfNull() {
+        return "NULL";
     }
 
     private String stringFor(Iterable iterable) {
