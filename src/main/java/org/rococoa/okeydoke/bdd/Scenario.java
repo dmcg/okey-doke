@@ -1,5 +1,7 @@
 package org.rococoa.okeydoke.bdd;
 
+import org.rococoa.okeydoke.Transcript;
+
 public class Scenario {
 
     private final Pickle pickle;
@@ -8,23 +10,29 @@ public class Scenario {
         this.pickle = pickle;
     }
 
-    public void given(String s) {
-        term("Given", s);
+    public void given(Object... os) {
+        term("Given", os);
     }
 
-    public void and(String s) {
-        term("And", s);
+    public void and(Object... os) {
+        term("And", os);
     }
 
-    public void when(String s) {
-        term("When", s);
+    public void when(Object... os) {
+        term("When", os);
     }
 
-    public void then(String s, Object o) {
-        pickle.transcript().append("Then").space().append(s).space().appendFormatted(o).endl();
+    public void then(Object... os) {
+        term("Then", os);
     }
 
-    public void term(String term, String s) {
-        pickle.transcript().append(term).space().appendLine(s);
+    public void term(String term, Object... os) {
+        Transcript transcript = pickle.transcript();
+        transcript.append(term);
+        for (Object o : os) {
+            transcript.space().appendFormatted(o);
+        }
+        transcript.endl();
     }
+
 }
