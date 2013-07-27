@@ -14,4 +14,6 @@ public interface Transcript {
     public <T> Transcript appendFormatted(T o, Formatter<T,String> formatter);
 
     public Transcript endl();
+
+    public Transcript space();
 }

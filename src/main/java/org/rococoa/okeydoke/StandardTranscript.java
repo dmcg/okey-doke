@@ -41,4 +41,9 @@ public class StandardTranscript implements Transcript {
         stream.println();
         return this;
     }
+
+    @Override
+    public Transcript space() {
+        return append(" ");
+    }
 }
