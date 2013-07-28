@@ -18,4 +18,9 @@ public class Pickle {
         transcript().append("Feature: ").appendLine(description);
         return new Feature(this);
     }
+
+    public Scenario scenario(String description) {
+        transcript().append("Scenario: ").appendLine(description);
+        return new Scenario(this, 0);
+    }
 }
