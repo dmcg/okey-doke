@@ -10,12 +10,12 @@ public class Pickle {
         this.transcript = transcript;
     }
 
-    public Scenario scenario(String description) {
-        transcript.appendLine("Scenario: " + description);
-        return new Scenario(this);
-    }
-
     public Transcript transcript() {
         return transcript;
+    }
+
+    public Feature feature(String description) {
+        transcript().append("Feature: ").appendLine(description);
+        return new Feature(this);
     }
 }

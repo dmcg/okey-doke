@@ -5,9 +5,11 @@ import org.rococoa.okeydoke.Transcript;
 public class Scenario {
 
     private final Pickle pickle;
+    private final int indent;
 
-    public Scenario(Pickle pickle) {
+    public Scenario(Pickle pickle, int indent) {
         this.pickle = pickle;
+        this.indent = indent;
     }
 
     public void given(Object... os) {
@@ -28,11 +30,14 @@ public class Scenario {
 
     public void term(String term, Object... os) {
         Transcript transcript = pickle.transcript();
-        transcript.append(term);
+        indent().append(term);
         for (Object o : os) {
             transcript.space().appendFormatted(o);
         }
         transcript.endl();
     }
 
+    private Transcript indent() {
+        return pickle.transcript().space(indent + 4);
+    }
 }

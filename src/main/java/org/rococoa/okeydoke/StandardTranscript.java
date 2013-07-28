@@ -46,4 +46,12 @@ public class StandardTranscript implements Transcript {
     public Transcript space() {
         return append(" ");
     }
+
+    @Override
+    public Transcript space(int number) {
+        for (int i = 0; i < number; i++) {
+            space();
+        }
+        return this;
+    }
 }

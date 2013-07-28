@@ -16,4 +16,6 @@ public interface Transcript {
     public Transcript endl();
 
     public Transcript space();
+
+    public Transcript space(int number);
 }
