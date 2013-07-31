@@ -99,7 +99,6 @@ public class BaseApprover<T, C, F> {
             return existing;
         approve(formatter.emptyThing());
         return sourceOfApproval.inputOrNullForApproved(testName);
-
     }
 
     public void approve(T approved) throws IOException {
@@ -135,6 +134,4 @@ public class BaseApprover<T, C, F> {
             IO.closeQuietly(inputForActualOrNull);
         }
     }
-
-
 }
