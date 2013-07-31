@@ -4,24 +4,20 @@ import java.util.*;
 
 public class Tabulator {
 
-    public String tableOf(Collection<?> data) {
-        if (data.isEmpty())
-            return "";
+    public String tableOf(Iterable<?> data) {
         return tableOf(data, columnSizes(data));
     }
 
-    public String headedTableOf(Collection<?> data) {
-        if (data.isEmpty())
-            return "";
+    public String headedTableOf(Iterable<?> data) {
         int[] columnSizes = columnSizes(data);
         return tableOf(withDivider(data, columnSizes), columnSizes);
     }
 
-    private int[] columnSizes(Collection<?> data) {
-        int[] result = null;
+    private int[] columnSizes(Iterable<?> data) {
+        int[] result = {};
         for (Object row : data) {
             Collection<?> rowCollection = collectionOf(row);
-            if (result == null)
+            if (result.length == 0)
                 result = new int[rowCollection.size()];
             int c = 0;
             for (Object cell : rowCollection) {
@@ -37,18 +33,18 @@ public class Tabulator {
         return row instanceof Collection ? (Collection<?>) row : Collections.singleton(row);
     }
 
-    private String tableOf(Collection<?> data, int[] columnSizes) {
+    private String tableOf(Iterable<?> data, int[] columnSizes) {
         if (columnSizes.length == 0)
             return "";
-        String[][] formatted = formattedCells(data, columnSizes);
+        List<List<String>> formatted = formattedCells(data, columnSizes);
         StringBuffer result = new StringBuffer();
-        for (String[] row: formatted) {
+        for (List<String> row: formatted) {
             formatRowInto(result, row);
         }
         return result.toString();
     }
 
-    private void formatRowInto(StringBuffer result, String[] row) {
+    private void formatRowInto(StringBuffer result, List<String> row) {
         result.append('|');
         for (String cell : row) {
             result.append(cell).append('|');
@@ -56,21 +52,22 @@ public class Tabulator {
         result.append('\n');
     }
 
-    private String[][] formattedCells(Collection<?> data, int[] columnSizes) {
-        String[][] result = null;
-        int r = 0;
+    private List<List<String>> formattedCells(Iterable<?> data, int[] columnSizes) {
+        List<List<String>> result = new ArrayList<List<String>>();
         for (Object row : data) {
-            Collection<?> rowCollection = collectionOf(row);
-            if (result == null)
-                result = new String[data.size()][rowCollection.size()];
-            int c = 0;
-            for (Object cell : rowCollection) {
-                result[r][c] = formatCell(String.valueOf(cell), columnSizes[c]);
-                ++c;
-            }
-            ++r;
+            result.add(formattedRow(collectionOf(row), columnSizes));
         }
         return result;
+    }
+
+    private List<String> formattedRow(Iterable<?> rowCollection, int[] columnSizes) {
+        List<String> resultRow = new ArrayList<String>();
+        int c = 0;
+        for (Object cell : rowCollection) {
+            resultRow.add(formatCell(String.valueOf(cell), columnSizes[c]));
+            ++c;
+        }
+        return resultRow;
     }
 
     private String formatCell(String s, int columnSize) {
@@ -84,12 +81,8 @@ public class Tabulator {
         return result.toString();
     }
 
-    private Collection<?> withDivider(final Collection<?> data, final int[] columnSizes) {
-        return new Collection<Object>() {
-            @Override public int size() {
-                return data.size() + 1;
-            }
-
+    private Iterable<?> withDivider(final Iterable<?> data, final int[] columnSizes) {
+        return new Iterable<Object>() {
             @Override public Iterator<Object> iterator() {
                 return new Iterator<Object>() {
                     final Iterator<?> underlying = data.iterator();
@@ -111,18 +104,6 @@ public class Tabulator {
                     @Override public void remove() { throw new UnsupportedOperationException(); }
                 };
             }
-
-            @Override public boolean isEmpty() { throw new UnsupportedOperationException(); }
-            @Override public boolean contains(Object o) { throw new UnsupportedOperationException(); }
-            @Override public Object[] toArray() { throw new UnsupportedOperationException(); }
-            @Override public Object[] toArray(Object[] a) { throw new UnsupportedOperationException(); }
-            @Override public boolean add(Object o) { throw new UnsupportedOperationException(); }
-            @Override public boolean remove(Object o) { throw new UnsupportedOperationException(); }
-            @Override public boolean containsAll(Collection<?> c) { throw new UnsupportedOperationException(); }
-            @Override public boolean addAll(Collection<?> c) { throw new UnsupportedOperationException(); }
-            @Override public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
-            @Override public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
-            @Override public void clear() { throw new UnsupportedOperationException(); }
         };
     }
 

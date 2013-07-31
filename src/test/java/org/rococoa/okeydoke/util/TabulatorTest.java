@@ -13,17 +13,17 @@ public class TabulatorTest {
     private final Tabulator tabulator = new Tabulator();
 
     @Test public void empty_when_empty_collection() {
-        Collection<? extends Collection<?>> empty = Collections.emptyList();
+        Iterable<?> empty = Collections.emptyList();
         assertEquals("", tabulator.tableOf(empty));
     }
 
     @Test public void empty_when_first_row_empty() {
-        Collection<?> emptyRow = Collections.emptyList();
+        Iterable<?> emptyRow = Collections.emptyList();
         assertEquals("", tabulator.tableOf(asList(emptyRow)));
     }
 
     @Test public void no_header_row() {
-        Collection<? extends Collection<?>> data = asList(
+        Iterable<?> data = asList(
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
 
@@ -34,7 +34,7 @@ public class TabulatorTest {
     }
 
     @Test public void header_row() {
-        Collection<? extends Collection<?>> data = asList(
+        Iterable<?> data = asList(
                 asList("Header 1", "Header 2", "Header 3"),
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
@@ -48,7 +48,7 @@ public class TabulatorTest {
     }
 
     @Test public void header_row_for_one_row() {
-        Collection<? extends Collection<?>> data = asList(
+        Iterable<?> data = asList(
                 asList("Header 1", "Header 2", "Header 3"));
 
         assertEquals(
@@ -64,9 +64,9 @@ public class TabulatorTest {
                 "three");
 
         assertEquals(
-                "|one  |\n" +
-                        "|two  |\n" +
-                        "|three|\n",
+"|one  |\n" +
+"|two  |\n" +
+"|three|\n",
                 tabulator.tableOf(data));
     }
 
