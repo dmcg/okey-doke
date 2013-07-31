@@ -45,7 +45,16 @@ public class TabulatorTest {
 "|one     |two     |three    |\n" +
 "|four    |five    |siiiiiiix|\n",
                 tabulator.headedTableOf(data));
+    }
 
+    @Test public void header_row_for_one_row() {
+        Collection<? extends Collection<?>> data = asList(
+                asList("Header 1", "Header 2", "Header 3"));
+
+        assertEquals(
+"|Header 1|Header 2|Header 3|\n" +
+"|--------|--------|--------|\n",
+                tabulator.headedTableOf(data));
     }
 
 }

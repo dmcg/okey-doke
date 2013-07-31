@@ -94,7 +94,7 @@ public class Tabulator {
                     int i = 0;
                     @Override
                     public boolean hasNext() {
-                        return underlying.hasNext();
+                        return underlying.hasNext() || i < 2;
                     }
 
                     @Override
