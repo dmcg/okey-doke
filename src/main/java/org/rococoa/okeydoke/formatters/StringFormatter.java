@@ -59,7 +59,7 @@ public class StringFormatter implements Formatter<Object, String> {
         return "NULL";
     }
 
-    private String stringFor(Iterable iterable) {
+    protected String stringFor(Iterable iterable) {
         StringBuilder result = new StringBuilder("[");
         for (Object o : iterable) {
             result.append("\"").append(formatted(o)).append("\",");
@@ -68,7 +68,7 @@ public class StringFormatter implements Formatter<Object, String> {
         return result.toString();
     }
 
-    private String stringFor(Object[] iterable) {
+    protected String stringFor(Object[] iterable) {
         return stringFor(Arrays.asList(iterable));
     }
 

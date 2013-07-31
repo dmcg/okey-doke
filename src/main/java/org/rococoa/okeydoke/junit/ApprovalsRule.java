@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class ApprovalsRule extends BaseApprovalsRule<Object, Approver> {
+public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
 
     public static ApprovalsRule fileSystemRule(String sourceRoot) {
         return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));

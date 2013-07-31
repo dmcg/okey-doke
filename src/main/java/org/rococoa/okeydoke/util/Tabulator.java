@@ -30,7 +30,11 @@ public class Tabulator {
     }
 
     private Collection<?> collectionOf(Object row) {
-        return row instanceof Collection ? (Collection<?>) row : Collections.singleton(row);
+        if (row instanceof Collection)
+            return (Collection<?>) row;
+        if (row instanceof Object[])
+            return Arrays.asList((Object[]) row);
+        return Collections.singleton(row);
     }
 
     private String tableOf(Iterable<?> data, int[] columnSizes) {

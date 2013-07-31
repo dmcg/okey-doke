@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], BinaryApprover> {
+public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], byte[], BinaryApprover> {
 
     public static BinaryApprovalsRule fileSystemRule(final String sourceRoot) {
         return new BinaryApprovalsRule(new BaseApproverFactory<byte[], BinaryApprover>() {

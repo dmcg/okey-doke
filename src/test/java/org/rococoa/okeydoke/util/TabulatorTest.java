@@ -1,5 +1,6 @@
 package org.rococoa.okeydoke.util;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -32,6 +33,30 @@ public class TabulatorTest {
 "|four|five|siiiiiiix|\n",
             tabulator.tableOf(data));
     }
+
+    @Test public void iterable_of_arrays() {
+        Iterable<?> data = asList(
+                new String[] {"one", "two", "three"},
+                new String[] {"four", "five", "siiiiiiix"});
+
+        assertEquals(
+"|one |two |three    |\n" +
+"|four|five|siiiiiiix|\n",
+                tabulator.tableOf(data));
+    }
+
+    @Ignore("Lots of work or pull in Guava")
+    @Test public void iterable_of_arrays_of_primitives() {
+        Iterable<?> data = asList(
+                new int[] {1, 2, 3},
+                new boolean[] {true, false, true});
+
+        assertEquals(
+"|1   |2    |3   |\n" +
+"|true|false|true|\n",
+                tabulator.tableOf(data));
+    }
+
 
     @Test public void header_row() {
         Iterable<?> data = asList(

@@ -4,6 +4,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.BaseApprover;
 import org.rococoa.okeydoke.BaseApproverFactory;
+import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.Naming;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.io.PrintStream;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class BaseApprovalsRule<T, A extends BaseApprover<T,?,?>> extends TestWatcher {
+public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends TestWatcher {
 
     protected A approver;
     private final BaseApproverFactory<T, A> factory;
@@ -31,6 +32,10 @@ public class BaseApprovalsRule<T, A extends BaseApprover<T,?,?>> extends TestWat
 
     public void assertApproved(T actual) throws IOException {
         approver().assertApproved(actual);
+    }
+
+    public void assertApproved(T actual, Formatter<T, C> formatter) throws IOException {
+        approver().assertApproved(actual, formatter);
     }
 
     public void assertSatisfied() throws IOException {

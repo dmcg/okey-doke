@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 public class StringFormatterTest {
 
-    // Test through the approvalsRule for now
-
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
     @Test public void a_string_is_itself() throws IOException {
@@ -32,6 +30,4 @@ public class StringFormatterTest {
     @Test public void null_is_printed() throws IOException {
         approver.assertApproved(null);
     }
-
-
 }
