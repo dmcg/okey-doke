@@ -57,4 +57,31 @@ public class TabulatorTest {
                 tabulator.headedTableOf(data));
     }
 
+    @Test public void one_dimension() {
+        Collection<?> data = asList(
+                "one",
+                "two",
+                "three");
+
+        assertEquals(
+                "|one  |\n" +
+                        "|two  |\n" +
+                        "|three|\n",
+                tabulator.tableOf(data));
+    }
+
+    @Test public void one_dimension_with_header_row() {
+        Collection<?> data = asList(
+                "one",
+                "two",
+                "three");
+
+        assertEquals(
+"|one  |\n" +
+"|-----|\n" +
+"|two  |\n" +
+"|three|\n",
+                tabulator.headedTableOf(data));
+    }
+
 }

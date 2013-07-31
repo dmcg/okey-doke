@@ -1,32 +1,30 @@
 package org.rococoa.okeydoke.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Tabulator {
 
-    public String tableOf(Collection<? extends Collection<?>> data) {
+    public String tableOf(Collection<?> data) {
         if (data.isEmpty())
             return "";
         return tableOf(data, columnSizes(data));
     }
 
-    public String headedTableOf(Collection<? extends Collection<?>> data) {
+    public String headedTableOf(Collection<?> data) {
         if (data.isEmpty())
             return "";
         int[] columnSizes = columnSizes(data);
         return tableOf(withDivider(data, columnSizes), columnSizes);
     }
 
-    private int[] columnSizes(Collection<? extends Collection<?>> data) {
+    private int[] columnSizes(Collection<?> data) {
         int[] result = null;
-        for (Collection<?> row : data) {
+        for (Object row : data) {
+            Collection<?> rowCollection = collectionOf(row);
             if (result == null)
-                result = new int[row.size()];
+                result = new int[rowCollection.size()];
             int c = 0;
-            for (Object cell : row) {
+            for (Object cell : rowCollection) {
                 int cellLength = String.valueOf(cell).length();
                 result[c] = Math.max(result[c], cellLength);
                 ++c;
@@ -35,7 +33,11 @@ public class Tabulator {
         return result;
     }
 
-    private String tableOf(Collection<? extends Collection<?>> data, int[] columnSizes) {
+    private Collection<?> collectionOf(Object row) {
+        return row instanceof Collection ? (Collection<?>) row : Collections.singleton(row);
+    }
+
+    private String tableOf(Collection<?> data, int[] columnSizes) {
         if (columnSizes.length == 0)
             return "";
         String[][] formatted = formattedCells(data, columnSizes);
@@ -54,14 +56,15 @@ public class Tabulator {
         result.append('\n');
     }
 
-    private String[][] formattedCells(Collection<? extends Collection<?>> data, int[] columnSizes) {
+    private String[][] formattedCells(Collection<?> data, int[] columnSizes) {
         String[][] result = null;
         int r = 0;
-        for (Collection<?> row : data) {
+        for (Object row : data) {
+            Collection<?> rowCollection = collectionOf(row);
             if (result == null)
-                result = new String[data.size()][row.size()];
+                result = new String[data.size()][rowCollection.size()];
             int c = 0;
-            for (Object cell : row) {
+            for (Object cell : rowCollection) {
                 result[r][c] = formatCell(String.valueOf(cell), columnSizes[c]);
                 ++c;
             }
@@ -81,16 +84,15 @@ public class Tabulator {
         return result.toString();
     }
 
-    private Collection<? extends Collection<?>> withDivider(final Collection<? extends Collection<?>> data, final int[] columnSizes) {
-        return new Collection<Collection<?>>() {
-
+    private Collection<?> withDivider(final Collection<?> data, final int[] columnSizes) {
+        return new Collection<Object>() {
             @Override public int size() {
                 return data.size() + 1;
             }
 
-            @Override public Iterator<Collection<?>> iterator() {
-                return new Iterator<Collection<?>>() {
-                    final Iterator<? extends Collection<?>> underlying = data.iterator();
+            @Override public Iterator<Object> iterator() {
+                return new Iterator<Object>() {
+                    final Iterator<?> underlying = data.iterator();
                     int i = 0;
                     @Override
                     public boolean hasNext() {
@@ -98,7 +100,7 @@ public class Tabulator {
                     }
 
                     @Override
-                    public Collection<?> next() {
+                    public Object next() {
                         try {
                             return i == 1 ? dividerData(columnSizes) : underlying.next();
                         } finally {
@@ -113,11 +115,11 @@ public class Tabulator {
             @Override public boolean isEmpty() { throw new UnsupportedOperationException(); }
             @Override public boolean contains(Object o) { throw new UnsupportedOperationException(); }
             @Override public Object[] toArray() { throw new UnsupportedOperationException(); }
-            @Override public <T> T[] toArray(T[] a) { throw new UnsupportedOperationException(); }
-            @Override public boolean add(Collection<?> objects) { throw new UnsupportedOperationException(); }
+            @Override public Object[] toArray(Object[] a) { throw new UnsupportedOperationException(); }
+            @Override public boolean add(Object o) { throw new UnsupportedOperationException(); }
             @Override public boolean remove(Object o) { throw new UnsupportedOperationException(); }
             @Override public boolean containsAll(Collection<?> c) { throw new UnsupportedOperationException(); }
-            @Override public boolean addAll(Collection<? extends Collection<?>> c) { throw new UnsupportedOperationException(); }
+            @Override public boolean addAll(Collection<?> c) { throw new UnsupportedOperationException(); }
             @Override public boolean removeAll(Collection<?> c) { throw new UnsupportedOperationException(); }
             @Override public boolean retainAll(Collection<?> c) { throw new UnsupportedOperationException(); }
             @Override public void clear() { throw new UnsupportedOperationException(); }
