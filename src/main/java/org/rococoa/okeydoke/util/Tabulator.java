@@ -1,5 +1,6 @@
 package org.rococoa.okeydoke.util;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Tabulator {
@@ -32,8 +33,8 @@ public class Tabulator {
     private Collection<?> collectionOf(Object row) {
         if (row instanceof Collection)
             return (Collection<?>) row;
-        if (row instanceof Object[])
-            return Arrays.asList((Object[]) row);
+        if (row.getClass().isArray())
+            return asList(row);
         return Collections.singleton(row);
     }
 
@@ -83,6 +84,23 @@ public class Tabulator {
             result.append(' ');
         }
         return result.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> asList(final Object array) {
+        if (!array.getClass().isArray())
+            throw new IllegalArgumentException("Not an array");
+        return new AbstractList<T>() {
+            @Override
+            public T get(int index) {
+                return (T) Array.get(array, index);
+            }
+
+            @Override
+            public int size() {
+                return Array.getLength(array);
+            }
+        };
     }
 
     private Iterable<?> withDivider(final Iterable<?> data, final int[] columnSizes) {

@@ -1,6 +1,5 @@
 package org.rococoa.okeydoke.util;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -45,7 +44,6 @@ public class TabulatorTest {
                 tabulator.tableOf(data));
     }
 
-    @Ignore("Lots of work or pull in Guava")
     @Test public void iterable_of_arrays_of_primitives() {
         Iterable<?> data = asList(
                 new int[] {1, 2, 3},
@@ -56,7 +54,6 @@ public class TabulatorTest {
 "|true|false|true|\n",
                 tabulator.tableOf(data));
     }
-
 
     @Test public void header_row() {
         Iterable<?> data = asList(
