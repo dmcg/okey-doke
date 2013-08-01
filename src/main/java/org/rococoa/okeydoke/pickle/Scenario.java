@@ -1,5 +1,6 @@
 package org.rococoa.okeydoke.pickle;
 
+import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Transcript;
 
 public class Scenario {
@@ -29,15 +30,26 @@ public class Scenario {
     }
 
     public void term(String term, Object... os) {
-        Transcript transcript = pickle.transcript();
-        indent().append(term);
+        Transcript transcript = indent().append(term);
         for (Object o : os) {
             transcript.space().appendFormatted(o);
         }
         transcript.endl();
     }
 
+    public Transcript appendFormatted(Object o, Formatter<Object, String> formatter) {
+        String[] lines = formatter.formatted(o).split("\\n");
+        for (String line : lines) {
+            indent().append(line).endl();
+        }
+        return transcript();
+    }
+
+    private Transcript transcript() {
+        return pickle.transcript();
+    }
+
     private Transcript indent() {
-        return pickle.transcript().space(indent + 4);
+        return transcript().space(indent + 4);
     }
 }
