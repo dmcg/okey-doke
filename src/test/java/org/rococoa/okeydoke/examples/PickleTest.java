@@ -2,10 +2,10 @@ package org.rococoa.okeydoke.examples;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.rococoa.okeydoke.bdd.Feature;
-import org.rococoa.okeydoke.bdd.Pickle;
-import org.rococoa.okeydoke.bdd.Scenario;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
+import org.rococoa.okeydoke.pickle.Feature;
+import org.rococoa.okeydoke.pickle.Pickle;
+import org.rococoa.okeydoke.pickle.Scenario;
 
 import java.io.IOException;
 

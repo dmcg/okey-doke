@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke.bdd;
+package org.rococoa.okeydoke.pickle;
 
 import org.rococoa.okeydoke.Transcript;
 
