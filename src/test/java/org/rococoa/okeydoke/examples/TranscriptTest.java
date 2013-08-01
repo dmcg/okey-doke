@@ -1,12 +1,13 @@
-package org.rococoa.okeydoke;
+package org.rococoa.okeydoke.examples;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.Transcript;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.IOException;
 
-public class CommentaryTest {
+public class TranscriptTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 

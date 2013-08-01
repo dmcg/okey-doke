@@ -1,4 +1,4 @@
-package org.rococoa.okeydoke.junit;
+package org.rococoa.okeydoke.examples;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -6,6 +6,7 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import org.rococoa.okeydoke.junit.TheoryApprovalsRule;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,7 @@ import static org.rococoa.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
  * and then lockDown the results.
  */
 @RunWith(Theories.class)
-public class QuickCheckTest {
+public class LockDownTest {
 
     @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();

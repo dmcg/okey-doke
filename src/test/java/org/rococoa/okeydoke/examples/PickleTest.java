@@ -1,12 +1,15 @@
-package org.rococoa.okeydoke.bdd;
+package org.rococoa.okeydoke.examples;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.bdd.Feature;
+import org.rococoa.okeydoke.bdd.Pickle;
+import org.rococoa.okeydoke.bdd.Scenario;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.IOException;
 
-public class BDDTest {
+public class PickleTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
@@ -38,13 +41,6 @@ public class BDDTest {
         addition.and("I have entered", 99, "into the calculator");
         addition.when("I press add");
         addition.then("the result should be", add(42, 99));
-
-        Scenario negativeAddition = pickle.scenario("Add a positive to a negative number");
-        negativeAddition.given("I have a calculator");
-        negativeAddition.given("I have entered", 42, "into the calculator");
-        negativeAddition.and("I have entered", -99, "into the calculator");
-        negativeAddition.when("I press add");
-        negativeAddition.then("the result should be", add(42, -99));
     }
 
 
