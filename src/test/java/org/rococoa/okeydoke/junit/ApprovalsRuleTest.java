@@ -5,8 +5,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -15,7 +13,7 @@ public class ApprovalsRuleTest {
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("target/approvals");
 
     @Test
-    public void doesnt_match_where_no_approved_result() throws IOException {
+    public void doesnt_match_where_no_approved_result() {
         try {
             approver.assertApproved("banana");
             fail();
@@ -25,12 +23,12 @@ public class ApprovalsRuleTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() throws IOException {
+    @Test public void matches_when_approved_result_matches() {
         approver.approve("banana");
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() {
         approver.approve("banana");
         try {
             approver.assertApproved("kumquat");
@@ -42,12 +40,12 @@ public class ApprovalsRuleTest {
     }
 
     @Ignore("Unignore to see no approval in IDE")
-    @Test public void see_how_my_IDE_reports_no_approval() throws IOException {
+    @Test public void see_how_my_IDE_reports_no_approval() {
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 
     @Ignore("Unignore to see failure report in IDE")
-    @Test public void see_how_my_IDE_reports_diffs() throws IOException {
+    @Test public void see_how_my_IDE_reports_diffs() {
         approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }

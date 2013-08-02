@@ -7,7 +7,6 @@ import org.rococoa.okeydoke.BaseApproverFactory;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.Naming;
 
-import java.io.IOException;
 import java.io.PrintStream;
 
 /**
@@ -22,29 +21,29 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
         this.factory = factory;
     }
 
-    public PrintStream printStream() throws IOException {
+    public PrintStream printStream() {
         return approver().printStream();
     }
 
-    public void writeFormatted(T o) throws IOException {
+    public void writeFormatted(T o) {
         approver().writeFormatted(o);
     }
 
-    public void assertApproved(T actual) throws IOException {
+    public void assertApproved(T actual) {
         approver().assertApproved(actual);
     }
 
-    public void assertApproved(T actual, Formatter<T, C> formatter) throws IOException {
+    public void assertApproved(T actual, Formatter<T, C> formatter) {
         approver().assertApproved(actual, formatter);
     }
 
-    public void assertSatisfied() throws IOException {
+    public void assertSatisfied() {
         if (approver().satisfactionChecked())
             throw new IllegalStateException("I've got too much satisfaction");
         approver().assertSatisfied();
     }
 
-    public void approve(T approved) throws IOException {
+    public void approve(T approved) {
         approver().approve(approved);
     }
 
@@ -57,11 +56,7 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
     protected void succeeded(Description description) {
         if (approver().satisfactionChecked())
             return;
-        try {
-            assertSatisfied();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertSatisfied();
     }
 
     protected A createApprover(String testName, Class<?> testClass) {

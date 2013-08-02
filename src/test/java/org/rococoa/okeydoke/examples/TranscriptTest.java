@@ -5,14 +5,12 @@ import org.junit.Test;
 import org.rococoa.okeydoke.Transcript;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
-import java.io.IOException;
-
 public class TranscriptTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
     @Test
-    public void can_describe_what_we_are_doing_before_assertion() throws IOException {
+    public void can_describe_what_we_are_doing_before_assertion() {
         Transcript transcript = approver.transcript();
         transcript.appendLine("As a greengrocer").
             appendLine("I want to sing");

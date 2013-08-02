@@ -10,8 +10,6 @@ import org.rococoa.okeydoke.Reporters;
 import org.rococoa.okeydoke.Sources;
 import org.rococoa.okeydoke.testutils.PrecannedApprovalsRule;
 
-import java.io.IOException;
-
 import static org.junit.Assert.fail;
 
 public class ApprovalsRuleTidiesUpTest {
@@ -30,7 +28,7 @@ public class ApprovalsRuleTidiesUpTest {
 
     @Rule public final RuleChain rules = RuleChain.outerRule(checkDelegateIsCheckedRule).around(approver);
 
-    @Test public void rule_will_check_satisfaction() throws IOException {
+    @Test public void rule_will_check_satisfaction() {
         approver.approve("banana");
 
         approver.writeFormatted("banana");

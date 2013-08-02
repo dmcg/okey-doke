@@ -3,7 +3,6 @@ package org.rococoa.okeydoke.sources;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +12,7 @@ public class FileSystemSourceOfApprovalTest {
 
     // This is mostly currently tested by ApproverTest
 
-    @Test public void writes_files_in_package() throws IOException {
+    @Test public void writes_files_in_package() {
         assertEquals(
                 new File("target/approvals", "testname.approved"),
                 sourceOfApproval.approvedFor("testname"));

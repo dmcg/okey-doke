@@ -10,7 +10,6 @@ import org.rococoa.okeydoke.internal.Naming;
 import org.rococoa.okeydoke.junit.jmock.JMockLocker;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -88,14 +87,14 @@ public class TheoryApprovalsRule extends TestWatcher {
             super.starting(description);
         }
 
-        public void lockDownResult(Object result, Object... arguments) throws IOException {
+        public void lockDownResult(Object result, Object... arguments) {
             Approver approver = approvers.get(theory);
             if (approver == null)
                 throw new IllegalStateException("Something is wrong - check that I am an @Rule!");
             approver.writeFormatted(formatted(result, arguments));
         }
 
-        public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, IOException {
+        public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
             List<Method> methods = methodFinder.findMethods(methodFinder.classFor(object), methodName, arguments);
             for (Method method : methods) {
                 try {
@@ -129,5 +128,4 @@ public class TheoryApprovalsRule extends TestWatcher {
             return result.substring(0, result.length() - LIST_SEPARATOR_LENGTH);
         }
     }
-
 }

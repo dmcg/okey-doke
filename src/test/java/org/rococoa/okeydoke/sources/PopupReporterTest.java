@@ -9,14 +9,12 @@ import org.rococoa.okeydoke.internal.OperatingSystem;
 import org.rococoa.okeydoke.junit.TestDirectoryRule;
 import org.rococoa.okeydoke.reporters.PopupReporter;
 
-import java.io.IOException;
-
 public class PopupReporterTest {
 
     @Rule public final TestDirectoryRule testDirectory = new TestDirectoryRule();
 
     @Ignore("UnIgnore to try me out")
-    @Test public void test() throws IOException {
+    @Test public void test() {
         Approver approver = new Approver("testname",
                 new FileSystemSourceOfApproval(testDirectory.dir()),
                     new PopupReporter(Reporters.differFor(OperatingSystem.current())));

@@ -7,7 +7,6 @@ import org.rococoa.okeydoke.sources.FileSystemSourceOfApproval;
 import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +25,7 @@ public class ApproverFileLifecycleTest {
         assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 
-    @Test public void approved() throws IOException {
+    @Test public void approved() {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.approve("banana");
@@ -37,7 +36,7 @@ public class ApproverFileLifecycleTest {
         assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 
-    @Test public void not_approved() throws IOException {
+    @Test public void not_approved() {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         try {
@@ -47,7 +46,7 @@ public class ApproverFileLifecycleTest {
         assertTrue(sourceOfApproval.actualFor("testname").exists());
     }
 
-    @Test public void not_matching_approved() throws IOException {
+    @Test public void not_matching_approved() {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.approve("banana");

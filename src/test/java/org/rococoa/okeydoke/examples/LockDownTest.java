@@ -8,7 +8,6 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.rococoa.okeydoke.junit.TheoryApprovalsRule;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.rococoa.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
@@ -28,12 +27,12 @@ public class LockDownTest {
     @DataPoints public static final int[] INTS = { -1, 0, 1, 2, 42 };
 
     @Theory
-    public void legacyMethod_checked_reflectively(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+    public void legacyMethod_checked_reflectively(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         approver.lockDownReflectively(this, "legacyMethod", fruit.name(), animal.name(), i);
     }
 
     @Theory
-    public void legacyMethod_checked_fluently(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+    public void legacyMethod_checked_fluently(Fruit fruit, Animal animal, int  i) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         approver.lockDown(this).legacyMethod(fruit.name(), animal.name(), i);
     }
 

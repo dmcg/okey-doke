@@ -29,28 +29,36 @@ public class BaseApprover<T, C, F> {
         this.reporter = reporter;
     }
 
-    public PrintStream printStream() throws IOException {
-        return new PrintStream(osForActual());
+    public PrintStream printStream() {
+        try {
+            return new PrintStream(osForActual());
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
+        }
     }
 
-    public void writeFormatted(T object) throws IOException {
+    public void writeFormatted(T object) {
         writeFormatted(object, formatter);
     }
 
-    public void writeFormatted(T object, Formatter<T, C> aFormatter) throws IOException {
-        aFormatter.writeTo(aFormatter.formatted(object), osForActual());
+    public void writeFormatted(T object, Formatter<T, C> aFormatter) {
+        try {
+            aFormatter.writeTo(aFormatter.formatted(object), osForActual());
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
+        }
     }
 
-    public void assertApproved(T actual) throws IOException {
+    public void assertApproved(T actual) {
         assertApproved(actual, formatter);
     }
 
-    public void assertApproved(T actual, Formatter<T, C> aFormatter) throws IOException {
+    public void assertApproved(T actual, Formatter<T, C> aFormatter) {
         writeFormatted(actual, aFormatter);
         assertSatisfied();
     }
 
-    public void assertSatisfied() throws IOException {
+    public void assertSatisfied() {
         try {
             osForActual().close();
             try {
@@ -67,6 +75,8 @@ public class BaseApprover<T, C, F> {
                         e);
                 throw e;
             }
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
         } finally {
             osForActual = null;
             done = true;
@@ -101,12 +111,16 @@ public class BaseApprover<T, C, F> {
         return sourceOfApproval.inputOrNullForApproved(testName);
     }
 
-    public void approve(T approved) throws IOException {
-        OutputStream output = sourceOfApproval.outputForApproved(testName);
+    public void approve(T approved) {
         try {
-            formatter.writeTo(formatter.formatted(approved), output);
-        } finally {
-            closeQuietly(output);
+            OutputStream output = sourceOfApproval.outputForApproved(testName);
+            try {
+                formatter.writeTo(formatter.formatted(approved), output);
+            } finally {
+                closeQuietly(output);
+            }
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
         }
     }
 
@@ -124,14 +138,18 @@ public class BaseApprover<T, C, F> {
         return osForActual;
     }
 
-    public C readActual() throws IOException {
-        InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+    public C readActual() {
         try {
-            if (inputForActualOrNull == null)
-                throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
-            return formatter.readFrom(inputForActualOrNull);
-        } finally {
-            IO.closeQuietly(inputForActualOrNull);
+            InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+            try {
+                if (inputForActualOrNull == null)
+                    throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
+                return formatter.readFrom(inputForActualOrNull);
+            } finally {
+                IO.closeQuietly(inputForActualOrNull);
+            }
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
         }
     }
 }

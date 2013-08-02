@@ -6,7 +6,6 @@ import org.rococoa.okeydoke.ApproverFactory;
 import org.rococoa.okeydoke.Transcript;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Use as an @Rule to automate approvals in JUnit.
@@ -25,7 +24,7 @@ public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
         super(factory);
     }
 
-    public Transcript transcript() throws IOException {
+    public Transcript transcript() {
         return approver().transcript();
     }
 }

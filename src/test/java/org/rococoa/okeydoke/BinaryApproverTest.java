@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -17,7 +16,7 @@ public class BinaryApproverTest {
     private final BinaryApprover approver = new BinaryApprover("testname", Sources.in("target/approvals"), Reporters.reporter());
 
     @Test
-    public void doesnt_match_where_no_approved_result() throws IOException {
+    public void doesnt_match_where_no_approved_result() {
         try {
             approver.assertApproved("banana".getBytes());
             fail();
@@ -27,12 +26,12 @@ public class BinaryApproverTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() throws IOException {
+    @Test public void matches_when_approved_result_matches() {
         approver.approve("banana".getBytes());
         approver.assertApproved("banana".getBytes());
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() {
         approver.approve("banana".getBytes());
         try {
             approver.assertApproved("bnana".getBytes());

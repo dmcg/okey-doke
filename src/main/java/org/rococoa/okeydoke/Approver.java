@@ -1,7 +1,6 @@
 package org.rococoa.okeydoke;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Approver extends BaseApprover<Object, String, File> {
 
@@ -13,7 +12,7 @@ public class Approver extends BaseApprover<Object, String, File> {
         super(testName, sourceOfApproval, formatter, reporter);
     }
 
-    public Transcript transcript() throws IOException {
+    public Transcript transcript() {
         return new StandardTranscript(printStream(), formatter());
     }
 }

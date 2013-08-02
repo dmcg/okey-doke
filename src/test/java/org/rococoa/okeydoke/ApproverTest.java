@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -21,7 +20,7 @@ public class ApproverTest {
      */
 
     @Test
-    public void doesnt_match_where_no_approved_result() throws IOException {
+    public void doesnt_match_where_no_approved_result()  {
         try {
             approver.assertApproved("banana");
             fail();
@@ -31,12 +30,12 @@ public class ApproverTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() throws IOException {
+    @Test public void matches_when_approved_result_matches() {
         approver.approve("banana");
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() {
         approver.approve("banana");
         try {
             approver.assertApproved("kumquat");
@@ -47,7 +46,7 @@ public class ApproverTest {
         }
     }
 
-    @Test public void can_assert_with_nothing_approved() throws IOException {
+    @Test public void can_assert_with_nothing_approved() {
         approver.approve("");
         approver.assertSatisfied();
     }
