@@ -1,5 +1,7 @@
 package org.rococoa.okeydoke.util;
 
+import org.rococoa.okeydoke.internal.LyingWrappingIterator;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -79,7 +81,7 @@ public class Tabulator {
     private String formatCell(String s, int columnSize) {
         if (s.length() == columnSize)
             return s;
-        StringBuffer result = new StringBuffer(columnSize);
+        StringBuilder result = new StringBuilder(columnSize);
         result.append(s);
         while (result.length() < columnSize) {
             result.append(' ');
@@ -104,54 +106,36 @@ public class Tabulator {
         };
     }
 
+    @SuppressWarnings("unchecked")
     private Iterable<?> withHeader(final Iterable<?> data, final String... headers) {
-        return new Iterable<Object>() {
-            @Override public Iterator<Object> iterator() {
-                return new Iterator<Object>() {
-                    final Iterator<?> underlying = data.iterator();
-                    int i = 0;
-                    @Override
-                    public boolean hasNext() {
-                        return underlying.hasNext() || i < 1;
+        return new Iterable() {
+            @Override public Iterator iterator() {
+                return new LyingWrappingIterator(data.iterator()) {
+                    @Override protected boolean hasNext(int i) {
+                        return wrapped.hasNext() || i < 1;
                     }
 
-                    @Override
-                    public Object next() {
-                        try {
-                            return i == 0 ? headers : underlying.next();
-                        } finally {
-                            i++;
-                        }
+                    @Override protected Object next(int i) {
+                        return i == 0 ? headers : wrapped.next();
                     }
-
-                    @Override public void remove() { throw new UnsupportedOperationException(); }
                 };
             }
         };
 
     }
 
+    @SuppressWarnings("unchecked")
     private Iterable<?> withDivider(final Iterable<?> data, final int[] columnSizes) {
         return new Iterable<Object>() {
             @Override public Iterator<Object> iterator() {
-                return new Iterator<Object>() {
-                    final Iterator<?> underlying = data.iterator();
-                    int i = 0;
-                    @Override
-                    public boolean hasNext() {
-                        return underlying.hasNext() || i < 2;
+                return new LyingWrappingIterator(data.iterator()) {
+                    @Override protected boolean hasNext(int i) {
+                        return wrapped.hasNext() || i < 2;
                     }
 
-                    @Override
-                    public Object next() {
-                        try {
-                            return i == 1 ? dividerData(columnSizes) : underlying.next();
-                        } finally {
-                            i++;
-                        }
+                    @Override protected Object next(int i) {
+                        return i == 1 ? dividerData(columnSizes) : wrapped.next();
                     }
-
-                    @Override public void remove() { throw new UnsupportedOperationException(); }
                 };
             }
         };
