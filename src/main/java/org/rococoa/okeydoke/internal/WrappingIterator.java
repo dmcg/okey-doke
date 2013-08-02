@@ -20,6 +20,6 @@ public abstract class WrappingIterator<T, U> implements Iterator<T> {
 
     @Override
     public void remove() {
-        wrapped.remove();;
+        wrapped.remove();
     }
 }

@@ -3,14 +3,16 @@ package org.rococoa.okeydoke.examples;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.formatters.TableFormatter;
+import org.rococoa.okeydoke.internal.MappingIterable;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.Pickle;
 import org.rococoa.okeydoke.pickle.Scenario;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class PickleTest {
 
@@ -53,14 +55,33 @@ public class PickleTest {
         addition.when("I add numbers");
         addition.then("the result should be");
 
-        List<?> table = Arrays.asList(
+        List<?> table = asList(
                 row(42, 99),
                 row(42, -99),
                 row(-42, -99)
         );
-
         addition.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
+
+    @Test public void object_mapping() throws IOException {
+        Pickle pickle = new Pickle(approver.transcript());
+        Scenario addition = pickle.scenario("Find properties of strings");
+        addition.given("I have a some strings");
+        addition.then("the string properties should be");
+
+        List<String> strings = asList("banana", "apple", "kumquat");
+        Iterable<?> table = new MappingIterable<Object, String>(strings) {
+            @Override protected Object map(String next) {
+                return new Object[] {next, next.length(), next.toUpperCase()};
+            }
+        };
+        addition.appendFormatted(table, TableFormatter.withHeader("String", "Length", "UPPERCASE"));
+    }
+
+    private Addition addition(int i1, int i2) {
+        return new Addition(i1, i2);
+    }
+
 
     private Object row(int i1, int i2) {
         return new int[] {i1, i2, add(i1, i2)};
@@ -68,5 +89,19 @@ public class PickleTest {
 
     private int add(int i1, int i2) {
         return i1 + i2;
+    }
+
+    private class Addition {
+        public final int i1;
+        public final int i2;
+
+        public Addition(int i1, int i2) {
+            this.i1 = i1;
+            this.i2 = i2;
+        }
+
+        public int result() {
+            return add(i1, i2);
+        }
     }
 }
