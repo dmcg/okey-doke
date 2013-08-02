@@ -54,13 +54,12 @@ public class PickleTest {
         addition.then("the result should be");
 
         List<?> table = Arrays.asList(
-                new String[]{"Op1", "Op2", "sum"},
                 row(42, 99),
                 row(42, -99),
                 row(-42, -99)
         );
 
-        addition.appendFormatted(table, TableFormatter.withHeader());
+        addition.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
     private Object row(int i1, int i2) {

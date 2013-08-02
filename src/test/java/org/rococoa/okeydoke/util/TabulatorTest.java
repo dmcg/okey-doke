@@ -55,9 +55,8 @@ public class TabulatorTest {
                 tabulator.tableOf(data));
     }
 
-    @Test public void header_row() {
+    @Test public void header_row_2() {
         Iterable<?> data = asList(
-                asList("Header 1", "Header 2", "Header 3"),
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
 
@@ -66,17 +65,16 @@ public class TabulatorTest {
 "|--------|--------|---------|\n" +
 "|one     |two     |three    |\n" +
 "|four    |five    |siiiiiiix|\n",
-                tabulator.headedTableOf(data));
+                tabulator.headedTableOf(data, "Header 1", "Header 2", "Header 3"));
     }
 
-    @Test public void header_row_for_one_row() {
-        Iterable<?> data = asList(
-                asList("Header 1", "Header 2", "Header 3"));
+    @Test public void header_row_for_no_data() {
+        Iterable<?> data = Collections.emptyList();
 
         assertEquals(
 "|Header 1|Header 2|Header 3|\n" +
 "|--------|--------|--------|\n",
-                tabulator.headedTableOf(data));
+                tabulator.headedTableOf(data, "Header 1", "Header 2", "Header 3"));
     }
 
     @Test public void one_dimension() {
@@ -99,11 +97,12 @@ public class TabulatorTest {
                 "three");
 
         assertEquals(
-"|one  |\n" +
-"|-----|\n" +
-"|two  |\n" +
-"|three|\n",
-                tabulator.headedTableOf(data));
+"|Header|\n" +
+"|------|\n" +
+"|one   |\n" +
+"|two   |\n" +
+"|three |\n",
+                tabulator.headedTableOf(data, "Header"));
     }
 
 }

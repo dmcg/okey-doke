@@ -5,18 +5,13 @@ import org.rococoa.okeydoke.util.Tabulator;
 import java.nio.charset.Charset;
 
 public class TableFormatter {
-
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
     private static final Tabulator tabulator = new Tabulator();
 
-    private static StringFormatter instance = formatter(Charset.forName("UTF-8"));
-    private static StringFormatter withHeader = withHeader(Charset.forName("UTF-8"));
+    private static StringFormatter instance = formatter(UTF_8);
 
     public static StringFormatter instance() {
         return instance;
-    }
-
-    public static StringFormatter withHeader() {
-        return withHeader;
     }
 
     public static StringFormatter formatter(final Charset charset) {
@@ -28,11 +23,15 @@ public class TableFormatter {
         };
     }
 
-    public static StringFormatter withHeader(final Charset charset) {
+    public static StringFormatter withHeader(final String... headers) {
+        return withHeader(UTF_8, headers);
+    }
+
+    public static StringFormatter withHeader(final Charset charset, final String... headers) {
         return new StringFormatter(charset) {
             @Override
             protected String stringFor(Iterable iterable) {
-                return new Tabulator().headedTableOf(iterable);
+                return new Tabulator().headedTableOf(iterable, headers);
             }
         };
     }

@@ -9,9 +9,10 @@ public class Tabulator {
         return tableOf(data, columnSizes(data));
     }
 
-    public String headedTableOf(Iterable<?> data) {
-        int[] columnSizes = columnSizes(data);
-        return tableOf(withDivider(data, columnSizes), columnSizes);
+    public String headedTableOf(Iterable<?> data, String... headers) {
+        Iterable<?> dataWithHeader = withHeader(data, headers);
+        int[] columnSizes = columnSizes(dataWithHeader);
+        return tableOf(withDivider(dataWithHeader, columnSizes), columnSizes);
     }
 
     private int[] columnSizes(Iterable<?> data) {
@@ -101,6 +102,33 @@ public class Tabulator {
                 return Array.getLength(array);
             }
         };
+    }
+
+    private Iterable<?> withHeader(final Iterable<?> data, final String... headers) {
+        return new Iterable<Object>() {
+            @Override public Iterator<Object> iterator() {
+                return new Iterator<Object>() {
+                    final Iterator<?> underlying = data.iterator();
+                    int i = 0;
+                    @Override
+                    public boolean hasNext() {
+                        return underlying.hasNext() || i < 1;
+                    }
+
+                    @Override
+                    public Object next() {
+                        try {
+                            return i == 0 ? headers : underlying.next();
+                        } finally {
+                            i++;
+                        }
+                    }
+
+                    @Override public void remove() { throw new UnsupportedOperationException(); }
+                };
+            }
+        };
+
     }
 
     private Iterable<?> withDivider(final Iterable<?> data, final int[] columnSizes) {

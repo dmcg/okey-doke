@@ -40,9 +40,8 @@ public class TableFormatterTest {
 
     @Test public void with_header() throws IOException {
         Iterable<?> data = asList(
-                asList("Header 1", "Header 2", "Header 3"),
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
-        approver.assertApproved(data, TableFormatter.withHeader());
+        approver.assertApproved(data, TableFormatter.withHeader("Header 1", "Header 2", "Header 3"));
     }
 }
