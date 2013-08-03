@@ -21,6 +21,6 @@ public class Pickle {
 
     public Scenario scenario(String description) {
         transcript().append("Scenario: ").appendLine(description);
-        return new Scenario(this, 0);
+        return new Scenario(this.transcript(), 0);
     }
 }

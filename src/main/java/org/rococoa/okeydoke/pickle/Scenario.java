@@ -5,11 +5,11 @@ import org.rococoa.okeydoke.Transcript;
 
 public class Scenario {
 
-    private final Pickle pickle;
+    private final Transcript transcript;
     private final int indent;
 
-    public Scenario(Pickle pickle, int indent) {
-        this.pickle = pickle;
+    public Scenario(Transcript transcript, int indent) {
+        this.transcript = transcript;
         this.indent = indent;
     }
 
@@ -46,7 +46,7 @@ public class Scenario {
     }
 
     private Transcript transcript() {
-        return pickle.transcript();
+        return transcript;
     }
 
     private Transcript indent() {

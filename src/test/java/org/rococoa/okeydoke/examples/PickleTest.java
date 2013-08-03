@@ -82,7 +82,7 @@ public class PickleTest {
         scenario.when("I press add");
         calculator.add();
 
-        scenario.then("the result should be", calculator.display);
+        scenario.then("the result should be", calculator.display());
     }
 
     private Object[] additionAsArray(int i1, int i2) {
@@ -98,7 +98,7 @@ public class PickleTest {
         return new Addition(i1, i2, calculator.display());
     }
 
-    private static class Calculator {
+    public static class Calculator {
         private final LinkedList<Integer> stack = new LinkedList<Integer>();
         private int display;
 
