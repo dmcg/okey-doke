@@ -14,7 +14,7 @@ import java.io.PrintStream;
  */
 public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends TestWatcher {
 
-    protected A approver;
+    private A approver;
     private final BaseApproverFactory<T, A> factory;
 
     public BaseApprovalsRule(BaseApproverFactory<T,A> factory) {
