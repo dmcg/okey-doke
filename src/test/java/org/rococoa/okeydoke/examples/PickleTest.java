@@ -77,11 +77,6 @@ public class PickleTest {
         addition.appendFormatted(table, TableFormatter.withHeader("String", "Length", "UPPERCASE"));
     }
 
-    private Addition addition(int i1, int i2) {
-        return new Addition(i1, i2);
-    }
-
-
     private Object row(int i1, int i2) {
         return new int[] {i1, i2, add(i1, i2)};
     }
