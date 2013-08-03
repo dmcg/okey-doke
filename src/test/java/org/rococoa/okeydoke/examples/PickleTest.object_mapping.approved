@@ -1,8 +1,0 @@
-Scenario: Find properties of strings
-    Given I have a some strings
-    Then the string properties should be
-    |String |Length|UPPERCASE|
-    |-------|------|---------|
-    |banana |6     |BANANA   |
-    |apple  |5     |APPLE    |
-    |kumquat|7     |KUMQUAT  |

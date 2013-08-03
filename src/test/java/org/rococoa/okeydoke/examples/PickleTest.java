@@ -9,6 +9,7 @@ import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.Pickle;
 import org.rococoa.okeydoke.pickle.Scenario;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -22,29 +23,14 @@ public class PickleTest {
         Feature feature = pickle.feature("Addition").inOrder("to avoid silly mistakes").
                 asA("math idiot").
                 iWant("to be told the sum of two numbers");
-        Scenario addition = feature.scenario("Add two numbers");
-        addition.given("I have a calculator");
-        addition.given("I have entered", 42, "into the calculator");
-        addition.and("I have entered", 99, "into the calculator");
-        addition.when("I press add");
-        addition.then("the result should be", add(42, 99));
 
-        Scenario negativeAddition = feature.scenario("Add a positive to a negative number");
-        negativeAddition.given("I have a calculator");
-        negativeAddition.given("I have entered", 42, "into the calculator");
-        negativeAddition.and("I have entered", -99, "into the calculator");
-        negativeAddition.when("I press add");
-        negativeAddition.then("the result should be", add(42, -99));
+        addition(feature.scenario("Add two numbers"), 42, 99);
+        addition(feature.scenario("Add a positive to a negative number"), 42, -99);
     }
 
     @Test public void direct_to_scenario() {
         Pickle pickle = new Pickle(approver.transcript());
-        Scenario addition = pickle.scenario("Add two numbers");
-        addition.given("I have a calculator");
-        addition.given("I have entered", 42, "into the calculator");
-        addition.and("I have entered", 99, "into the calculator");
-        addition.when("I press add");
-        addition.then("the result should be", add(42, 99));
+        addition(pickle.scenario("Add two numbers"), 42, 99);
     }
 
     @Test public void table_formatting() {
@@ -54,48 +40,90 @@ public class PickleTest {
         addition.when("I add numbers");
         addition.then("the result should be");
 
-        List<?> table = asList(
-                row(42, 99),
-                row(42, -99),
-                row(-42, -99)
+        List<Object[]> table = asList(
+                additionAsArray(42, 99),
+                additionAsArray(42, -99),
+                additionAsArray(-42, -99)
         );
         addition.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
-    @Test public void object_mapping() {
+    @Test public void table_formatting_mapped() {
         Pickle pickle = new Pickle(approver.transcript());
-        Scenario addition = pickle.scenario("Find properties of strings");
-        addition.given("I have a some strings");
-        addition.then("the string properties should be");
+        Scenario addition = pickle.scenario("Add two numbers");
+        addition.given("I have a calculator");
+        addition.when("I add numbers");
+        addition.then("the result should be");
 
-        List<String> strings = asList("banana", "apple", "kumquat");
-        Iterable<?> table = new MappingIterable<Object, String>(strings) {
-            @Override protected Object map(String next) {
-                return new Object[] {next, next.length(), next.toUpperCase()};
+        List<Addition> table = asList(
+                additionAsObject(42, 99),
+                additionAsObject(42, -99),
+                additionAsObject(-42, -99)
+        );
+        Iterable<?> mappedTable = new MappingIterable<Object, Addition>(table) {
+            @Override protected Object map(Addition next) {
+                return new Object[] {next.i1, next.i2, next.display};
             }
         };
-        addition.appendFormatted(table, TableFormatter.withHeader("String", "Length", "UPPERCASE"));
+
+        addition.appendFormatted(mappedTable, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
-    private Object row(int i1, int i2) {
-        return new int[] {i1, i2, add(i1, i2)};
+    private void addition(Scenario scenario, int i1, int i2) {
+        scenario.given("I have a calculator");
+        Calculator calculator = new Calculator();
+
+        scenario.given("I have entered", i1, "into the calculator");
+        calculator.enter(i1);
+
+        scenario.and("I have entered", i2, "into the calculator");
+        calculator.enter(i2);
+
+        scenario.when("I press add");
+        calculator.add();
+
+        scenario.then("the result should be", calculator.display);
     }
 
-    private int add(int i1, int i2) {
-        return i1 + i2;
+    private Object[] additionAsArray(int i1, int i2) {
+        Addition addition = additionAsObject(i1, i2);
+        return new Object[] {addition.i1, addition.i2, addition.display};
     }
 
-    private class Addition {
-        public final int i1;
-        public final int i2;
+    private Addition additionAsObject(int i1, int i2) {
+        Calculator calculator = new Calculator();
+        calculator.enter(i1);
+        calculator.enter(i2);
+        calculator.add();
+        return new Addition(i1, i2, calculator.display());
+    }
 
-        public Addition(int i1, int i2) {
-            this.i1 = i1;
-            this.i2 = i2;
+    private static class Calculator {
+        private final LinkedList<Integer> stack = new LinkedList<Integer>();
+        private int display;
+
+        public void enter(int n) {
+            stack.push(n);
         }
 
-        public int result() {
-            return add(i1, i2);
+        public void add() {
+            display = stack.pop() + stack.pop();
+        }
+
+        public String display() {
+            return String.valueOf(display);
+        }
+    }
+
+    class Addition {
+        final int i1;
+        final int i2;
+        final String display;
+
+        public Addition(int i1, int i2, String display) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.display = display;
         }
     }
 }

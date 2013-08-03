@@ -1,0 +1,9 @@
+Scenario: Add two numbers
+    Given I have a calculator
+    When I add numbers
+    Then the result should be
+    |Op1|Op2|sum |
+    |---|---|----|
+    |42 |99 |141 |
+    |42 |-99|-57 |
+    |-42|-99|-141|
