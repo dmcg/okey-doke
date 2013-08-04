@@ -13,7 +13,7 @@ There are three modes of operation, exemplified by
  - for easy testing of legacy code.
 3. [TranscriptTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/examples/TranscriptTest.java)
  - for producing approved files with interactions.
-4. [PickleTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/examples/PickleTest.java)
+4. [PickleTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/examples/PickleTest.java) and [PickleTableTest](https://github.com/dmcg/okey-doke/blob/master/src/test/java/org/rococoa/okeydoke/examples/PickleTablesTest.java)
  - for producing Gerkin-like output from your tests that the customer can approve.
 
 I'll get round to publishing to Maven Central eventually, but in the meantime there are relatively up to date jar files
