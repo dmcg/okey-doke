@@ -18,8 +18,14 @@ public class FeatureRule extends TestWatcher {
 
     @Override
     protected void starting(Description description) {
+        approvalsRule.starting(description);
         Feature featureAnnotation = description.getTestClass().getAnnotation(Feature.class);
         writeFeature(approvalsRule.transcript(), featureAnnotation);
+    }
+
+    @Override
+    protected void succeeded(Description description) {
+        approvalsRule.succeeded(description);
     }
 
     private void writeFeature(Transcript transcript, Feature feature) {

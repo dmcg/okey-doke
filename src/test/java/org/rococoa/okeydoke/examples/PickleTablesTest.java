@@ -4,7 +4,6 @@ import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.internal.MappingIterable;
-import org.rococoa.okeydoke.junit.ApprovalsRule;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
@@ -23,10 +22,7 @@ import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PickleTablesTest {
 
-    public static final ApprovalsRule approvalsRule = fileSystemRule("src/test/java");
-    @ClassRule public static final FeatureRule feature = new FeatureRule(approvalsRule);
-    @ClassRule public static final ApprovalsRule alias = approvalsRule;
-
+    @ClassRule public static final FeatureRule feature = new FeatureRule(fileSystemRule("src/test/java"));
     @Rule public final ScenarioRule scenario = feature.scenarioRule();
 
     private Calculator calculator;

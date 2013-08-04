@@ -48,12 +48,12 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
     }
 
     @Override
-    protected void starting(Description description) {
+    public void starting(Description description) {
         approver = createApprover(Naming.testNameFor(description), description.getTestClass());
     }
 
     @Override
-    protected void succeeded(Description description) {
+    public void succeeded(Description description) {
         if (approver().satisfactionChecked())
             return;
         assertSatisfied();
