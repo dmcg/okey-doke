@@ -1,59 +1,72 @@
 package org.rococoa.okeydoke.examples;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.runners.MethodSorters;
 import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.internal.MappingIterable;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
-import org.rococoa.okeydoke.pickle.Feature;
-import org.rococoa.okeydoke.pickle.Pickle;
+import org.rococoa.okeydoke.pickle.Description;
+import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
+import org.rococoa.okeydoke.pickle.ScenarioRule;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
+@Description(
+        value = "Addition",
+        inOrder = "to avoid silly mistakes",
+        as = "a math idiot",
+        iWant = "to be told the sum of two numbers")
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PickleTest {
 
-    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
+    public static final ApprovalsRule approvalsRule = fileSystemRule("src/test/java");
+    @ClassRule public static final FeatureRule feature = new FeatureRule(approvalsRule);
+    @ClassRule public static final ApprovalsRule alias = approvalsRule;
 
-    @Test public void scenarios_from_feature() {
-        Pickle pickle = new Pickle(approver.transcript());
-        Feature feature = pickle.feature("Addition").inOrder("to avoid silly mistakes").
-                asA("math idiot").
-                iWant("to be told the sum of two numbers");
+    @Rule public final ScenarioRule scenarioRule = feature.scenarioRule();
 
-        addition(feature.scenario("Add two numbers"), 42, 99);
-        addition(feature.scenario("Add a positive to a negative number"), 42, -99);
+    private Scenario scenario;
+    private PickleTest.Calculator calculator;
+
+    @Before
+    public void setUp() {
+        scenario = scenarioRule.scenario();
+        scenario.given("I have a calculator");
+        calculator = new PickleTest.Calculator();
     }
 
-    @Test public void direct_to_scenario() {
-        Pickle pickle = new Pickle(approver.transcript());
-        addition(pickle.scenario("Add two numbers"), 42, 99);
+    @Description("Add two numbers")
+    @Test public void _1_add_two_numbers() {
+        add(42, 99);
     }
 
-    @Test public void table_formatting() {
-        Pickle pickle = new Pickle(approver.transcript());
-        Scenario addition = pickle.scenario("Add two numbers");
-        addition.given("I have a calculator");
-        addition.when("I add numbers");
-        addition.then("the result should be");
+    @Description("Add a positive to a negative number")
+    @Test public void _2_add_a_positive_to_a_negative_number() {
+        add(42, -99);
+    }
+
+    @Description("Lots of numbers")
+    @Test public void _3_table_formatting() {
+        scenario.when("I add numbers");
+        scenario.then("the result should be");
 
         List<Object[]> table = asList(
                 additionAsArray(42, 99),
                 additionAsArray(42, -99),
                 additionAsArray(-42, -99)
         );
-        addition.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
+        scenario.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
-    @Test public void table_formatting_mapped() {
-        Pickle pickle = new Pickle(approver.transcript());
-        Scenario addition = pickle.scenario("Add two numbers");
-        addition.given("I have a calculator");
-        addition.when("I add numbers");
-        addition.then("the result should be");
+    @Description("Lots of numbers with mapping")
+    @Test public void _4_table_formatting_mapped() {
+        scenario.when("I add numbers");
+        scenario.then("the result should be");
 
         List<Addition> table = asList(
                 additionAsObject(42, 99),
@@ -66,13 +79,10 @@ public class PickleTest {
             }
         };
 
-        addition.appendFormatted(mappedTable, TableFormatter.withHeader("Op1", "Op2", "sum"));
+        scenario.appendFormatted(mappedTable, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
-    private void addition(Scenario scenario, int i1, int i2) {
-        scenario.given("I have a calculator");
-        Calculator calculator = new Calculator();
-
+    private void add(int i1, int i2) {
         scenario.given("I have entered", i1, "into the calculator");
         calculator.enter(i1);
 
@@ -98,7 +108,7 @@ public class PickleTest {
         return new Addition(i1, i2, calculator.display());
     }
 
-    public static class Calculator {
+    private static class Calculator {
         private final LinkedList<Integer> stack = new LinkedList<Integer>();
         private int display;
 
@@ -115,7 +125,7 @@ public class PickleTest {
         }
     }
 
-    class Addition {
+    private class Addition {
         final int i1;
         final int i2;
         final String display;

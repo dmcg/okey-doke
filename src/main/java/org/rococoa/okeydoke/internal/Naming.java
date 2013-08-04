@@ -6,7 +6,10 @@ public class Naming {
 
     public static String testNameFor(Description description) {
         String justTheClassName = description.getTestClass().getSimpleName();
-        return justTheClassName + "." + description.getDisplayName().replaceFirst("\\(.*\\)", "");
+        String methodName = description.getMethodName();
+        return methodName == null ?
+                justTheClassName :
+                justTheClassName + "." + methodName;
     }
 
 }
