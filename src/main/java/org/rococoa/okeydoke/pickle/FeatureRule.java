@@ -1,6 +1,7 @@
 package org.rococoa.okeydoke.pickle;
 
 import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.rococoa.okeydoke.Transcript;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
@@ -16,15 +17,19 @@ public class FeatureRule extends TestWatcher {
     }
 
     @Override
-    protected void starting(org.junit.runner.Description description) {
-        Description featureAnnotation = description.getTestClass().getAnnotation(Description.class);
+    protected void starting(Description description) {
+        Feature featureAnnotation = description.getTestClass().getAnnotation(Feature.class);
         writeFeature(approvalsRule.transcript(), featureAnnotation);
     }
 
-    private void writeFeature(Transcript transcript, Description description) {
-        transcript.append("Feature: ").appendLine(description.value());
-        transcript.space(4).append("In Order ").appendLine(description.inOrder());
-        transcript.space(4).append("As ").appendLine(description.as());
-        transcript.space(4).append("I want ").appendLine(description.iWant());
+    private void writeFeature(Transcript transcript, Feature feature) {
+        transcript.append("Feature: ").appendLine(feature.value());
+        indent(transcript).append("In Order ").appendLine(feature.inOrder());
+        indent(transcript).append("As ").appendLine(feature.as());
+        indent(transcript).append("I want ").appendLine(feature.iWant());
+    }
+
+    private Transcript indent(Transcript transcript) {
+        return transcript.space(4);
     }
 }

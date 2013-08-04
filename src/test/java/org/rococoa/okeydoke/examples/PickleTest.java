@@ -5,7 +5,7 @@ import org.junit.runners.MethodSorters;
 import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.internal.MappingIterable;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
-import org.rococoa.okeydoke.pickle.Description;
+import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
 import org.rococoa.okeydoke.pickle.ScenarioRule;
@@ -16,7 +16,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
-@Description(
+@Feature(
         value = "Addition",
         inOrder = "to avoid silly mistakes",
         as = "a math idiot",
@@ -28,29 +28,27 @@ public class PickleTest {
     @ClassRule public static final FeatureRule feature = new FeatureRule(approvalsRule);
     @ClassRule public static final ApprovalsRule alias = approvalsRule;
 
-    @Rule public final ScenarioRule scenarioRule = feature.scenarioRule();
+    @Rule public final ScenarioRule scenario = feature.scenarioRule();
 
-    private Scenario scenario;
     private PickleTest.Calculator calculator;
 
     @Before
     public void setUp() {
-        scenario = scenarioRule.scenario();
         scenario.given("I have a calculator");
         calculator = new PickleTest.Calculator();
     }
 
-    @Description("Add two numbers")
+    @Scenario("Add two numbers")
     @Test public void _1_add_two_numbers() {
         add(42, 99);
     }
 
-    @Description("Add a positive to a negative number")
+    @Scenario("Add a positive to a negative number")
     @Test public void _2_add_a_positive_to_a_negative_number() {
         add(42, -99);
     }
 
-    @Description("Lots of numbers")
+    @Scenario("Lots of numbers")
     @Test public void _3_table_formatting() {
         scenario.when("I add numbers");
         scenario.then("the result should be");
@@ -63,7 +61,7 @@ public class PickleTest {
         scenario.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
     }
 
-    @Description("Lots of numbers with mapping")
+    @Scenario("Lots of numbers with mapping")
     @Test public void _4_table_formatting_mapped() {
         scenario.when("I add numbers");
         scenario.then("the result should be");
