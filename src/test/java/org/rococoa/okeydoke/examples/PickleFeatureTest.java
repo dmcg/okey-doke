@@ -1,29 +1,41 @@
 package org.rococoa.okeydoke.examples;
 
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.rococoa.okeydoke.Transcript;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
-import org.rococoa.okeydoke.pickle.AFeature;
+import org.rococoa.okeydoke.pickle.Description;
 import org.rococoa.okeydoke.pickle.Scenario;
 
-@AFeature(
-        description = "Behaviour Driven Development",
-        inOrder = "to make my life simpler",
-        asA = "programmer",
-        iWant = "okeydoke to manage scenarios for me")
+import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
+
+@Description(
+        value = "Addition",
+        inOrder = "to avoid silly mistakes",
+        as = "a math idiot",
+        iWant = "to be told the sum of two numbers")
 public class PickleFeatureTest {
 
-    @ClassRule public static final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
-    @Rule public final ScenarioRule scenarioRule = new ScenarioRule(approver);
+    public static final ApprovalsRule approvalsRule = fileSystemRule("src/test/java");
+    @ClassRule public static final FeatureRule feature = new FeatureRule(approvalsRule);
+    @ClassRule public static final ApprovalsRule alias = approvalsRule;
 
-    @Test public void add_two_numbers() {
-        Scenario scenario = scenarioRule.scenario();
+    @Rule public final ScenarioRule scenarioRule = feature.scenarioRule();
+
+    private Scenario scenario;
+    private PickleTest.Calculator calculator;
+
+    @Before public void setUp() {
+        scenario = scenarioRule.scenario();
         scenario.given("I have a calculator");
-        PickleTest.Calculator calculator = new PickleTest.Calculator();
+        calculator = new PickleTest.Calculator();
+    }
 
+    @Description("Add two numbers")
+    @Test public void add_two_numbers() {
         int i1 = 42;
         int i2 = 99;
 
@@ -40,10 +52,6 @@ public class PickleFeatureTest {
     }
 
     @Test public void add_a_positive_to_a_negative_number() {
-        Scenario scenario = scenarioRule.scenario();
-        scenario.given("I have a calculator");
-        PickleTest.Calculator calculator = new PickleTest.Calculator();
-
         int i1 = 42;
         int i2 = -99;
 
@@ -59,22 +67,51 @@ public class PickleFeatureTest {
         scenario.then("the result should be", calculator.display());
     }
 
-    public static class ScenarioRule extends TestWatcher {
-        private final ApprovalsRule approver;
-        private Description description;
+    public static class FeatureRule extends TestWatcher {
+        private final ApprovalsRule approvalsRule;
 
-        public ScenarioRule(ApprovalsRule approver) {
-            this.approver = approver;
+        public FeatureRule(ApprovalsRule approvalsRule) {
+            this.approvalsRule = approvalsRule;
+        }
+
+        public ScenarioRule scenarioRule() {
+            return new ScenarioRule(approvalsRule.transcript());
         }
 
         @Override
-        protected void starting(Description description) {
-            this.description = description;
+        protected void starting(org.junit.runner.Description description) {
+            Description featureAnnotation = description.getTestClass().getAnnotation(Description.class);
+            writeFeature(approvalsRule.transcript(), featureAnnotation);
+        }
+
+        private void writeFeature(Transcript transcript, Description description) {
+            transcript.append("Feature: ").appendLine(description.value());
+            transcript.space(4).append("In Order ").appendLine(description.inOrder());
+            transcript.space(4).append("As ").appendLine(description.as());
+            transcript.space(4).append("I want ").appendLine(description.iWant());
+        }
+    }
+
+    public static class ScenarioRule extends TestWatcher {
+        private final Transcript transcript;
+
+        public ScenarioRule(Transcript transcript) {
+            this.transcript = transcript;
+        }
+
+        @Override
+        protected void starting(org.junit.runner.Description description) {
+            transcript.space(4).endl();
+            transcript.space(4).append("Scenario: ").appendLine(scenarioNameFor(description));
+        }
+
+        private String scenarioNameFor(org.junit.runner.Description description) {
+            Description annotation = description.getAnnotation(Description.class);
+            return annotation == null ? description.getMethodName() : annotation.value();
         }
 
         public Scenario scenario() {
-            approver.transcript().endl();
-            return new Scenario(approver.transcript(), 4);
+            return new Scenario(transcript, 4);
         }
     }
 }
