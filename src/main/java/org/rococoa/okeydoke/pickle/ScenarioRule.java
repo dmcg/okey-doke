@@ -39,26 +39,28 @@ public class ScenarioRule extends TestWatcher {
 
     public void term(String term, Object... os) {
         Transcript transcript = indent().append(term);
-        for (Object o : os) {
-            transcript.space().appendFormatted(o);
+        for (int i = 0; i < os.length; i++) {
+            Object o = os[i];
+            if (o instanceof Formatter)
+                appendFormatted(os[i++ + 1], (Formatter<Object, String>) o);
+            else
+                transcript.space().appendFormatted(o);
         }
         transcript.endl();
     }
 
     public Transcript appendFormatted(Object o, Formatter<Object, String> formatter) {
         String[] lines = formatter.formatted(o).split("\\n");
-        for (String line : lines) {
-            indent().append(line).endl();
+        for (int i = 0; i < lines.length; i++) {
+            indent().append(lines[i]);
+            if (i < lines.length - 1)
+                transcript.endl();
         }
-        return transcript();
-    }
-
-    private Transcript transcript() {
         return transcript;
     }
 
     private Transcript indent() {
-        return transcript().space(indent + 4);
+        return transcript.space(indent + 4);
     }
 
 

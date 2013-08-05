@@ -36,20 +36,17 @@ public class PickleTablesTest {
     @Scenario("Lots of numbers")
     @Test public void _1_table_formatting() {
         scenario.when("I add numbers");
-        scenario.then("the result should be");
-
         List<Object[]> table = asList(
                 additionAsArray(42, 99),
                 additionAsArray(42, -99),
                 additionAsArray(-42, -99)
         );
-        scenario.appendFormatted(table, TableFormatter.withHeader("Op1", "Op2", "sum"));
+        scenario.then("the result should be\n", TableFormatter.withHeader("Op1", "Op2", "sum"), table);
     }
 
     @Scenario("Lots of numbers with mapping")
     @Test public void _2_table_formatting_mapped() {
         scenario.when("I add numbers");
-        scenario.then("the result should be");
 
         List<Addition> table = asList(
                 additionAsObject(42, 99),
@@ -62,7 +59,7 @@ public class PickleTablesTest {
             }
         };
 
-        scenario.appendFormatted(mappedTable, TableFormatter.withHeader("Op1", "Op2", "sum"));
+        scenario.then("the result should be\n", TableFormatter.withHeader("Op1", "Op2", "sum"), mappedTable);
     }
 
     private Object[] additionAsArray(int i1, int i2) {
