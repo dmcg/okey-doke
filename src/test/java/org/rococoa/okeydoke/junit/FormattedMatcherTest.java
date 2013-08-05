@@ -10,7 +10,7 @@ public class FormattedMatcherTest {
     @Test public void test() {
         String[] object = {"one, two", "three"};
         String expected = stringFormatter().formatted(object);
-        assertThat(expected, org.rococoa.okeydoke.junit.Matchers.isFormatted(object, stringFormatter()));
+        assertThat(object, org.rococoa.okeydoke.junit.Matchers.isFormatted(expected, stringFormatter()));
     }
 
 }

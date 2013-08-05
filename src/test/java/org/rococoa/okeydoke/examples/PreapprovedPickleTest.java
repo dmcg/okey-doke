@@ -7,7 +7,11 @@ import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
 import org.rococoa.okeydoke.pickle.ScenarioRule;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
+import static org.rococoa.okeydoke.formatters.TableFormatter.withHeader;
 import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
 @Feature(
@@ -39,7 +43,30 @@ public class PreapprovedPickleTest {
         add(42, 99, "142");
     }
 
+    @Scenario("Lots of numbers")
+    @Test public void _3_table_formatting() {
+        scenario.when("I add numbers");
+        List<Object[]> results = asList(
+                additionAsArray(42, 99),
+                additionAsArray(42, -99),
+                additionAsArray(-42, -99)
+        );
+        String expected =
+                "|Op1|Op2|sum |\n" +
+                "|---|---|----|\n" +
+                "|42 |99 |141 |\n" +
+                "|42 |-99|-57 |\n" +
+                "|-42|-99|-141|\n";
+
+        scenario.thenAssertThat("the result should be\n", results, withHeader("Op1", "Op2", "sum"), expected);
+    }
+
     private void add(int i1, int i2, String expected) {
+        String display = add(i1, i2);
+        scenario.thenAssertThat("the result should be", display, equalTo(expected));
+    }
+
+    private String add(int i1, int i2) {
         scenario.given("I have entered", i1, "into the calculator");
         calculator.enter(i1);
 
@@ -48,7 +75,13 @@ public class PreapprovedPickleTest {
 
         scenario.when("I press add");
         calculator.add();
+        return calculator.display();
+    }
 
-        scenario.thenAssertThat("the result should be", calculator.display(), equalTo(expected));
+    private Object[] additionAsArray(int i1, int i2) {
+        calculator.enter(i1);
+        calculator.enter(i2);
+        calculator.add();
+        return new Object[] {i1, i2, calculator.display()};
     }
 }

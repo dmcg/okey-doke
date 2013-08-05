@@ -6,6 +6,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Transcript;
+import org.rococoa.okeydoke.junit.Matchers;
 
 public class ScenarioRule extends TestWatcher {
 
@@ -32,9 +33,14 @@ public class ScenarioRule extends TestWatcher {
         term("Then", os);
     }
 
-    public <T> void thenAssertThat(String s, T actual, Matcher<? super T> matcher) {
+    public <T> void thenAssertThat(String description, T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat(actual, matcher);
-        then(s, actual);
+        then(description, actual);
+    }
+
+    public <T> void thenAssertThat(String description, T actual, Formatter<Object, String> formatter, String formattedExpected) {
+        MatcherAssert.assertThat(actual, Matchers.isFormatted(formattedExpected, formatter));
+        then(description, formatter, actual);
     }
 
     public void term(String term, Object... os) {
