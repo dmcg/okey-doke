@@ -50,16 +50,4 @@ public class PickleTest {
 
         scenario.then("the result should be", calculator.display());
     }
-
-    private class Addition {
-        final int i1;
-        final int i2;
-        final String display;
-
-        public Addition(int i1, int i2, String display) {
-            this.i1 = i1;
-            this.i2 = i2;
-            this.display = display;
-        }
-    }
 }
