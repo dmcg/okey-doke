@@ -1,5 +1,7 @@
 package org.rococoa.okeydoke.pickle;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.rococoa.okeydoke.Formatter;
@@ -28,6 +30,11 @@ public class ScenarioRule extends TestWatcher {
 
     public void then(Object... os) {
         term("Then", os);
+    }
+
+    public <T> void thenAssertThat(String s, T actual, Matcher<? super T> matcher) {
+        MatcherAssert.assertThat(actual, matcher);
+        then(s, actual);
     }
 
     public void term(String term, Object... os) {
@@ -65,5 +72,4 @@ public class ScenarioRule extends TestWatcher {
         Scenario annotation = description.getAnnotation(Scenario.class);
         return annotation == null ? description.getMethodName() : annotation.value();
     }
-
 }
