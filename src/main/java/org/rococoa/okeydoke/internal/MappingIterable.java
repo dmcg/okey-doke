@@ -3,6 +3,7 @@ package org.rococoa.okeydoke.internal;
 import java.util.Iterator;
 
 public abstract class MappingIterable<T,U> implements Iterable<T> {
+
     private final Iterable<U> wrapped;
 
     public MappingIterable(Iterable<U> wrapped) {

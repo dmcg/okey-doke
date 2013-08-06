@@ -3,7 +3,8 @@ package org.rococoa.okeydoke.examples;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.rococoa.okeydoke.formatters.TableFormatter;
-import org.rococoa.okeydoke.internal.MappingIterable;
+import org.rococoa.okeydoke.internal.MappedIterable;
+import org.rococoa.okeydoke.internal.Mapper;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
@@ -53,12 +54,11 @@ public class PickleTablesTest {
                 additionAsObject(42, -99),
                 additionAsObject(-42, -99)
         );
-        Iterable<?> mappedTable = new MappingIterable<Object, Addition>(table) {
-            @Override protected Object map(Addition next) {
+        Iterable<Object[]> mappedTable = MappedIterable.map(table, new Mapper<Addition, Object[]>() {
+            public Object[] map(Addition next) {
                 return new Object[] {next.i1, next.i2, next.display};
             }
-        };
-
+        });
         scenario.then("the result should be\n", TableFormatter.withHeader("Op1", "Op2", "sum"), mappedTable);
     }
 
