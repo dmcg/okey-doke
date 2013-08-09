@@ -97,7 +97,7 @@ public class TheoryApprovalsRule extends TestWatcher {
             Approver approver = approvers.get(theory);
             if (approver == null)
                 throw new IllegalStateException("Something is wrong - check that I am an @Rule!");
-            approver.writeFormatted(invocationFormatter.format(arguments, result));
+            approver.transcript().appendFormatted(invocationFormatter.format(arguments, result)).endl();
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {

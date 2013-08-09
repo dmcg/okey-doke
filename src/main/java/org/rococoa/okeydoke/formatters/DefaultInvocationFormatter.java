@@ -11,7 +11,7 @@ public class DefaultInvocationFormatter implements InvocationFormatter {
     public String format(Object[] arguments, Object result) {
         StringBuilder myResult = new StringBuilder();
         myResult.append("[").append(formatArguments(arguments)).append("] -> ");
-        myResult.append(String.valueOf(result)).append("\n");
+        myResult.append(String.valueOf(result));
         return myResult.toString();
     }
 

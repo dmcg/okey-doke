@@ -2,6 +2,7 @@ package org.rococoa.okeydoke.examples;
 
 import org.junit.*;
 import org.junit.runners.MethodSorters;
+import org.rococoa.okeydoke.formatters.DefaultInvocationFormatter;
 import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
@@ -44,7 +45,7 @@ public class ExperimentalPickleTest {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 Object result = method.invoke(object, args);
-                scenario.then(s, args, result);
+                scenario.then(s, new DefaultInvocationFormatter().format(args, result));
                 return result;
             }
         };

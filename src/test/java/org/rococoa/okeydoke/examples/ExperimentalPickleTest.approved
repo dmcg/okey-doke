@@ -6,5 +6,5 @@ Feature: Addition
     Scenario: Adding numbers
         Given I have a calculator
         When I enter numbers
-        Then the result is ["42","42"] 84
-        Then the result is ["42","-99"] -57
+        Then the result is [42, 42] -> 84
+        Then the result is [42, -99] -> -57
