@@ -5,6 +5,8 @@ import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.ApproverFactories;
 import org.rococoa.okeydoke.ApproverFactory;
+import org.rococoa.okeydoke.InvocationFormatter;
+import org.rococoa.okeydoke.formatters.DefaultInvocationFormatter;
 import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.internal.MethodFinder;
 import org.rococoa.okeydoke.internal.Naming;
@@ -22,9 +24,6 @@ import java.util.Map;
  * Use as an @ClassRule to automate approval of @Theories in JUnit
  */
 public class TheoryApprovalsRule extends TestWatcher {
-
-    public static final String LIST_SEPARATOR = ", ";
-    private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
 
     private final MethodFinder methodFinder = new MethodFinder();
 
@@ -79,6 +78,12 @@ public class TheoryApprovalsRule extends TestWatcher {
     public class TheoryApprover extends TestWatcher {
 
         private Description theory;
+        private InvocationFormatter invocationFormatter = new DefaultInvocationFormatter();
+
+        public TheoryApprover withInvocationFormatter(InvocationFormatter invocationFormatter) {
+            this.invocationFormatter = invocationFormatter;
+            return this;
+        }
 
         @Override
         public void starting(Description description) {
@@ -92,7 +97,7 @@ public class TheoryApprovalsRule extends TestWatcher {
             Approver approver = approvers.get(theory);
             if (approver == null)
                 throw new IllegalStateException("Something is wrong - check that I am an @Rule!");
-            approver.writeFormatted(formatted(result, arguments));
+            approver.writeFormatted(invocationFormatter.format(arguments, result));
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
@@ -122,19 +127,6 @@ public class TheoryApprovalsRule extends TestWatcher {
             return (T) Fred.newProxyInstance(object.getClass(), handler);
         }
 
-        private String formatted(Object result, Object[] parameters) {
-            StringBuilder myResult = new StringBuilder();
-            myResult.append("[").append(formatted(parameters)).append("] -> ");
-            myResult.append(String.valueOf(result)).append("\n");
-            return myResult.toString();
-        }
-
-        private String formatted(Object[] parameters) {
-            StringBuilder result = new StringBuilder();
-            for (Object parameter : parameters) {
-                result.append(String.valueOf(parameter)).append(LIST_SEPARATOR);
-            }
-            return result.substring(0, result.length() - LIST_SEPARATOR_LENGTH);
-        }
     }
+
 }
