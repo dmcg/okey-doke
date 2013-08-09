@@ -12,8 +12,8 @@ import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
 public class BaseApprover<T, C, F> {
 
-    protected final String testName;
-    protected final SourceOfApproval<F> sourceOfApproval;
+    private final String testName;
+    private final SourceOfApproval<F> sourceOfApproval;
     private final Formatter<T, C> formatter;
     private final Reporter<F> reporter;
 
@@ -67,11 +67,11 @@ public class BaseApprover<T, C, F> {
                 } else {
                     checkByReading();
                 }
-                sourceOfApproval.removeActual(testName);
+                sourceOfApproval.removeActual(testName());
             } catch (AssertionError e) {
                 reporter.reportFailure(
-                        sourceOfApproval.actualFor(testName),
-                        sourceOfApproval.approvedFor(testName),
+                        sourceOfApproval.actualFor(testName()),
+                        sourceOfApproval.approvedFor(testName()),
                         e);
                 throw e;
             }
@@ -95,25 +95,25 @@ public class BaseApprover<T, C, F> {
     }
 
     private InputStream inputForActual() throws IOException {
-        InputStream result = sourceOfApproval.inputOrNullForActual(testName);
+        InputStream result = sourceOfApproval.inputOrNullForActual(testName());
         if (result != null) {
             return result;
         }
-        throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
+        throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
             // Can happen if we have opened file early and then delete the directory
     }
 
     private InputStream inputForApproved() throws IOException {
-        InputStream existing = sourceOfApproval.inputOrNullForApproved(testName);
+        InputStream existing = sourceOfApproval.inputOrNullForApproved(testName());
         if (existing != null)
             return existing;
         approve(formatter.emptyThing());
-        return sourceOfApproval.inputOrNullForApproved(testName);
+        return sourceOfApproval.inputOrNullForApproved(testName());
     }
 
     public void approve(T approved) {
         try {
-            OutputStream output = sourceOfApproval.outputForApproved(testName);
+            OutputStream output = sourceOfApproval.outputForApproved(testName());
             try {
                 formatter.writeTo(formatter.formatted(approved), output);
             } finally {
@@ -134,16 +134,16 @@ public class BaseApprover<T, C, F> {
 
     protected OutputStream osForActual() throws IOException {
         if (osForActual == null)
-            osForActual = sourceOfApproval.outputForActual(testName);
+            osForActual = sourceOfApproval.outputForActual(testName());
         return osForActual;
     }
 
     public C readActual() {
         try {
-            InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName);
+            InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName());
             try {
                 if (inputForActualOrNull == null)
-                    throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName);
+                    throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
                 return formatter.readFrom(inputForActualOrNull);
             } finally {
                 IO.closeQuietly(inputForActualOrNull);
@@ -151,5 +151,9 @@ public class BaseApprover<T, C, F> {
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
+    }
+
+    protected String testName() {
+        return testName;
     }
 }
