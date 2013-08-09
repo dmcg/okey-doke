@@ -5,11 +5,12 @@ import org.junit.runner.Description;
 import org.rococoa.okeydoke.Approver;
 import org.rococoa.okeydoke.ApproverFactories;
 import org.rococoa.okeydoke.ApproverFactory;
+import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.internal.MethodFinder;
 import org.rococoa.okeydoke.internal.Naming;
-import org.rococoa.okeydoke.junit.jmock.JMockLocker;
 
 import java.io.File;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -110,7 +111,15 @@ public class TheoryApprovalsRule extends TestWatcher {
 
         // experimental
         public <T> T lockDown(final T object) {
-            return JMockLocker.lockWithJMock(object, this);
+            InvocationHandler handler = new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    Object result = method.invoke(object, args);
+                    lockDownResult(result, args);
+                    return result;
+                }
+            };
+            return (T) Fred.newProxyInstance(object.getClass(), handler);
         }
 
         private String formatted(Object result, Object[] parameters) {
