@@ -17,10 +17,6 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
         super(directory);
     }
 
-    public StreamingFileSystemSourceOfApproval(File root, Package thePackage) {
-        super(root, thePackage);
-    }
-
     @Override
     public OutputStream outputForActual(String testname) throws IOException {
         InputStream approvedOrNull = inputOrNullForApproved(testname);

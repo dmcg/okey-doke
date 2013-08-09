@@ -4,7 +4,6 @@ import org.rococoa.okeydoke.BaseApproverFactory;
 import org.rococoa.okeydoke.BinaryApprover;
 import org.rococoa.okeydoke.Reporters;
 import org.rococoa.okeydoke.Sources;
-import org.rococoa.okeydoke.sources.StreamingFileSystemSourceOfApproval;
 
 import java.io.File;
 
@@ -29,7 +28,7 @@ public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], byte[], Binar
             @Override
             public BinaryApprover create(String testName, Class<?> testClass) {
                 return new BinaryApprover(testName,
-                        new StreamingFileSystemSourceOfApproval(new File(sourceRoot), testClass.getPackage()),
+                        Sources.streamingInto(new File(sourceRoot), testClass.getPackage()),
                         Reporters.reporter());
             }
         });

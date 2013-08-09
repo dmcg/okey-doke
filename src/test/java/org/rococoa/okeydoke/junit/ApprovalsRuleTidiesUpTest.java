@@ -10,11 +10,13 @@ import org.rococoa.okeydoke.Reporters;
 import org.rococoa.okeydoke.Sources;
 import org.rococoa.okeydoke.testutils.PrecannedApprovalsRule;
 
+import java.io.File;
+
 import static org.junit.Assert.fail;
 
 public class ApprovalsRuleTidiesUpTest {
 
-    private final Approver delegate = new Approver("testname", Sources.in("target/approvals"), Reporters.reporter());
+    private final Approver delegate = new Approver("testname", Sources.in(new File("target/approvals")), Reporters.reporter());
 
     private final TestWatcher checkDelegateIsCheckedRule = new TestWatcher() {
         @Override

@@ -15,14 +15,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
         this.actualDir = directory;
     }
 
-    public FileSystemSourceOfApproval(File root, Package aPackage) {
-        this(dirForPackage(root, aPackage));
-    }
-
-    public static File dirForPackage(File root, Package aPackage) {
-        return new File(root, aPackage.getName().replaceAll("\\.", "/"));
-    }
-
     @Override
     public OutputStream outputForApproved(String testname) throws IOException {
         return createAndOpenOutputStreamFor(approvedFor(testname));

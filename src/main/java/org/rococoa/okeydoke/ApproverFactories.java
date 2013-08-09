@@ -1,7 +1,5 @@
 package org.rococoa.okeydoke;
 
-import org.rococoa.okeydoke.sources.StreamingFileSystemSourceOfApproval;
-
 import java.io.File;
 
 public class ApproverFactories {
@@ -22,7 +20,7 @@ public class ApproverFactories {
             @Override
             public Approver create(String testName, Class<?> testClass) {
                 return new Approver(testName,
-                        new StreamingFileSystemSourceOfApproval(sourceRoot, testClass.getPackage()),
+                        Sources.streamingInto(sourceRoot, testClass.getPackage()),
                         Reporters.reporter());
             }
         };
