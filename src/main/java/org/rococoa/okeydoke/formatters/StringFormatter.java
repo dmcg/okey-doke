@@ -3,7 +3,8 @@ package org.rococoa.okeydoke.formatters;
 import org.junit.Assert;
 import org.rococoa.okeydoke.Formatter;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -13,17 +14,6 @@ import java.util.Arrays;
 public class StringFormatter implements Formatter<Object, String> {
 
     private static final int BUFFER_SIZE = 4 * 1024;
-
-    private final Charset charset;
-
-    public StringFormatter(Charset charset) {
-        this.charset = charset;
-    }
-
-    @Override
-    public String readFrom(InputStream is) throws IOException {
-        return readFully(new InputStreamReader(is, charset));
-    }
 
     @Override
     public Object emptyThing() {
@@ -44,15 +34,6 @@ public class StringFormatter implements Formatter<Object, String> {
         if (actual instanceof Iterable)
             return stringFor((Iterable) actual);
         return String.valueOf(actual);
-    }
-
-    @Override
-    public void writeTo(String s, OutputStream os) throws IOException {
-        os.write(s.getBytes(charset));
-    }
-
-    public Charset getCharset() {
-        return charset;
     }
 
     protected String representationOfNull() {

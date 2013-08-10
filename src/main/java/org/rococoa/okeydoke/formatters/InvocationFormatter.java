@@ -1,17 +1,15 @@
 package org.rococoa.okeydoke.formatters;
 
+import org.junit.Assert;
+import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Invocation;
 
 import java.nio.charset.Charset;
 
-public class InvocationFormatter extends StringFormatter {
+public class InvocationFormatter implements Formatter<Object, String> {
 
     public static final String LIST_SEPARATOR = ", ";
     private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
-
-    public InvocationFormatter(Charset charset) {
-        super(charset);
-    }
 
     @Override
     public String formatted(Object actual) {
@@ -19,6 +17,16 @@ public class InvocationFormatter extends StringFormatter {
             throw new IllegalArgumentException("TODO - extract BaseStringFormatter");
         Invocation invocation = (Invocation) actual;
         return format(invocation.arguments, invocation.result);
+    }
+
+    @Override
+    public Object emptyThing() {
+        return "";
+    }
+
+    @Override
+    public void assertEquals(String expected, String actual) {
+        Assert.assertEquals(expected, actual);
     }
 
     private String format(Object[] arguments, Object result) {

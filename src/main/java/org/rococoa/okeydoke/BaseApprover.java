@@ -15,6 +15,7 @@ public class BaseApprover<T, C, F> {
     private final String testName;
     private final SourceOfApproval<F> sourceOfApproval;
     private final Formatter<T, C> formatter;
+    private final Serializer<C> serializer;
     private final Reporter<F> reporter;
 
     private OutputStream osForActual;
@@ -22,10 +23,12 @@ public class BaseApprover<T, C, F> {
 
     protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval,
                            Formatter<T, C> formatter,
+                           Serializer<C> serializer,
                            Reporter<F> reporter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
+        this.serializer = serializer;
         this.reporter = reporter;
     }
 
@@ -43,7 +46,7 @@ public class BaseApprover<T, C, F> {
 
     public void writeFormatted(T object, Formatter<T, C> aFormatter) {
         try {
-            aFormatter.writeTo(aFormatter.formatted(object), osForActual());
+            serializer.writeTo(aFormatter.formatted(object), osForActual());
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
@@ -87,7 +90,7 @@ public class BaseApprover<T, C, F> {
         InputStream approved = inputForApproved();
         InputStream actual = inputForActual();
         try {
-            formatter.assertEquals(formatter.readFrom(approved), formatter.readFrom(actual));
+            formatter.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
         } finally {
             IO.closeQuietly(actual);
             IO.closeQuietly(approved);
@@ -115,7 +118,7 @@ public class BaseApprover<T, C, F> {
         try {
             OutputStream output = sourceOfApproval.outputForApproved(testName());
             try {
-                formatter.writeTo(formatter.formatted(approved), output);
+                serializer.writeTo(formatter.formatted(approved), output);
             } finally {
                 closeQuietly(output);
             }
@@ -144,7 +147,7 @@ public class BaseApprover<T, C, F> {
             try {
                 if (inputForActualOrNull == null)
                     throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
-                return formatter.readFrom(inputForActualOrNull);
+                return serializer.readFrom(inputForActualOrNull);
             } finally {
                 IO.closeQuietly(inputForActualOrNull);
             }
