@@ -1,14 +1,31 @@
 package org.rococoa.okeydoke.formatters;
 
-import org.rococoa.okeydoke.InvocationFormatter;
+import org.rococoa.okeydoke.Invocation;
 
-public class DefaultInvocationFormatter implements InvocationFormatter {
+import java.nio.charset.Charset;
+
+public class InvocationFormatter extends StringFormatter {
 
     public static final String LIST_SEPARATOR = ", ";
     private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
 
+    public InvocationFormatter() {
+        this(Charset.forName("UTF-8"));
+    }
+
+    public InvocationFormatter(Charset charset) {
+        super(charset);
+    }
+
     @Override
-    public String format(Object[] arguments, Object result) {
+    public String formatted(Object actual) {
+        if (!(actual instanceof Invocation))
+            throw new IllegalArgumentException("TODO - extract BaseStringFormatter");
+        Invocation invocation = (Invocation) actual;
+        return format(invocation.arguments, invocation.result);
+    }
+
+    private String format(Object[] arguments, Object result) {
         StringBuilder myResult = new StringBuilder();
         myResult.append("[").append(formatArguments(arguments)).append("] -> ");
         myResult.append(String.valueOf(result));
@@ -22,5 +39,4 @@ public class DefaultInvocationFormatter implements InvocationFormatter {
         }
         return result.substring(0, result.length() - LIST_SEPARATOR_LENGTH);
     }
-
 }

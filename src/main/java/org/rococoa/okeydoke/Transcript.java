@@ -18,4 +18,6 @@ public interface Transcript {
     public Transcript space();
 
     public Transcript space(int number);
+
+    boolean isStartOfLine();
 }

@@ -2,11 +2,8 @@ package org.rococoa.okeydoke.junit;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.rococoa.okeydoke.Approver;
-import org.rococoa.okeydoke.ApproverFactories;
-import org.rococoa.okeydoke.ApproverFactory;
-import org.rococoa.okeydoke.InvocationFormatter;
-import org.rococoa.okeydoke.formatters.DefaultInvocationFormatter;
+import org.rococoa.okeydoke.*;
+import org.rococoa.okeydoke.formatters.InvocationFormatter;
 import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.internal.MethodFinder;
 import org.rococoa.okeydoke.internal.Naming;
@@ -78,7 +75,7 @@ public class TheoryApprovalsRule extends TestWatcher {
     public class TheoryApprover extends TestWatcher {
 
         private Description theory;
-        private InvocationFormatter invocationFormatter = new DefaultInvocationFormatter();
+        private Formatter<Object, String> invocationFormatter = Formatters.invocationFormatter();
 
         public TheoryApprover withInvocationFormatter(InvocationFormatter invocationFormatter) {
             this.invocationFormatter = invocationFormatter;
@@ -94,18 +91,22 @@ public class TheoryApprovalsRule extends TestWatcher {
         }
 
         public void lockDownResult(Object result, Object... arguments) {
+            Invocation invocation = new Invocation(arguments, result);
+            lockDownResult(invocation);
+        }
+
+        public void lockDownResult(Invocation invocation) {
             Approver approver = approvers.get(theory);
             if (approver == null)
                 throw new IllegalStateException("Something is wrong - check that I am an @Rule!");
-            approver.transcript().appendFormatted(invocationFormatter.format(arguments, result)).endl();
+            approver.transcript().appendFormatted(invocation, invocationFormatter).endl();
         }
 
         public void lockDownReflectively(Object object, String methodName, Object... arguments) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
             List<Method> methods = methodFinder.findMethods(methodFinder.classFor(object), methodName, arguments);
             for (Method method : methods) {
                 try {
-                    Object result = method.invoke(object, arguments);
-                    lockDownResult(result, arguments);
+                    lockDownResult(new Invocation(object, method, arguments));
                     return;
                 } catch (IllegalArgumentException wrongArguments) {
                     // ho hum, try the next

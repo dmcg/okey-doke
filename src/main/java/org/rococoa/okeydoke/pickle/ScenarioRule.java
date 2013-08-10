@@ -66,9 +66,10 @@ public class ScenarioRule extends TestWatcher {
     }
 
     private Transcript indent() {
-        return transcript.space(indent + 4);
+        if (transcript.isStartOfLine())
+            transcript.space(indent + 4);
+        return transcript;
     }
-
 
     @Override
     protected void starting(Description description) {

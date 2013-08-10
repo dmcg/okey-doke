@@ -2,7 +2,8 @@ package org.rococoa.okeydoke.examples;
 
 import org.junit.*;
 import org.junit.runners.MethodSorters;
-import org.rococoa.okeydoke.formatters.DefaultInvocationFormatter;
+import org.rococoa.okeydoke.Formatters;
+import org.rococoa.okeydoke.Invocation;
 import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
@@ -36,8 +37,8 @@ public class ExperimentalPickleTest {
     @Scenario("Adding numbers")
     @Test public void _1_called_thenWith() {
         scenario.when("I enter numbers");
-        thenWith(scenario, this, "the result is").add(42, 42);
-        thenWith(scenario, this, "the result is").add(42, -99);
+        thenWith(scenario, this, "the result is ").add(42, 42);
+        thenWith(scenario, this, "the result is ").add(42, -99);
     }
 
     private static  <T> T thenWith(final ScenarioRule scenario, final T object, final String s) {
@@ -45,7 +46,7 @@ public class ExperimentalPickleTest {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 Object result = method.invoke(object, args);
-                scenario.then(s, new DefaultInvocationFormatter().format(args, result));
+                scenario.then(s, Formatters.invocationFormatter(), new Invocation(args, result));
                 return result;
             }
         };
