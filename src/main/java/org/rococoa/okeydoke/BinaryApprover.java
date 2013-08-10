@@ -8,6 +8,6 @@ import java.io.File;
 public class BinaryApprover extends BaseApprover<byte[], byte[], File> {
 
     public BinaryApprover(String testname, SourceOfApproval<File> sourceOfApproval, Reporter<File> reporter) {
-        super(testname, sourceOfApproval, Formatters.binaryFormatter(), Serializers.binarySerializer(), reporter);
+        super(testname, sourceOfApproval, Formatters.binaryFormatter(), Serializers.binarySerializer(), Checkers.hexChecker(), reporter);
     }
 }

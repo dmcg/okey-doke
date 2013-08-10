@@ -1,6 +1,5 @@
 package org.rococoa.okeydoke.formatters;
 
-import org.junit.Assert;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Invocation;
 
@@ -15,11 +14,6 @@ public class InvocationFormatter implements Formatter<Object, String> {
             throw new IllegalArgumentException("TODO - extract BaseStringFormatter");
         Invocation invocation = (Invocation) actual;
         return format(invocation.arguments, invocation.result);
-    }
-
-    @Override
-    public void assertEquals(String expected, String actual) {
-        Assert.assertEquals(expected, actual);
     }
 
     private String format(Object[] arguments, Object result) {

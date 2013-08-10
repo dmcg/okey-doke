@@ -1,6 +1,5 @@
 package org.rococoa.okeydoke.formatters;
 
-import org.junit.Assert;
 import org.rococoa.okeydoke.Formatter;
 
 import java.io.IOException;
@@ -13,11 +12,6 @@ import java.util.Arrays;
 public class StringFormatter implements Formatter<Object, String> {
 
     private static final int BUFFER_SIZE = 4 * 1024;
-
-    @Override
-    public void assertEquals(String expected, String actual) {
-        Assert.assertEquals(expected, actual);
-    }
 
     @Override
     public String formatted(Object actual) {

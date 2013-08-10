@@ -16,6 +16,7 @@ public class BaseApprover<T, C, F> {
     private final SourceOfApproval<F> sourceOfApproval;
     private final Formatter<T, C> formatter;
     private final Serializer<C> serializer;
+    private final Checker<C> checker;
     private final Reporter<F> reporter;
 
     private OutputStream osForActual;
@@ -24,11 +25,13 @@ public class BaseApprover<T, C, F> {
     protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval,
                            Formatter<T, C> formatter,
                            Serializer<C> serializer,
+                           Checker<C> checker,
                            Reporter<F> reporter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
         this.serializer = serializer;
+        this.checker = checker;
         this.reporter = reporter;
     }
 
@@ -90,7 +93,7 @@ public class BaseApprover<T, C, F> {
         InputStream approved = inputForApproved();
         InputStream actual = inputForActual();
         try {
-            formatter.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
+            checker.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
         } finally {
             IO.closeQuietly(actual);
             IO.closeQuietly(approved);
