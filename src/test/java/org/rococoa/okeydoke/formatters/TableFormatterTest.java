@@ -40,6 +40,6 @@ public class TableFormatterTest {
         Iterable<?> data = asList(
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
-        approver.assertApproved(data, TableFormatter.withHeader("Header 1", "Header 2", "Header 3"));
+        approver.assertApproved(data, new TableFormatter().withHeaders("Header 1", "Header 2", "Header 3"));
     }
 }

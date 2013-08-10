@@ -2,6 +2,7 @@ package org.rococoa.okeydoke.examples;
 
 import org.junit.*;
 import org.junit.runners.MethodSorters;
+import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.Scenario;
@@ -11,7 +12,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
-import static org.rococoa.okeydoke.formatters.TableFormatter.withHeader;
 import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
 @Feature(
@@ -58,7 +58,7 @@ public class PreapprovedPickleTest {
                 "|42 |-99|-57 |\n" +
                 "|-42|-99|-141|\n";
 
-        scenario.thenAssertThat("the result should be\n", results, withHeader("Op1", "Op2", "sum"), expected);
+        scenario.thenAssertThat("the result should be\n", results, new TableFormatter().withHeaders("Op1", "Op2", "sum"), expected);
     }
 
     private void add(int i1, int i2, String expected) {
