@@ -4,17 +4,11 @@ import org.rococoa.okeydoke.internal.MappedIterable;
 import org.rococoa.okeydoke.internal.Mapper;
 import org.rococoa.okeydoke.util.Tabulator;
 
-import java.nio.charset.Charset;
-
 public class TableFormatter extends StringFormatter {
 
+    // NB - I've tried making TableFormatter implement Formatter<Iterable, String> but then it can't cope with arrays.
+
     private static final Tabulator tabulator = new Tabulator();
-
-    private static StringFormatter instance = new TableFormatter();
-
-    public static StringFormatter instance() {
-        return instance;
-    }
 
     private String[] headersOrNull;
     private Mapper<?,?> mapperOrNull;

@@ -3,14 +3,15 @@ package org.rococoa.okeydoke;
 import org.rococoa.okeydoke.formatters.BinaryFormatter;
 import org.rococoa.okeydoke.formatters.InvocationFormatter;
 import org.rococoa.okeydoke.formatters.StringFormatter;
-
-import java.nio.charset.Charset;
+import org.rococoa.okeydoke.formatters.TableFormatter;
 
 public class Formatters {
 
     private static final Formatter<Object, String> string = new StringFormatter();
     private static final Formatter<byte[], byte[]> binary = new BinaryFormatter();
-    private static final Formatter<Object, String> invocation = new InvocationFormatter();
+    private static final Formatter<Object, String> table = new TableFormatter();
+    private static final Formatter<Invocation, String> invocation = new InvocationFormatter();
+
 
     public static Formatter<Object, String> stringFormatter() {
         return string;
@@ -20,8 +21,12 @@ public class Formatters {
         return binary;
     }
 
-    public static Formatter<Object, String> invocationFormatter() {
+    public static Formatter<Invocation, String> invocationFormatter() {
         return invocation;
     }
 
+    public static Formatter<Object, String> instance() {
+        // declared as base type to stop mutation with TableFormatter.withXXX methods
+        return table;
+    }
 }

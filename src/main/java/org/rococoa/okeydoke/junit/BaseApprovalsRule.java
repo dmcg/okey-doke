@@ -33,7 +33,7 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
         approver().assertApproved(actual);
     }
 
-    public void assertApproved(T actual, Formatter<T, C> formatter) {
+    public <T2 extends T> void assertApproved(T2 actual, Formatter<T2, C> formatter) {
         approver().assertApproved(actual, formatter);
     }
 

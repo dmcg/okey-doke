@@ -47,7 +47,7 @@ public class BaseApprover<T, C, F> {
         writeFormatted(object, formatter);
     }
 
-    public void writeFormatted(T object, Formatter<T, C> aFormatter) {
+    public <T2 extends T> void writeFormatted(T2 object, Formatter<T2, C> aFormatter) {
         try {
             serializer.writeTo(aFormatter.formatted(object), osForActual());
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public class BaseApprover<T, C, F> {
         assertApproved(actual, formatter);
     }
 
-    public void assertApproved(T actual, Formatter<T, C> aFormatter) {
+    public <T2 extends T> void assertApproved(T2 actual, Formatter<T2, C> aFormatter) {
         writeFormatted(actual, aFormatter);
         assertSatisfied();
     }

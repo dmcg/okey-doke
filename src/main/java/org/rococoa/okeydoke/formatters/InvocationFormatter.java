@@ -3,17 +3,14 @@ package org.rococoa.okeydoke.formatters;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Invocation;
 
-public class InvocationFormatter implements Formatter<Object, String> {
+public class InvocationFormatter implements Formatter<Invocation, String> {
 
     public static final String LIST_SEPARATOR = ", ";
     private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
 
     @Override
-    public String formatted(Object actual) {
-        if (!(actual instanceof Invocation))
-            throw new IllegalArgumentException("TODO - extract BaseStringFormatter");
-        Invocation invocation = (Invocation) actual;
-        return format(invocation.arguments, invocation.result);
+    public String formatted(Invocation actual) {
+        return format(actual.arguments, actual.result);
     }
 
     private String format(Object[] arguments, Object result) {

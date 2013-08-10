@@ -75,7 +75,7 @@ public class TheoryApprovalsRule extends TestWatcher {
     public class TheoryApprover extends TestWatcher {
 
         private Description theory;
-        private Formatter<Object, String> invocationFormatter = Formatters.invocationFormatter();
+        private Formatter<Invocation, String> invocationFormatter = Formatters.invocationFormatter();
 
         public TheoryApprover withInvocationFormatter(InvocationFormatter invocationFormatter) {
             this.invocationFormatter = invocationFormatter;
