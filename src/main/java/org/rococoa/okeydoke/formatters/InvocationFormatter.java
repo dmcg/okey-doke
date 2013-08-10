@@ -9,10 +9,6 @@ public class InvocationFormatter extends StringFormatter {
     public static final String LIST_SEPARATOR = ", ";
     private static final int LIST_SEPARATOR_LENGTH = LIST_SEPARATOR.length();
 
-    public InvocationFormatter() {
-        this(Charset.forName("UTF-8"));
-    }
-
     public InvocationFormatter(Charset charset) {
         super(charset);
     }
