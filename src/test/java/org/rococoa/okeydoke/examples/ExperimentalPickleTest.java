@@ -53,6 +53,7 @@ public class ExperimentalPickleTest {
         return (T) Fred.newProxyInstance(object.getClass(), handler);
     }
 
+    // must be protected to allow overriding in proxy
     protected String add(int i1, int i2) {
         calculator.enter(i1);
         calculator.enter(i2);
