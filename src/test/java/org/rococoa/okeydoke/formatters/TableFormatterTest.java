@@ -13,25 +13,25 @@ public class TableFormatterTest {
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
     @Test public void array_is_listed_by_row() {
-        approver.assertApproved(new String[] {"one", "two", "three"}, Formatters.instance());
+        approver.assertApproved(new String[] {"one", "two", "three"}, Formatters.table());
     }
 
     @Test public void array_table_is_laid_out() {
         String [][] data = {
                 {"one", "two", "three"},
                 {"four", "five", "siiiiiiix"}};
-        approver.assertApproved(data, Formatters.instance());
+        approver.assertApproved(data, Formatters.table());
     }
 
     @Test public void iterable_is_listed_by_row() {
-        approver.assertApproved(asList("one", "two", "three"), Formatters.instance());
+        approver.assertApproved(asList("one", "two", "three"), Formatters.table());
     }
 
     @Test public void iterable_table_is_laid_out() {
         Iterable<?> data = asList(
                 asList("one", "two", "three"),
                 asList("four", "five", "siiiiiiix"));
-        approver.assertApproved(data, Formatters.instance());
+        approver.assertApproved(data, Formatters.table());
     }
 
     @Test public void null_is_printed() {

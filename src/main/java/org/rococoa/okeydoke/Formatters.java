@@ -25,7 +25,7 @@ public class Formatters {
         return invocation;
     }
 
-    public static Formatter<Object, String> instance() {
+    public static Formatter<Object, String> table() {
         // declared as base type to stop mutation with TableFormatter.withXXX methods
         return table;
     }

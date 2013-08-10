@@ -48,7 +48,7 @@ public class ScenarioRule extends TestWatcher {
         for (int i = 0; i < os.length; i++) {
             Object o = os[i];
             if (o instanceof Formatter)
-                appendFormatted(os[i++ + 1], (Formatter<Object, String>) o);
+                appendFormatted(os[i++ + 1], (Formatter<Object, String>) o); // bit of a cheeky cast that one
             else
                 transcript.space().appendFormatted(o);
         }
