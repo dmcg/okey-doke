@@ -2,8 +2,6 @@ package org.rococoa.okeydoke.formatters;
 
 import org.rococoa.okeydoke.Formatter;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Arrays;
 
 /**
@@ -41,13 +39,4 @@ public class StringFormatter implements Formatter<Object, String> {
         return stringFor(Arrays.asList(iterable));
     }
 
-    private static String readFully(Reader input) throws IOException {
-        StringBuilder result = new StringBuilder();
-        char[] buffer = new char[BUFFER_SIZE];
-        int charsRead;
-        while ((charsRead = input.read(buffer)) != -1) {
-            result.append(buffer, 0, charsRead);
-        }
-        return result.toString();
-    }
 }
