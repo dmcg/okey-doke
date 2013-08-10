@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 public class StreamingApprovalTest {
 
     private final TestDirectory dir = new TestDirectory(StreamingApprovalTest.class);
-    @Rule public ApprovalsRule rule = new ApprovalsRule(ApproverFactories.streamingFileSystemApprover(dir));
+    @Rule public ApprovalsRule rule = new ApprovalsRule(ApproverFactories.streamingApproverFactory(dir));
 
     @Test public void as_approved() {
         rule.approve("long contents we don't want to read into memory");

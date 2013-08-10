@@ -1,13 +1,15 @@
 package org.rococoa.okeydoke;
 
+import org.rococoa.okeydoke.junit.BinaryApprovalsRule;
+
 import java.io.File;
 
 public class ApproverFactories {
 
-    public static ApproverFactory fileSystemApprover(final File sourceRoot) {
-        return new ApproverFactory() {
+    public static ApproverFactory<Approver> fileSystemApproverFactory(final File sourceRoot) {
+        return new ApproverFactory<Approver>() {
             @Override
-            public Approver create(String testName, Class<?> testClass) {
+            public Approver createApprover(String testName, Class<?> testClass) {
                 return new Approver(testName,
                         Sources.in(sourceRoot, testClass.getPackage()),
                         Reporters.reporter());
@@ -15,10 +17,10 @@ public class ApproverFactories {
         };
     }
 
-    public static ApproverFactory streamingFileSystemApprover(final File sourceRoot) {
-        return new ApproverFactory() {
+    public static ApproverFactory<Approver> streamingApproverFactory(final File sourceRoot) {
+        return new ApproverFactory<Approver>() {
             @Override
-            public Approver create(String testName, Class<?> testClass) {
+            public Approver createApprover(String testName, Class<?> testClass) {
                 return new Approver(testName,
                         Sources.streamingInto(sourceRoot, testClass.getPackage()),
                         Reporters.reporter());
@@ -26,4 +28,25 @@ public class ApproverFactories {
         };
     }
 
+    public static ApproverFactory<BinaryApprover> binaryFileSystemApproverFactory(final File sourceRoot) {
+        return new ApproverFactory<BinaryApprover>() {
+            @Override
+            public BinaryApprover createApprover(String testName, Class<?> testClass) {
+                return new BinaryApprover(testName,
+                        Sources.in(sourceRoot, testClass.getPackage()),
+                        Reporters.reporter());
+            }
+        };
+    }
+
+    public static BinaryApprovalsRule streamingBinaryApproverFactory(final File sourceRoot) {
+        return new BinaryApprovalsRule(new ApproverFactory<BinaryApprover>() {
+            @Override
+            public BinaryApprover createApprover(String testName, Class<?> testClass) {
+                return new BinaryApprover(testName,
+                        Sources.streamingInto(sourceRoot, testClass.getPackage()),
+                        Reporters.reporter());
+            }
+        });
+    }
 }

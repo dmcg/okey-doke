@@ -2,8 +2,8 @@ package org.rococoa.okeydoke.junit;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.rococoa.okeydoke.ApproverFactory;
 import org.rococoa.okeydoke.BaseApprover;
-import org.rococoa.okeydoke.BaseApproverFactory;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.Naming;
 
@@ -15,9 +15,9 @@ import java.io.PrintStream;
 public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends TestWatcher {
 
     private A approver;
-    private final BaseApproverFactory<T, A> factory;
+    private final ApproverFactory<A> factory;
 
-    public BaseApprovalsRule(BaseApproverFactory<T,A> factory) {
+    public BaseApprovalsRule(ApproverFactory<A> factory) {
         this.factory = factory;
     }
 
@@ -60,7 +60,7 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
     }
 
     protected A createApprover(String testName, Class<?> testClass) {
-        return factory.create(testName, testClass);
+        return factory.createApprover(testName, testClass);
     }
 
     public A approver() {

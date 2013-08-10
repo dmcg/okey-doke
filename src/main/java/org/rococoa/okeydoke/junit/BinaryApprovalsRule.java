@@ -1,9 +1,8 @@
 package org.rococoa.okeydoke.junit;
 
-import org.rococoa.okeydoke.BaseApproverFactory;
+import org.rococoa.okeydoke.ApproverFactories;
+import org.rococoa.okeydoke.ApproverFactory;
 import org.rococoa.okeydoke.BinaryApprover;
-import org.rococoa.okeydoke.Reporters;
-import org.rococoa.okeydoke.Sources;
 
 import java.io.File;
 
@@ -13,28 +12,14 @@ import java.io.File;
 public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], byte[], BinaryApprover> {
 
     public static BinaryApprovalsRule fileSystemRule(final String sourceRoot) {
-        return new BinaryApprovalsRule(new BaseApproverFactory<byte[], BinaryApprover>() {
-            @Override
-            public BinaryApprover create(String testName, Class<?> testClass) {
-                return new BinaryApprover(testName,
-                        Sources.in(new File(sourceRoot), testClass.getPackage()),
-                        Reporters.reporter());
-            }
-        });
+        return new BinaryApprovalsRule(ApproverFactories.binaryFileSystemApproverFactory(new File(sourceRoot)));
     }
 
     public static BinaryApprovalsRule streamingFileSystemRule(final String sourceRoot) {
-        return new BinaryApprovalsRule(new BaseApproverFactory<byte[], BinaryApprover>() {
-            @Override
-            public BinaryApprover create(String testName, Class<?> testClass) {
-                return new BinaryApprover(testName,
-                        Sources.streamingInto(new File(sourceRoot), testClass.getPackage()),
-                        Reporters.reporter());
-            }
-        });
+        return ApproverFactories.streamingBinaryApproverFactory(new File(sourceRoot));
     }
 
-    public BinaryApprovalsRule(BaseApproverFactory<byte[], BinaryApprover> factory) {
+    public BinaryApprovalsRule(ApproverFactory<BinaryApprover> factory) {
         super(factory);
     }
 

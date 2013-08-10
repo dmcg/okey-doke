@@ -13,11 +13,11 @@ import java.io.File;
 public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
 
     public static ApprovalsRule fileSystemRule(String sourceRoot) {
-        return new ApprovalsRule(ApproverFactories.fileSystemApprover(new File(sourceRoot)));
+        return new ApprovalsRule(ApproverFactories.fileSystemApproverFactory(new File(sourceRoot)));
     }
 
     public static ApprovalsRule streamingFileSystemRule(String sourceRoot) {
-        return new ApprovalsRule(ApproverFactories.streamingFileSystemApprover(new File(sourceRoot)));
+        return new ApprovalsRule(ApproverFactories.streamingApproverFactory(new File(sourceRoot)));
     }
 
     public ApprovalsRule(ApproverFactory factory) {

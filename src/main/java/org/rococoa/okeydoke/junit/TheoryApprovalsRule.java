@@ -25,12 +25,12 @@ public class TheoryApprovalsRule extends TestWatcher {
     private final MethodFinder methodFinder = new MethodFinder();
 
     private final Map<Description, Approver> approvers = new HashMap<Description, Approver>();
-    private final ApproverFactory factory;
+    private final ApproverFactory<Approver> factory;
 
     private Description description;
 
     public static TheoryApprovalsRule fileSystemRule(File sourceRoot) {
-        return new TheoryApprovalsRule(ApproverFactories.fileSystemApprover(sourceRoot));
+        return new TheoryApprovalsRule(ApproverFactories.fileSystemApproverFactory(sourceRoot));
     }
 
     public static TheoryApprovalsRule fileSystemRule(String sourceRoot) {
@@ -86,7 +86,7 @@ public class TheoryApprovalsRule extends TestWatcher {
         public void starting(Description description) {
             theory = description;
             if (!approvers.containsKey(description))
-                approvers.put(theory, factory.create(Naming.testNameFor(description), TheoryApprovalsRule.this.description.getTestClass()));
+                approvers.put(theory, factory.createApprover(Naming.testNameFor(description), TheoryApprovalsRule.this.description.getTestClass()));
             super.starting(description);
         }
 
