@@ -2,6 +2,7 @@ package org.rococoa.okeydoke.formatters;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.rococoa.okeydoke.internal.Mapper;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import static java.util.Arrays.asList;
@@ -42,4 +43,16 @@ public class TableFormatterTest {
                 asList("four", "five", "siiiiiiix"));
         approver.assertApproved(data, new TableFormatter().withHeaders("Header 1", "Header 2", "Header 3"));
     }
+
+    @Test public void with_mapper() {
+        Iterable<?> data = asList("one", "two", "three");
+        Mapper<String, Object[]> mapper = new Mapper<String, Object[]>() {
+            @Override public Object[] map(String next) {
+                return new Object[] {next, next.length()};
+            }
+        };
+        approver.assertApproved(data, new TableFormatter().withHeaders("String", "Length").withMapper(mapper));
+    }
+
+
 }
