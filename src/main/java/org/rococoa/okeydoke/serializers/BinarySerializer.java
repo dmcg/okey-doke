@@ -26,4 +26,9 @@ public class BinarySerializer implements Serializer<byte[]> {
     public void writeTo(byte[] object, OutputStream os) throws IOException {
         os.write(object);
     }
+
+    @Override
+    public byte[] emptyThing() {
+        return new byte[0];
+    }
 }

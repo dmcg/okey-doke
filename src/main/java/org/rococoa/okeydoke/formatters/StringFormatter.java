@@ -5,7 +5,6 @@ import org.rococoa.okeydoke.Formatter;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
@@ -14,11 +13,6 @@ import java.util.Arrays;
 public class StringFormatter implements Formatter<Object, String> {
 
     private static final int BUFFER_SIZE = 4 * 1024;
-
-    @Override
-    public Object emptyThing() {
-        return "";
-    }
 
     @Override
     public void assertEquals(String expected, String actual) {

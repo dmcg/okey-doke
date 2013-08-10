@@ -11,7 +11,6 @@ package org.rococoa.okeydoke;
 public interface Formatter<T, C> {
 
     public C formatted(T object);
-    public T emptyThing();
     public void assertEquals(C expected, C actual);
 
 }

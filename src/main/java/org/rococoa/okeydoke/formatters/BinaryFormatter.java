@@ -10,11 +10,6 @@ import org.rococoa.okeydoke.internal.HexDump;
 public class BinaryFormatter implements Formatter<byte[], byte[]> {
 
     @Override
-    public byte[] emptyThing() {
-        return new byte[0];
-    }
-
-    @Override
     public void assertEquals(byte[] expected, byte[] actual) {
         Assert.assertEquals(HexDump.format(expected), HexDump.format(actual));
     }

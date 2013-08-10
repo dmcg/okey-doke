@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.Invocation;
 
-import java.nio.charset.Charset;
-
 public class InvocationFormatter implements Formatter<Object, String> {
 
     public static final String LIST_SEPARATOR = ", ";
@@ -17,11 +15,6 @@ public class InvocationFormatter implements Formatter<Object, String> {
             throw new IllegalArgumentException("TODO - extract BaseStringFormatter");
         Invocation invocation = (Invocation) actual;
         return format(invocation.arguments, invocation.result);
-    }
-
-    @Override
-    public Object emptyThing() {
-        return "";
     }
 
     @Override

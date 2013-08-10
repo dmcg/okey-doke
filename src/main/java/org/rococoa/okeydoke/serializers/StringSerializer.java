@@ -24,6 +24,11 @@ public class StringSerializer implements Serializer<String> {
     }
 
     @Override
+    public String emptyThing() {
+        return "";
+    }
+
+    @Override
     public void writeTo(String s, OutputStream os) throws IOException {
         os.write(s.getBytes(charset));
     }

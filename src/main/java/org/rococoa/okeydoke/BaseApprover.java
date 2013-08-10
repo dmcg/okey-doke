@@ -110,15 +110,19 @@ public class BaseApprover<T, C, F> {
         InputStream existing = sourceOfApproval.inputOrNullForApproved(testName());
         if (existing != null)
             return existing;
-        approve(formatter.emptyThing());
+        writeToApproved(serializer.emptyThing());
         return sourceOfApproval.inputOrNullForApproved(testName());
     }
 
     public void approve(T approved) {
+        writeToApproved(formatter.formatted(approved));
+    }
+
+    private void writeToApproved(C formatted) {
         try {
             OutputStream output = sourceOfApproval.outputForApproved(testName());
             try {
-                serializer.writeTo(formatter.formatted(approved), output);
+                serializer.writeTo(formatted, output);
             } finally {
                 closeQuietly(output);
             }
