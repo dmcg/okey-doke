@@ -49,4 +49,15 @@ public class ApproverFactories {
             }
         });
     }
+
+    public static ApproverFactory<BinaryApprover> binaryFileSystemApproverFactory(final File sourceRoot, final String extension) {
+        return new ApproverFactory<BinaryApprover>() {
+            @Override
+            public BinaryApprover createApprover(String testName, Class<?> testClass) {
+                return new BinaryApprover(testName,
+                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension),
+                        Reporters.reporter());
+            }
+        };
+    }
 }

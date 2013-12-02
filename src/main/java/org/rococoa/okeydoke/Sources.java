@@ -7,19 +7,19 @@ import java.io.File;
 
 public class Sources {
 
-    public static SourceOfApproval<File> in(File directory) {
+    public static FileSystemSourceOfApproval in(File directory) {
         return new FileSystemSourceOfApproval(directory);
     }
 
-    public static SourceOfApproval<File> in(File srcRoot, Package thePackage) {
+    public static FileSystemSourceOfApproval in(File srcRoot, Package thePackage) {
         return in(dirForPackage(srcRoot, thePackage));
     }
 
-    public static SourceOfApproval<File> streamingInto(File directory) {
+    public static FileSystemSourceOfApproval streamingInto(File directory) {
         return new StreamingFileSystemSourceOfApproval(directory);
     }
 
-    public static SourceOfApproval<File> streamingInto(File srcRoot, Package thePackage) {
+    public static FileSystemSourceOfApproval streamingInto(File srcRoot, Package thePackage) {
         return streamingInto(dirForPackage(srcRoot, thePackage));
     }
 

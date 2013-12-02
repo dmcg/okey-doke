@@ -11,8 +11,12 @@ import java.io.File;
  */
 public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], byte[], BinaryApprover> {
 
-    public static BinaryApprovalsRule fileSystemRule(final String sourceRoot) {
+    public static BinaryApprovalsRule fileSystemRule(String sourceRoot) {
         return new BinaryApprovalsRule(ApproverFactories.binaryFileSystemApproverFactory(new File(sourceRoot)));
+    }
+
+    public static BinaryApprovalsRule fileSystemRule(String sourceRoot, String extension) {
+        return new BinaryApprovalsRule(ApproverFactories.binaryFileSystemApproverFactory(new File(sourceRoot), extension));
     }
 
     public static BinaryApprovalsRule streamingFileSystemRule(final String sourceRoot) {

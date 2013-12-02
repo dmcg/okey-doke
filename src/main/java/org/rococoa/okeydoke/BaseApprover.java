@@ -43,6 +43,10 @@ public class BaseApprover<T, C, F> {
         }
     }
 
+    public OutputStream outputStream() throws IOException {
+        return osForActual();
+    }
+
     public void writeFormatted(T object) {
         writeFormatted(object, formatter);
     }

@@ -7,6 +7,8 @@ import org.rococoa.okeydoke.BaseApprover;
 import org.rococoa.okeydoke.Formatter;
 import org.rococoa.okeydoke.internal.Naming;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 /**
@@ -23,6 +25,10 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
 
     public PrintStream printStream() {
         return approver().printStream();
+    }
+
+    public OutputStream outputStream() throws IOException {
+        return approver.outputStream();
     }
 
     public void writeFormatted(T o) {
