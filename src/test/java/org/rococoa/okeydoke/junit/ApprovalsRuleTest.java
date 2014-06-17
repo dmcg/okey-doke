@@ -24,12 +24,12 @@ public class ApprovalsRuleTest {
     }
 
     @Test public void matches_when_approved_result_matches() {
-        approver.approve("banana");
+        approver.makeApproved("banana");
         approver.assertApproved("banana");
     }
 
     @Test public void doesnt_match_when_approved_result_doesnt_match() {
-        approver.approve("banana");
+        approver.makeApproved("banana");
         try {
             approver.assertApproved("kumquat");
             fail();
@@ -46,7 +46,7 @@ public class ApprovalsRuleTest {
 
     @Ignore("Unignore to see failure report in IDE")
     @Test public void see_how_my_IDE_reports_diffs() {
-        approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
+        approver.makeApproved("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 }

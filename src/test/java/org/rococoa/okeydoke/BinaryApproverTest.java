@@ -27,12 +27,12 @@ public class BinaryApproverTest {
     }
 
     @Test public void matches_when_approved_result_matches() {
-        approver.approve("banana".getBytes());
+        approver.makeApproved("banana".getBytes());
         approver.assertApproved("banana".getBytes());
     }
 
     @Test public void doesnt_match_when_approved_result_doesnt_match() {
-        approver.approve("banana".getBytes());
+        approver.makeApproved("banana".getBytes());
         try {
             approver.assertApproved("bnana".getBytes());
             fail();

@@ -31,7 +31,7 @@ public class ApprovalsRuleTest {
 
     @Ignore("Unignore to see failure report in IDE")
     @Test public void see_how_my_IDE_reports_diffs() {
-        approver.approve("Deliberate failure - Jackdaws love my big sphinx of quartz");
+        approver.makeApproved("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }
 }

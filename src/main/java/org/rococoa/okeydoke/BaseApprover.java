@@ -121,7 +121,7 @@ public class BaseApprover<T, C, F> {
         return sourceOfApproval.inputOrNullForApproved(testName());
     }
 
-    public void approve(T approved) {
+    public void makeApproved(T approved) {
         writeToApproved(formatter.formatted(approved));
     }
 

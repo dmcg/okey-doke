@@ -14,7 +14,7 @@ public class StreamingApprovalTest {
     @Rule public ApprovalsRule rule = new ApprovalsRule(ApproverFactories.streamingApproverFactory(dir));
 
     @Test public void as_approved() {
-        rule.approve("long contents we don't want to read into memory");
+        rule.makeApproved("long contents we don't want to read into memory");
         rule.assertApproved("long contents we don't want to read into memory");
     }
 
@@ -25,7 +25,7 @@ public class StreamingApprovalTest {
 
     @Test
     public void not_as_approved() {
-        rule.approve("long contents we don't want to read into memory");
+        rule.makeApproved("long contents we don't want to read into memory");
 
         try {
             rule.assertApproved("long CONTENTS we don't want to read into memory");

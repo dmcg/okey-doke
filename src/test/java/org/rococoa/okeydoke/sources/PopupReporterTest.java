@@ -19,7 +19,7 @@ public class PopupReporterTest {
                 new FileSystemSourceOfApproval(testDirectory.dir()),
                     new PopupReporter(Reporters.differFor(OperatingSystem.current())));
 
-        approver.approve("Now is the time for all good men to come to the aid of the party.");
+        approver.makeApproved("Now is the time for all good men to come to the aid of the party.");
         approver.assertApproved("Now isn't the time for all gods men to come to the aid of the party");
     }
 

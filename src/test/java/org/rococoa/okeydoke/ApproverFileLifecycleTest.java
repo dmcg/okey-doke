@@ -15,7 +15,7 @@ public class ApproverFileLifecycleTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
 
-    private final FileSystemSourceOfApproval sourceOfApproval = (FileSystemSourceOfApproval) Sources.in(new File("target/approvals"));
+    private final FileSystemSourceOfApproval sourceOfApproval = Sources.in(new File("target/approvals"));
     private Approver approver;
 
     @Before public void createApproverInsideCleanDirectoryRule() {
@@ -28,7 +28,7 @@ public class ApproverFileLifecycleTest {
     @Test public void approved() {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
-        approver.approve("banana");
+        approver.makeApproved("banana");
         assertTrue(sourceOfApproval.approvedFor("testname").exists());
 
         approver.assertApproved("banana");
@@ -49,7 +49,7 @@ public class ApproverFileLifecycleTest {
     @Test public void not_matching_approved() {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
-        approver.approve("banana");
+        approver.makeApproved("banana");
         assertTrue(sourceOfApproval.approvedFor("testname").exists());
 
         try {

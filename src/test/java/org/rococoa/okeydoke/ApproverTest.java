@@ -31,12 +31,12 @@ public class ApproverTest {
     }
 
     @Test public void matches_when_approved_result_matches() {
-        approver.approve("banana");
+        approver.makeApproved("banana");
         approver.assertApproved("banana");
     }
 
     @Test public void doesnt_match_when_approved_result_doesnt_match() {
-        approver.approve("banana");
+        approver.makeApproved("banana");
         try {
             approver.assertApproved("kumquat");
             fail();
@@ -47,7 +47,7 @@ public class ApproverTest {
     }
 
     @Test public void can_assert_with_nothing_approved() {
-        approver.approve("");
+        approver.makeApproved("");
         approver.assertSatisfied();
     }
 }

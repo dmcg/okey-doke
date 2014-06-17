@@ -31,7 +31,7 @@ public class ApprovalsRuleTidiesUpTest {
     @Rule public final RuleChain rules = RuleChain.outerRule(checkDelegateIsCheckedRule).around(approver);
 
     @Test public void rule_will_check_satisfaction() {
-        approver.approve("banana");
+        approver.makeApproved("banana");
 
         approver.writeFormatted("banana");
     }

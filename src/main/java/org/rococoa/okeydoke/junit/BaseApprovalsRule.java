@@ -49,8 +49,8 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends Test
         approver().assertSatisfied();
     }
 
-    public void approve(T approved) {
-        approver().approve(approved);
+    public void makeApproved(T approved) {
+        approver().makeApproved(approved);
     }
 
     @Override
