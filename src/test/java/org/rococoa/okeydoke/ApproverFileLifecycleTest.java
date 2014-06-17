@@ -8,8 +8,7 @@ import org.rococoa.okeydoke.testutils.CleanDirectoryRule;
 
 import java.io.File;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ApproverFileLifecycleTest {
 
@@ -29,7 +28,7 @@ public class ApproverFileLifecycleTest {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.makeApproved("banana");
-        assertTrue(sourceOfApproval.approvedFor("testname").exists());
+        assertEquals("banana".length(), sourceOfApproval.approvedFor("testname").length());
 
         approver.assertApproved("banana");
         assertTrue(sourceOfApproval.approvedFor("testname").exists());
@@ -42,8 +41,8 @@ public class ApproverFileLifecycleTest {
         try {
             approver.assertApproved("banana");
         } catch (AssertionError expected) {}
-        assertTrue(sourceOfApproval.approvedFor("testname").exists());
-        assertTrue(sourceOfApproval.actualFor("testname").exists());
+        assertEquals(0, sourceOfApproval.approvedFor("testname").length());
+        assertEquals("banana".length(), sourceOfApproval.actualFor("testname").length());
     }
 
     @Test public void not_matching_approved() {
@@ -55,7 +54,7 @@ public class ApproverFileLifecycleTest {
         try {
             approver.assertApproved("kumquat");
         } catch (AssertionError expected) {}
-        assertTrue(sourceOfApproval.approvedFor("testname").exists());
-        assertTrue(sourceOfApproval.actualFor("testname").exists());
+        assertEquals("banana".length(), sourceOfApproval.approvedFor("testname").length());
+        assertEquals("kumquat".length(), sourceOfApproval.actualFor("testname").length());
     }
 }
