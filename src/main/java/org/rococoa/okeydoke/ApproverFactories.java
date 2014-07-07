@@ -17,6 +17,17 @@ public class ApproverFactories {
         };
     }
 
+    public static ApproverFactory<Approver> fileSystemApproverFactory(final File sourceRoot, final String extension) {
+        return new ApproverFactory<Approver>() {
+            @Override
+            public Approver createApprover(String testName, Class<?> testClass) {
+                return new Approver(testName,
+                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension),
+                        Reporters.reporter());
+            }
+        };
+    }
+
     public static ApproverFactory<Approver> streamingApproverFactory(final File sourceRoot) {
         return new ApproverFactory<Approver>() {
             @Override
