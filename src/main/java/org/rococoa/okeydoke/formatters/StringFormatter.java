@@ -10,6 +10,11 @@ import java.util.Arrays;
 public class StringFormatter implements Formatter<Object, String> {
 
     private static final int BUFFER_SIZE = 4 * 1024;
+    private final String quoteChar;
+
+    public StringFormatter(String quoteChar) {
+        this.quoteChar = quoteChar;
+    }
 
     @Override
     public String formatted(Object actual) {
@@ -29,9 +34,11 @@ public class StringFormatter implements Formatter<Object, String> {
     protected String stringFor(Iterable iterable) {
         StringBuilder result = new StringBuilder("[");
         for (Object o : iterable) {
-            result.append("\"").append(formatted(o)).append("\",");
+            result.append(quoteChar).append(formatted(o)).append(quoteChar + ",");
         }
-        result.deleteCharAt(result.length() - 1).append("]");
+        if (result.length() > 1)
+            result.deleteCharAt(result.length() - 1);
+        result.append("]");
         return result.toString();
     }
 

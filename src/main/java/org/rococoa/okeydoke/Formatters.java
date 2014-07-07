@@ -7,14 +7,14 @@ import org.rococoa.okeydoke.formatters.TableFormatter;
 
 public class Formatters {
 
-    private static final Formatter<Object, String> string = new StringFormatter();
+    private static final Formatter<Object, String> doubleQuotedString = new StringFormatter("\"");
     private static final Formatter<byte[], byte[]> binary = new BinaryFormatter();
     private static final Formatter<Object, String> table = new TableFormatter();
     private static final Formatter<Invocation, String> invocation = new InvocationFormatter();
 
 
     public static Formatter<Object, String> stringFormatter() {
-        return string;
+        return doubleQuotedString;
     }
 
     public static Formatter<byte[], byte[]> binaryFormatter() {

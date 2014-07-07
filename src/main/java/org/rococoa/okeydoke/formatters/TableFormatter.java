@@ -13,6 +13,10 @@ public class TableFormatter extends StringFormatter {
     private String[] headersOrNull;
     private Mapper<?,?> mapperOrNull;
 
+    public TableFormatter() {
+        super("\"");
+    }
+
     public TableFormatter withHeaders(String... headers) {
         this.headersOrNull = headers;
         return this;

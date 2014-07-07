@@ -10,23 +10,29 @@ public class StringFormatterTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
+    private final StringFormatter formatter = new StringFormatter("\"");
+
     @Test public void a_string_is_itself() {
-        approver.assertApproved("A String");
+        approver.assertApproved("A String", formatter);
     }
 
     @Test public void object_uses_toString() {
-        approver.assertApproved(new StringBuilder("A StringBuilder"));
+        approver.assertApproved(new StringBuilder("A StringBuilder"), formatter);
     }
 
     @Test public void array_is_listed() {
-        approver.assertApproved(new String[] {"one", "two", "three"});
+        approver.assertApproved(new String[] {"one", "two", "three"}, formatter);
     }
 
     @Test public void iterable_is_listed() {
-        approver.assertApproved(Arrays.asList("one", "two", "three"));
+        approver.assertApproved(Arrays.asList("one", "two", "three"), formatter);
     }
 
     @Test public void null_is_printed() {
-        approver.assertApproved(null);
+        approver.assertApproved(null, formatter);
+    }
+
+    @Test public void emptyIterable() {
+        approver.assertApproved(new String[] {}, formatter);
     }
 }
