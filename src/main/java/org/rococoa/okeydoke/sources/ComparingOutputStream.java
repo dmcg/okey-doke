@@ -50,7 +50,7 @@ public class ComparingOutputStream extends FilterOutputStream implements Snitch 
     }
 
     @Override
-    public void grassOnTransgressions() throws AssertionError {
+    public void tellIf() throws AssertionError {
         if (firstMismatchPosition != -1)
             throw new AssertionError("Streams differed at " + firstMismatchPosition);
     }

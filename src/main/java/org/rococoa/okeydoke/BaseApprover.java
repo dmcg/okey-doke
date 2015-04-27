@@ -10,23 +10,23 @@ import java.io.PrintStream;
 
 import static org.rococoa.okeydoke.internal.IO.closeQuietly;
 
-public class BaseApprover<T, C, F> {
+public class BaseApprover<ApprovedT, ComparedT, StorageT> {
 
     private final String testName;
-    private final SourceOfApproval<F> sourceOfApproval;
-    private final Formatter<T, C> formatter;
-    private final Serializer<C> serializer;
-    private final Checker<C> checker;
-    private final Reporter<F> reporter;
+    private final SourceOfApproval<StorageT> sourceOfApproval;
+    private final Formatter<ApprovedT, ComparedT> formatter;
+    private final Serializer<ComparedT> serializer;
+    private final Checker<ComparedT> checker;
+    private final Reporter<StorageT> reporter;
 
     private OutputStream osForActual;
     private boolean done;
 
-    protected BaseApprover(String testName, SourceOfApproval<F> sourceOfApproval,
-                           Formatter<T, C> formatter,
-                           Serializer<C> serializer,
-                           Checker<C> checker,
-                           Reporter<F> reporter) {
+    protected BaseApprover(String testName, SourceOfApproval<StorageT> sourceOfApproval,
+                           Formatter<ApprovedT, ComparedT> formatter,
+                           Serializer<ComparedT> serializer,
+                           Checker<ComparedT> checker,
+                           Reporter<StorageT> reporter) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
@@ -47,11 +47,11 @@ public class BaseApprover<T, C, F> {
         return osForActual();
     }
 
-    public void writeFormatted(T object) {
+    public void writeFormatted(ApprovedT object) {
         writeFormatted(object, formatter);
     }
 
-    public <T2 extends T> void writeFormatted(T2 object, Formatter<T2, C> aFormatter) {
+    public <AT extends ApprovedT> void writeFormatted(AT object, Formatter<AT, ComparedT> aFormatter) {
         try {
             serializer.writeTo(aFormatter.formatted(object), osForActual());
         } catch (IOException e) {
@@ -59,11 +59,11 @@ public class BaseApprover<T, C, F> {
         }
     }
 
-    public void assertApproved(T actual) {
+    public void assertApproved(ApprovedT actual) {
         assertApproved(actual, formatter);
     }
 
-    public <T2 extends T> void assertApproved(T2 actual, Formatter<T2, C> aFormatter) {
+    public <AT extends ApprovedT> void assertApproved(AT actual, Formatter<AT, ComparedT> aFormatter) {
         writeFormatted(actual, aFormatter);
         assertSatisfied();
     }
@@ -73,7 +73,7 @@ public class BaseApprover<T, C, F> {
             osForActual().close();
             try {
                 if (osForActual() instanceof Snitch) {
-                    ((Snitch) osForActual()).grassOnTransgressions();
+                    ((Snitch) osForActual()).tellIf();
                 } else {
                     checkByReading();
                 }
@@ -121,11 +121,11 @@ public class BaseApprover<T, C, F> {
         return sourceOfApproval.inputOrNullForApproved(testName());
     }
 
-    public void makeApproved(T approved) {
+    public void makeApproved(ApprovedT approved) {
         writeToApproved(formatter.formatted(approved));
     }
 
-    private void writeToApproved(C formatted) {
+    private void writeToApproved(ComparedT formatted) {
         try {
             OutputStream output = sourceOfApproval.outputForApproved(testName());
             try {
@@ -142,7 +142,7 @@ public class BaseApprover<T, C, F> {
         return done;
     }
 
-    public Formatter<T, C> formatter() {
+    public Formatter<ApprovedT, ComparedT> formatter() {
         return formatter;
     }
 
@@ -152,7 +152,7 @@ public class BaseApprover<T, C, F> {
         return osForActual;
     }
 
-    public C readActual() {
+    public ComparedT readActual() {
         try {
             InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName());
             try {

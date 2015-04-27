@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * This Formatter reads and writes raw bytes, but compares a hex dump.
- */
 public class BinarySerializer implements Serializer<byte[]> {
 
     @Override
