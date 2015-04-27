@@ -20,7 +20,7 @@ public class ApproverFileLifecycleTest {
     @Before public void createApproverInsideCleanDirectoryRule() {
         // required because otherwise the directory is removed after the approver has created its file inside it
         assertFalse(sourceOfApproval.actualFor("testname").exists());
-        approver = new Approver("testname", sourceOfApproval, Reporters.reporter());
+        approver = new Approver("testname", sourceOfApproval);
         assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 

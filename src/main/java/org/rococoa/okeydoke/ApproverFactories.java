@@ -11,8 +11,8 @@ public class ApproverFactories {
             @Override
             public Approver createApprover(String testName, Class<?> testClass) {
                 return new Approver(testName,
-                        Sources.in(sourceRoot, testClass.getPackage()),
-                        Reporters.reporter());
+                        Sources.in(sourceRoot, testClass.getPackage())
+                );
             }
         };
     }
@@ -22,8 +22,8 @@ public class ApproverFactories {
             @Override
             public Approver createApprover(String testName, Class<?> testClass) {
                 return new Approver(testName,
-                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension),
-                        Reporters.reporter());
+                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension)
+                );
             }
         };
     }
@@ -33,8 +33,8 @@ public class ApproverFactories {
             @Override
             public Approver createApprover(String testName, Class<?> testClass) {
                 return new Approver(testName,
-                        Sources.streamingInto(sourceRoot, testClass.getPackage()),
-                        Reporters.reporter());
+                        Sources.streamingInto(sourceRoot, testClass.getPackage())
+                );
             }
         };
     }
@@ -44,8 +44,8 @@ public class ApproverFactories {
             @Override
             public BinaryApprover createApprover(String testName, Class<?> testClass) {
                 return new BinaryApprover(testName,
-                        Sources.in(sourceRoot, testClass.getPackage()),
-                        Reporters.reporter());
+                        Sources.in(sourceRoot, testClass.getPackage())
+                );
             }
         };
     }
@@ -55,8 +55,8 @@ public class ApproverFactories {
             @Override
             public BinaryApprover createApprover(String testName, Class<?> testClass) {
                 return new BinaryApprover(testName,
-                        Sources.streamingInto(sourceRoot, testClass.getPackage()),
-                        Reporters.reporter());
+                        Sources.streamingInto(sourceRoot, testClass.getPackage())
+                );
             }
         });
     }
@@ -66,8 +66,8 @@ public class ApproverFactories {
             @Override
             public BinaryApprover createApprover(String testName, Class<?> testClass) {
                 return new BinaryApprover(testName,
-                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension),
-                        Reporters.reporter());
+                        Sources.in(sourceRoot, testClass.getPackage()).withTypeExtension(extension)
+                );
             }
         };
     }

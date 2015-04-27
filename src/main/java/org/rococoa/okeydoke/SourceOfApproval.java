@@ -19,4 +19,6 @@ public interface SourceOfApproval<StorageT> {
     public StorageT approvedFor(String testname);
 
     public StorageT actualFor(String testname);
+
+    public void reportFailure(String testName, AssertionError e);
 }

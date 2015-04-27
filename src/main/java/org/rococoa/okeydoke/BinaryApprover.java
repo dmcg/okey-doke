@@ -7,7 +7,7 @@ import java.io.File;
  */
 public class BinaryApprover extends BaseApprover<byte[], byte[], File> {
 
-    public BinaryApprover(String testname, SourceOfApproval<File> sourceOfApproval, Reporter<File> reporter) {
-        super(testname, sourceOfApproval, Formatters.binaryFormatter(), Serializers.binarySerializer(), Checkers.hexChecker(), reporter);
+    public BinaryApprover(String testname, SourceOfApproval<File> sourceOfApproval) {
+        super(testname, sourceOfApproval, Formatters.binaryFormatter(), Serializers.binarySerializer(), Checkers.hexChecker());
     }
 }

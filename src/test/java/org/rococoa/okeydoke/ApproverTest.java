@@ -13,7 +13,7 @@ import static org.junit.Assert.fail;
 public class ApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
-    private final Approver approver = new Approver("testname", Sources.in(new File("target/approvals")), Reporters.reporter());
+    private final Approver approver = new Approver("testname", Sources.in(new File("target/approvals")));
 
     /*
       Note that you won't usually use an Approver directly - ApprovalsRule will manage it for you

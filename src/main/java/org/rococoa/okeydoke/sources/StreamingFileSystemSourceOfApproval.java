@@ -1,5 +1,7 @@
 package org.rococoa.okeydoke.sources;
 
+import org.rococoa.okeydoke.Reporter;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +15,8 @@ import java.io.OutputStream;
  */
 public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfApproval {
 
-    public StreamingFileSystemSourceOfApproval(File directory) {
-        super(directory);
+    public StreamingFileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
+        super(directory, reporter);
     }
 
     @Override

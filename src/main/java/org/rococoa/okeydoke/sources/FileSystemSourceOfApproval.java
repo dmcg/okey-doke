@@ -1,18 +1,21 @@
 package org.rococoa.okeydoke.sources;
 
+import org.rococoa.okeydoke.Reporter;
 import org.rococoa.okeydoke.SourceOfApproval;
 
 import java.io.*;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
 
+    private final Reporter<File> reporter;
     private File approvedDir;
     private File actualDir;
     private String typeExtension = "";
 
-    public FileSystemSourceOfApproval(File directory) {
+    public FileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
         this.approvedDir = directory;
         this.actualDir = directory;
+        this.reporter = reporter;
     }
 
     @Override
@@ -57,6 +60,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
     @Override
     public File actualFor(String testname) {
         return fileFor(actualDir, testname, actualExtension());
+    }
+
+    @Override
+    public void reportFailure(String testName, AssertionError e) {
+        reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
     }
 
     public FileSystemSourceOfApproval withActualDirectory(File actualDirectory) {

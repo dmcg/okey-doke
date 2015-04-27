@@ -8,7 +8,7 @@ import java.io.File;
 public class Sources {
 
     public static FileSystemSourceOfApproval in(File directory) {
-        return new FileSystemSourceOfApproval(directory);
+        return new FileSystemSourceOfApproval(directory, Reporters.reporter());
     }
 
     public static FileSystemSourceOfApproval in(File srcRoot, Package thePackage) {
@@ -16,7 +16,7 @@ public class Sources {
     }
 
     public static FileSystemSourceOfApproval streamingInto(File directory) {
-        return new StreamingFileSystemSourceOfApproval(directory);
+        return new StreamingFileSystemSourceOfApproval(directory, Reporters.reporter());
     }
 
     public static FileSystemSourceOfApproval streamingInto(File srcRoot, Package thePackage) {

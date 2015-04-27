@@ -17,7 +17,6 @@ public class BaseApprover<ApprovedT, ComparedT, StorageT> {
     private final Formatter<ApprovedT, ComparedT> formatter;
     private final Serializer<ComparedT> serializer;
     private final Checker<ComparedT> checker;
-    private final Reporter<StorageT> reporter;
 
     private OutputStream osForActual;
     private boolean done;
@@ -25,14 +24,12 @@ public class BaseApprover<ApprovedT, ComparedT, StorageT> {
     protected BaseApprover(String testName, SourceOfApproval<StorageT> sourceOfApproval,
                            Formatter<ApprovedT, ComparedT> formatter,
                            Serializer<ComparedT> serializer,
-                           Checker<ComparedT> checker,
-                           Reporter<StorageT> reporter) {
+                           Checker<ComparedT> checker) {
         this.testName = testName;
         this.sourceOfApproval = sourceOfApproval;
         this.formatter = formatter;
         this.serializer = serializer;
         this.checker = checker;
-        this.reporter = reporter;
     }
 
     public PrintStream printStream() {
@@ -79,10 +76,7 @@ public class BaseApprover<ApprovedT, ComparedT, StorageT> {
                 }
                 sourceOfApproval.removeActual(testName());
             } catch (AssertionError e) {
-                reporter.reportFailure(
-                        sourceOfApproval.actualFor(testName()),
-                        sourceOfApproval.approvedFor(testName()),
-                        e);
+                sourceOfApproval.reportFailure(testName(), e);
                 throw e;
             }
         } catch (IOException e) {

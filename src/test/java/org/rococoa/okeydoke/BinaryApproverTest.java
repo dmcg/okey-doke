@@ -13,7 +13,7 @@ import static org.junit.Assert.fail;
 public class BinaryApproverTest {
 
     @Rule public final CleanDirectoryRule clean = new CleanDirectoryRule(new File("target/approvals"));
-    private final BinaryApprover approver = new BinaryApprover("testname", Sources.in(new File("target/approvals")), Reporters.reporter());
+    private final BinaryApprover approver = new BinaryApprover("testname", Sources.in(new File("target/approvals")));
 
     @Test
     public void doesnt_match_where_no_approved_result() {

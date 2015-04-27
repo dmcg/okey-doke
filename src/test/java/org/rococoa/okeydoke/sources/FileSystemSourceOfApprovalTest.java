@@ -1,6 +1,7 @@
 package org.rococoa.okeydoke.sources;
 
 import org.junit.Test;
+import org.rococoa.okeydoke.Reporters;
 
 import java.io.File;
 
@@ -8,7 +9,8 @@ import static org.junit.Assert.assertEquals;
 
 public class FileSystemSourceOfApprovalTest {
 
-    private final FileSystemSourceOfApproval sourceOfApproval = new FileSystemSourceOfApproval(new File("target/approvals"));
+    private final FileSystemSourceOfApproval sourceOfApproval = new FileSystemSourceOfApproval(
+            new File("target/approvals"), Reporters.reporter());
 
     // This is mostly currently tested by ApproverTest
 
