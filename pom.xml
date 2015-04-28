@@ -15,6 +15,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <scm>
+        <connection>scm:git:git@github.com:dmcg/okey-doke.git</connection>
+        <developerConnection>scm:git:git@github.com:dmcg/okey-doke.git</developerConnection>
+        <url>https://github.com/dmcg/okey-doke</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -104,7 +110,11 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
         </plugins>
     </build>
 
