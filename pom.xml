@@ -7,7 +7,21 @@
     <packaging>jar</packaging>
 
     <name>okeydoke</name>
+    <description>An approvals test library</description>
     <url>https://github.com/dmcg/okey-doke</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>dmcg</id>
+            <name>Duncan McGregor</name>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
