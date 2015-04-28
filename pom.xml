@@ -23,7 +23,7 @@
         </dependency>
 
         <!-- These are scoped as provided so that we don't depend on them
-             They are used only by JMockLocker -->
+             They are used only by Fred -->
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
