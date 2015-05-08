@@ -23,8 +23,7 @@ to compare current thing with an approved version and fail with a diff if they a
 write_file_contents src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.java >> README.md
 
 echo "
-Next try
-- [LockDownTest](src/test/java/com/oneeyedmen/okeydoke/examples/LockDownTest.java)
+Next try [LockDownTest](src/test/java/com/oneeyedmen/okeydoke/examples/LockDownTest.java)
 for easy testing of legacy code.
 "  >> README.md
 
@@ -34,6 +33,6 @@ echo "
 Then move on to
 - [TranscriptTest](src/test/java/com/oneeyedmen/okeydoke/examples/TranscriptTest.java)
 for producing approved files with interactions
-- and finally [PickleTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTest.java) and [PickleTableTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTablesTest.java)
+- [PickleTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTest.java) and [PickleTableTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTablesTest.java)
 for producing Gerkin-like output from your tests that the customer can approve.
 " >> README.md

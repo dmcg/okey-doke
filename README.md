@@ -33,8 +33,7 @@ to compare current thing with an approved version and fail with a diff if they a
 
 ```
 
-Next try
-- [LockDownTest](src/test/java/com/oneeyedmen/okeydoke/examples/LockDownTest.java)
+Next try [LockDownTest](src/test/java/com/oneeyedmen/okeydoke/examples/LockDownTest.java)
 for easy testing of legacy code.
 
 ```java
@@ -73,6 +72,6 @@ for easy testing of legacy code.
 Then move on to
 - [TranscriptTest](src/test/java/com/oneeyedmen/okeydoke/examples/TranscriptTest.java)
 for producing approved files with interactions
-- and finally [PickleTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTest.java) and [PickleTableTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTablesTest.java)
+- [PickleTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTest.java) and [PickleTableTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTablesTest.java)
 for producing Gerkin-like output from your tests that the customer can approve.
 
