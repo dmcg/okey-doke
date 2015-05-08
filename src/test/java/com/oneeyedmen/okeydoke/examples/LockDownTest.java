@@ -19,6 +19,8 @@ import static com.oneeyedmen.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
 @RunWith(Theories.class)
 public class LockDownTest {
 
+    //README_TEXT
+
     @ClassRule public static final TheoryApprovalsRule theoryRule = fileSystemRule("src/test/java");
     @Rule public final TheoryApprovalsRule.TheoryApprover approver = theoryRule.approver();
 
@@ -47,4 +49,6 @@ public class LockDownTest {
     private static enum Animal {
         bear, cat, dog
     }
+
+    //README_TEXT
 }
