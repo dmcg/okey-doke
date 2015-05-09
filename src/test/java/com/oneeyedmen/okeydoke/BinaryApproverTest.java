@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -26,12 +27,12 @@ public class BinaryApproverTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() {
+    @Test public void matches_when_approved_result_matches() throws IOException {
         approver.makeApproved("banana".getBytes());
         approver.assertApproved("banana".getBytes());
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.makeApproved("banana".getBytes());
         try {
             approver.assertApproved("bnana".getBytes());

@@ -5,6 +5,8 @@ import com.oneeyedmen.okeydoke.util.TestDirectory;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -13,7 +15,7 @@ public class StreamingApprovalTest {
     private final TestDirectory dir = new TestDirectory(StreamingApprovalTest.class);
     @Rule public ApprovalsRule rule = new ApprovalsRule(ApproverFactories.streamingApproverFactory(dir));
 
-    @Test public void as_approved() {
+    @Test public void as_approved() throws IOException {
         rule.makeApproved("long contents we don't want to read into memory");
         rule.assertApproved("long contents we don't want to read into memory");
     }
@@ -24,7 +26,7 @@ public class StreamingApprovalTest {
     }
 
     @Test
-    public void not_as_approved() {
+    public void not_as_approved() throws IOException {
         rule.makeApproved("long contents we don't want to read into memory");
 
         try {

@@ -10,6 +10,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.fail;
 
@@ -29,7 +30,7 @@ public class ApprovalsRuleTidiesUpTest {
 
     @Rule public final RuleChain rules = RuleChain.outerRule(checkDelegateIsCheckedRule).around(approver);
 
-    @Test public void rule_will_check_satisfaction() {
+    @Test public void rule_will_check_satisfaction() throws IOException {
         approver.makeApproved("banana");
 
         approver.writeFormatted("banana");

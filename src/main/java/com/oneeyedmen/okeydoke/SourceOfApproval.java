@@ -6,8 +6,6 @@ import java.io.OutputStream;
 
 public interface SourceOfApproval {
 
-    public OutputStream outputForApproved(String testname) throws IOException;
-
     public OutputStream outputForActual(String testname) throws IOException;
 
     public InputStream inputOrNullForApproved(String testname) throws IOException;
@@ -17,4 +15,6 @@ public interface SourceOfApproval {
     public void removeActual(String testname) throws IOException;
 
     public void reportFailure(String testName, AssertionError e);
+
+    public <T> void writeToApproved(String testName, T thing, Serializer<T> serializer) throws IOException;
 }

@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -41,7 +42,7 @@ public class ApprovalsRuleTest {
     }
 
     @Ignore("Unignore to see failure report in IDE")
-    @Test public void see_how_my_IDE_reports_diffs() {
+    @Test public void see_how_my_IDE_reports_diffs() throws IOException {
         approver.makeApproved("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }

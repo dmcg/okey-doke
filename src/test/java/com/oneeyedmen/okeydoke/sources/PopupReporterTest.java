@@ -9,6 +9,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class PopupReporterTest {
 
     @Rule public final TestDirectoryRule testDirectory = new TestDirectoryRule();
@@ -16,7 +18,7 @@ public class PopupReporterTest {
     private PopupReporter reporter = new PopupReporter(Reporters.differFor(OperatingSystem.current()));
 
     @Ignore("UnIgnore to try me out")
-    @Test public void test() {
+    @Test public void test() throws IOException {
         Approver approver = new Approver("testname",
                 new FileSystemSourceOfApproval(testDirectory.dir(), reporter)
         );

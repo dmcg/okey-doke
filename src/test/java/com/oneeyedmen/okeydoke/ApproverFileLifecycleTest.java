@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +25,7 @@ public class ApproverFileLifecycleTest {
         assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 
-    @Test public void approved() {
+    @Test public void approved() throws IOException {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.makeApproved("banana");
@@ -45,7 +46,7 @@ public class ApproverFileLifecycleTest {
         assertEquals("banana".length(), sourceOfApproval.actualFor("testname").length());
     }
 
-    @Test public void not_matching_approved() {
+    @Test public void not_matching_approved() throws IOException {
         assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.makeApproved("banana");

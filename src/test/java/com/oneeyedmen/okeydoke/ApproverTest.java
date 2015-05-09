@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -30,12 +31,12 @@ public class ApproverTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() {
+    @Test public void matches_when_approved_result_matches() throws IOException {
         approver.makeApproved("banana");
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.makeApproved("banana");
         try {
             approver.assertApproved("kumquat");
@@ -46,7 +47,7 @@ public class ApproverTest {
         }
     }
 
-    @Test public void can_assert_with_nothing_approved() {
+    @Test public void can_assert_with_nothing_approved() throws IOException {
         approver.makeApproved("");
         approver.assertSatisfied();
     }

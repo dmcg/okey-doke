@@ -49,7 +49,7 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWa
         approver().assertSatisfied();
     }
 
-    public void makeApproved(T approved) {
+    public void makeApproved(T approved) throws IOException {
         approver().makeApproved(approved);
     }
 

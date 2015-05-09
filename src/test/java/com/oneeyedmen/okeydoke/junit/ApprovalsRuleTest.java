@@ -5,6 +5,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -23,12 +25,12 @@ public class ApprovalsRuleTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() {
+    @Test public void matches_when_approved_result_matches() throws IOException {
         approver.makeApproved("banana");
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
         approver.makeApproved("banana");
         try {
             approver.assertApproved("kumquat");
@@ -45,7 +47,7 @@ public class ApprovalsRuleTest {
     }
 
     @Ignore("Unignore to see failure report in IDE")
-    @Test public void see_how_my_IDE_reports_diffs() {
+    @Test public void see_how_my_IDE_reports_diffs() throws IOException {
         approver.makeApproved("Deliberate failure - Jackdaws love my big sphinx of quartz");
         approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
     }

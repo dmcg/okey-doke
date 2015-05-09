@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import static com.oneeyedmen.okeydoke.internal.IO.closeQuietly;
-
 public class BaseApprover<ApprovedT, ComparedT> {
 
     private final String testName;
@@ -115,21 +113,12 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return sourceOfApproval.inputOrNullForApproved(testName());
     }
 
-    public void makeApproved(ApprovedT approved) {
+    public void makeApproved(ApprovedT approved) throws IOException {
         writeToApproved(formatter.formatted(approved));
     }
 
-    private void writeToApproved(ComparedT formatted) {
-        try {
-            OutputStream output = sourceOfApproval.outputForApproved(testName());
-            try {
-                serializer.writeTo(formatted, output);
-            } finally {
-                closeQuietly(output);
-            }
-        } catch (IOException e) {
-            throw new RuntimeIOException(e);
-        }
+    private void writeToApproved(ComparedT formatted) throws IOException {
+        sourceOfApproval.writeToApproved(testName(), formatted, serializer);
     }
 
     public boolean satisfactionChecked() {

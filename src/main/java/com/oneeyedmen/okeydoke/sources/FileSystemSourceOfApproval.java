@@ -1,9 +1,12 @@
 package com.oneeyedmen.okeydoke.sources;
 
 import com.oneeyedmen.okeydoke.Reporter;
+import com.oneeyedmen.okeydoke.Serializer;
 import com.oneeyedmen.okeydoke.SourceOfApproval;
 
 import java.io.*;
+
+import static com.oneeyedmen.okeydoke.internal.IO.closeQuietly;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
@@ -36,11 +39,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public OutputStream outputForApproved(String testname) throws IOException {
-        return createAndOpenOutputStreamFor(approvedFor(testname));
-    }
-
-    @Override
     public OutputStream outputForActual(String testname) throws IOException {
         return createAndOpenOutputStreamFor(actualFor(testname));
     }
@@ -63,6 +61,16 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     @Override
     public void reportFailure(String testName, AssertionError e) {
         reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
+    }
+
+    @Override
+    public <T> void writeToApproved(String testName, T thing, Serializer<T> serializer) throws IOException {
+        OutputStream output = createAndOpenOutputStreamFor(approvedFor(testName));
+        try {
+            serializer.writeTo(thing, output);
+        } finally {
+            closeQuietly(output);
+        }
     }
 
     public File approvedFor(String testname) {
