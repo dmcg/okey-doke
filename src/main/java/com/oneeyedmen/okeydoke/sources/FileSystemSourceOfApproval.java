@@ -8,24 +8,36 @@ import java.io.*;
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private final Reporter<File> reporter;
-    private File approvedDir;
-    private File actualDir;
-    private String typeExtension = "";
+    private final File approvedDir;
+    private final File actualDir;
+    private final String typeExtension;
+
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String typeExtension, Reporter<File> reporter) {
+        this.approvedDir = approvedDir;
+        this.actualDir = actualDir;
+        this.typeExtension = typeExtension;
+        this.reporter = reporter;
+    }
+
+    public FileSystemSourceOfApproval(File directory, File actualDir, Reporter<File> reporter) {
+        this(directory, actualDir, "", reporter);
+    }
 
     public FileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
-        this.approvedDir = directory;
-        this.actualDir = directory;
-        this.reporter = reporter;
+        this(directory, directory, reporter);
+    }
+
+    public FileSystemSourceOfApproval withActualDirectory(File actualDirectory) {
+        return new FileSystemSourceOfApproval(approvedDir, actualDirectory, typeExtension, reporter);
+    }
+
+    public FileSystemSourceOfApproval withTypeExtension(String typeExtension) {
+        return new FileSystemSourceOfApproval(approvedDir, actualDir, typeExtension, reporter);
     }
 
     @Override
     public OutputStream outputForApproved(String testname) throws IOException {
         return createAndOpenOutputStreamFor(approvedFor(testname));
-    }
-
-    private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
-        file.getParentFile().mkdirs();
-        return new BufferedOutputStream(new FileOutputStream(file));
     }
 
     @Override
@@ -48,31 +60,21 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         actualFor(testname).delete(); // best efforts
     }
 
-    public File approvedFor(String testname) {
-        return fileFor(approvedDir, testname, approvedExtension());
+    @Override
+    public void reportFailure(String testName, AssertionError e) {
+        reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
     }
 
-    protected String approvedExtension() {
-        return ".approved" + typeExtension();
+    public File approvedFor(String testname) {
+        return fileFor(approvedDir, testname, approvedExtension());
     }
 
     public File actualFor(String testname) {
         return fileFor(actualDir, testname, actualExtension());
     }
 
-    @Override
-    public void reportFailure(String testName, AssertionError e) {
-        reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
-    }
-
-    public FileSystemSourceOfApproval withActualDirectory(File actualDirectory) {
-        this.actualDir = actualDirectory;
-        return this;
-    }
-
-    public FileSystemSourceOfApproval withTypeExtension(String typeExtension) {
-        this.typeExtension = typeExtension;
-        return this;
+    protected String approvedExtension() {
+        return ".approved" + typeExtension();
     }
 
     protected String actualExtension() {
@@ -85,6 +87,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private File fileFor(File dir, String testname, String suffix) {
         return new File(dir, testname + suffix);
+    }
+
+    private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
+        file.getParentFile().mkdirs();
+        return new BufferedOutputStream(new FileOutputStream(file));
     }
 
     private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {
