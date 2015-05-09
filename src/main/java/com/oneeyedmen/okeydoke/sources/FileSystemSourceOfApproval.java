@@ -41,17 +41,17 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public OutputStream outputForActual(String testname) throws IOException {
-        return createAndOpenOutputStreamFor(actualFor(testname));
+    public OutputStream outputForActual(String testName) throws IOException {
+        return createAndOpenOutputStreamFor(actualFor(testName));
     }
 
-    protected InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
-        return inputStreamOrNullFor(approvedFor(testname));
+    protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
+        return inputStreamOrNullFor(approvedFor(testName));
     }
 
     @Override
-    public void removeActual(String testname) throws IOException {
-        actualFor(testname).delete(); // best efforts
+    public void removeActual(String testName) throws IOException {
+        actualFor(testName).delete(); // best efforts
     }
 
     @Override
@@ -69,42 +69,24 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         }
     }
 
-    protected <T> InputStream inputForApproved(String testName, Serializer<T> serializer) throws IOException {
-        InputStream existing = inputOrNullForApproved(testName);
-        if (existing != null)
-            return existing;
-        writeToApproved(testName, serializer.emptyThing(), serializer);
-        return inputOrNullForApproved(testName);
-    }
-
     @Override
     public <T> T readActual(String testName, Serializer<T> serializer) throws IOException {
-        InputStream input = inputStreamFor(actualFor(testName));
-        try {
-            return serializer.readFrom(input);
-        } finally {
-            IO.closeQuietly(input);
-        }
+        return read(actualFor(testName), serializer);
     }
 
     @Override
     public <T> void checkActualAgainstApproved(String testName, Serializer<T> serializer, Checker<T> checker) throws AssertionError, IOException {
-        InputStream approved = inputForApproved(testName, serializer);
-        InputStream actual = inputStreamFor(actualFor(testName));
-        try {
-            checker.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
-        } finally {
-            IO.closeQuietly(actual);
-            IO.closeQuietly(approved);
-        }
+        checker.assertEquals(
+                approvedContent(testName, serializer),
+                readActual(testName, serializer));
     }
 
-    public File approvedFor(String testname) {
-        return fileFor(approvedDir, testname, approvedExtension());
+    public File approvedFor(String testName) {
+        return fileFor(approvedDir, testName, approvedExtension());
     }
 
-    public File actualFor(String testname) {
-        return fileFor(actualDir, testname, actualExtension());
+    public File actualFor(String testName) {
+        return fileFor(actualDir, testName, actualExtension());
     }
 
     protected String approvedExtension() {
@@ -119,8 +101,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return typeExtension;
     }
 
-    private File fileFor(File dir, String testname, String suffix) {
-        return new File(dir, testname + suffix);
+    private File fileFor(File dir, String testName, String suffix) {
+        return new File(dir, testName + suffix);
     }
 
     private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
@@ -135,5 +117,27 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     private BufferedInputStream inputStreamFor(File file) throws FileNotFoundException {
         return new BufferedInputStream(new FileInputStream(file));
     }
+
+    private <T> T approvedContent(String testName, Serializer<T> serializer) throws IOException {
+        InputStream existing = inputOrNullForApproved(testName);
+        if (existing != null)
+            return readAndClose(existing, serializer);
+        T empty = serializer.emptyThing();
+        writeToApproved(testName, empty, serializer); // so that an empty file exists for diff tools to chew on
+        return empty;
+    }
+
+    private <T> T read(File file, Serializer<T> serializer) throws IOException {
+        return readAndClose(inputStreamFor(file), serializer);
+    }
+
+    private <T> T readAndClose(InputStream input, Serializer<T> serializer) throws IOException {
+        try {
+            return serializer.readFrom(input);
+        } finally {
+            IO.closeQuietly(input);
+        }
+    }
+
 
 }

@@ -110,8 +110,6 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return sourceOfApproval.readActual(testName(), serializer);
     }
 
-
-
     protected String testName() {
         return testName;
     }
