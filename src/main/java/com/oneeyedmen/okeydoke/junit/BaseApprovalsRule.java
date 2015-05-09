@@ -14,7 +14,7 @@ import java.io.PrintStream;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C,?>> extends TestWatcher {
+public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWatcher {
 
     private A approver;
     private final ApproverFactory<A> factory;

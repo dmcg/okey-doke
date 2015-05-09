@@ -5,7 +5,7 @@ import com.oneeyedmen.okeydoke.SourceOfApproval;
 
 import java.io.*;
 
-public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
+public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private final Reporter<File> reporter;
     private File approvedDir;
@@ -48,7 +48,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
         actualFor(testname).delete(); // best efforts
     }
 
-    @Override
     public File approvedFor(String testname) {
         return fileFor(approvedDir, testname, approvedExtension());
     }
@@ -57,7 +56,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval<File> {
         return ".approved" + typeExtension();
     }
 
-    @Override
     public File actualFor(String testname) {
         return fileFor(actualDir, testname, actualExtension());
     }

@@ -1,10 +1,8 @@
 package com.oneeyedmen.okeydoke;
 
-import java.io.File;
+public class Approver extends BaseApprover<Object, String> {
 
-public class Approver extends BaseApprover<Object, String, File> {
-
-    public Approver(String testName, SourceOfApproval<File> sourceOfApproval) {
+    public Approver(String testName, SourceOfApproval sourceOfApproval) {
         this(testName,
                 sourceOfApproval,
                 Formatters.stringFormatter(),
@@ -14,7 +12,7 @@ public class Approver extends BaseApprover<Object, String, File> {
     }
 
     public Approver(String testName,
-                    SourceOfApproval<File> sourceOfApproval,
+                    SourceOfApproval sourceOfApproval,
                     Formatter<Object, String> formatter,
                     Serializer<String> serializer,
                     Checker<String> checker) {

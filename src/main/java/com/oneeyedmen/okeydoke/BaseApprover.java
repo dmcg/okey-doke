@@ -10,10 +10,10 @@ import java.io.PrintStream;
 
 import static com.oneeyedmen.okeydoke.internal.IO.closeQuietly;
 
-public class BaseApprover<ApprovedT, ComparedT, StorageT> {
+public class BaseApprover<ApprovedT, ComparedT> {
 
     private final String testName;
-    private final SourceOfApproval<StorageT> sourceOfApproval;
+    private final SourceOfApproval sourceOfApproval;
     private final Formatter<ApprovedT, ComparedT> formatter;
     private final Serializer<ComparedT> serializer;
     private final Checker<ComparedT> checker;
@@ -21,7 +21,7 @@ public class BaseApprover<ApprovedT, ComparedT, StorageT> {
     private OutputStream osForActual;
     private boolean done;
 
-    protected BaseApprover(String testName, SourceOfApproval<StorageT> sourceOfApproval,
+    protected BaseApprover(String testName, SourceOfApproval sourceOfApproval,
                            Formatter<ApprovedT, ComparedT> formatter,
                            Serializer<ComparedT> serializer,
                            Checker<ComparedT> checker) {
