@@ -1,5 +1,6 @@
 package com.oneeyedmen.okeydoke.sources;
 
+import com.oneeyedmen.okeydoke.Checker;
 import com.oneeyedmen.okeydoke.Reporter;
 import com.oneeyedmen.okeydoke.Serializer;
 import com.oneeyedmen.okeydoke.SourceOfApproval;
@@ -49,11 +50,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public InputStream inputOrNullForActual(String testname) throws IOException {
-        return inputStreamOrNullFor(actualFor(testname));
-    }
-
-    @Override
     public void removeActual(String testname) throws IOException {
         actualFor(testname).delete(); // best efforts
     }
@@ -73,8 +69,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         }
     }
 
-    @Override
-    public <T> InputStream inputForApproved(String testName, Serializer<T> serializer) throws IOException {
+    protected <T> InputStream inputForApproved(String testName, Serializer<T> serializer) throws IOException {
         InputStream existing = inputOrNullForApproved(testName);
         if (existing != null)
             return existing;
@@ -84,13 +79,23 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public <T> T readActual(String testName, Serializer<T> serializer) throws IOException {
-        InputStream inputForActualOrNull = inputOrNullForActual(testName);
+        InputStream input = inputStreamFor(actualFor(testName));
         try {
-            if (inputForActualOrNull == null)
-                throw new AssertionError("This is embarrassing - I've lost the 'actual' for " + testName);
-            return serializer.readFrom(inputForActualOrNull);
+            return serializer.readFrom(input);
         } finally {
-            IO.closeQuietly(inputForActualOrNull);
+            IO.closeQuietly(input);
+        }
+    }
+
+    @Override
+    public <T> void checkActualAgainstApproved(String testName, Serializer<T> serializer, Checker<T> checker) throws AssertionError, IOException {
+        InputStream approved = inputForApproved(testName, serializer);
+        InputStream actual = inputStreamFor(actualFor(testName));
+        try {
+            checker.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
+        } finally {
+            IO.closeQuietly(actual);
+            IO.closeQuietly(approved);
         }
     }
 
@@ -124,8 +129,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {
-        return !(file.exists() && file.isFile()) ?
-                null : new BufferedInputStream(new FileInputStream(file));
+        return !(file.exists() && file.isFile()) ? null : inputStreamFor(file);
+    }
+
+    private BufferedInputStream inputStreamFor(File file) throws FileNotFoundException {
+        return new BufferedInputStream(new FileInputStream(file));
     }
 
 }

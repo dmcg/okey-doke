@@ -1,10 +1,8 @@
 package com.oneeyedmen.okeydoke;
 
-import com.oneeyedmen.okeydoke.internal.IO;
 import com.oneeyedmen.okeydoke.sources.Snitch;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -70,7 +68,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
                 if (osForActual() instanceof Snitch) {
                     ((Snitch) osForActual()).tellIf();
                 } else {
-                    checkByReading();
+                    sourceOfApproval.checkActualAgainstApproved(testName(), serializer, checker);
                 }
                 sourceOfApproval.removeActual(testName());
             } catch (AssertionError e) {
@@ -82,21 +80,6 @@ public class BaseApprover<ApprovedT, ComparedT> {
         } finally {
             osForActual = null;
             done = true;
-        }
-    }
-
-    private void checkByReading() throws IOException {
-        InputStream approved = sourceOfApproval.inputForApproved(testName(), serializer);
-        InputStream actual = sourceOfApproval.inputOrNullForActual(testName());
-        if (actual == null) {
-            throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
-            // Can happen if we have opened file early and then delete the directory
-        }
-        try {
-            checker.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
-        } finally {
-            IO.closeQuietly(actual);
-            IO.closeQuietly(approved);
         }
     }
 
