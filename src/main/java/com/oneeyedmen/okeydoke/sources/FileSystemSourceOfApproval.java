@@ -3,6 +3,7 @@ package com.oneeyedmen.okeydoke.sources;
 import com.oneeyedmen.okeydoke.Reporter;
 import com.oneeyedmen.okeydoke.Serializer;
 import com.oneeyedmen.okeydoke.SourceOfApproval;
+import com.oneeyedmen.okeydoke.internal.IO;
 
 import java.io.*;
 
@@ -43,8 +44,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return createAndOpenOutputStreamFor(actualFor(testname));
     }
 
-    @Override
-    public InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
+    protected InputStream inputOrNullForApproved(String testname) throws FileNotFoundException {
         return inputStreamOrNullFor(approvedFor(testname));
     }
 
@@ -70,6 +70,27 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
             serializer.writeTo(thing, output);
         } finally {
             closeQuietly(output);
+        }
+    }
+
+    @Override
+    public <T> InputStream inputForApproved(String testName, Serializer<T> serializer) throws IOException {
+        InputStream existing = inputOrNullForApproved(testName);
+        if (existing != null)
+            return existing;
+        writeToApproved(testName, serializer.emptyThing(), serializer);
+        return inputOrNullForApproved(testName);
+    }
+
+    @Override
+    public <T> T readActual(String testName, Serializer<T> serializer) throws IOException {
+        InputStream inputForActualOrNull = inputOrNullForActual(testName);
+        try {
+            if (inputForActualOrNull == null)
+                throw new AssertionError("This is embarrassing - I've lost the 'actual' for " + testName);
+            return serializer.readFrom(inputForActualOrNull);
+        } finally {
+            IO.closeQuietly(inputForActualOrNull);
         }
     }
 

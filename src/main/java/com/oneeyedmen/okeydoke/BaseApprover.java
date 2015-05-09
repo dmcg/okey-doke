@@ -86,8 +86,12 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     private void checkByReading() throws IOException {
-        InputStream approved = inputForApproved();
-        InputStream actual = inputForActual();
+        InputStream approved = sourceOfApproval.inputForApproved(testName(), serializer);
+        InputStream actual = sourceOfApproval.inputOrNullForActual(testName());
+        if (actual == null) {
+            throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
+            // Can happen if we have opened file early and then delete the directory
+        }
         try {
             checker.assertEquals(serializer.readFrom(approved), serializer.readFrom(actual));
         } finally {
@@ -96,22 +100,6 @@ public class BaseApprover<ApprovedT, ComparedT> {
         }
     }
 
-    private InputStream inputForActual() throws IOException {
-        InputStream result = sourceOfApproval.inputOrNullForActual(testName());
-        if (result != null) {
-            return result;
-        }
-        throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
-            // Can happen if we have opened file early and then delete the directory
-    }
-
-    private InputStream inputForApproved() throws IOException {
-        InputStream existing = sourceOfApproval.inputOrNullForApproved(testName());
-        if (existing != null)
-            return existing;
-        writeToApproved(serializer.emptyThing());
-        return sourceOfApproval.inputOrNullForApproved(testName());
-    }
 
     public void makeApproved(ApprovedT approved) throws IOException {
         writeToApproved(formatter.formatted(approved));
@@ -135,20 +123,11 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return osForActual;
     }
 
-    public ComparedT readActual() {
-        try {
-            InputStream inputForActualOrNull = sourceOfApproval.inputOrNullForActual(testName());
-            try {
-                if (inputForActualOrNull == null)
-                    throw new AssertionError("This is embarrassing - I've lost the 'actual' I just wrote for " + testName());
-                return serializer.readFrom(inputForActualOrNull);
-            } finally {
-                IO.closeQuietly(inputForActualOrNull);
-            }
-        } catch (IOException e) {
-            throw new RuntimeIOException(e);
-        }
+    public ComparedT readActual() throws IOException {
+        return sourceOfApproval.readActual(testName(), serializer);
     }
+
+
 
     protected String testName() {
         return testName;
