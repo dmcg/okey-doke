@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class FileSystemSourceOfApprovalTest {
 
     private final FileSystemSourceOfApproval sourceOfApproval = new FileSystemSourceOfApproval(
-            new File("target/approvals"), Reporters.reporter());
+            new File("target/approvals"), Reporters.fileSystemReporter());
 
     // This is mostly currently tested by ApproverTest
 

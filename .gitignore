@@ -3,5 +3,3 @@ okeydoke.iws
 okeydoke.ipr
 okeydoke.iml
 target/
-src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.doesnt_match_when_approved_result_doesnt_match.approved
-src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.matches_when_approved_result_matches.approved

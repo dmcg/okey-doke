@@ -1,6 +1,7 @@
 package com.oneeyedmen.okeydoke;
 
 import com.oneeyedmen.okeydoke.internal.OperatingSystem;
+import com.oneeyedmen.okeydoke.reporters.ClassPathReporter;
 import com.oneeyedmen.okeydoke.reporters.CommandLineReporter;
 import com.oneeyedmen.okeydoke.reporters.PopupReporter;
 
@@ -11,8 +12,12 @@ public abstract class Reporters {
     public static final String DIFFER_PROPERTY_NAME = "okeydoke.differ";
     public static final String POPUP_PROPERTY_NAME = "okeydoke.popup";
 
-    public static Reporter<File> reporter() {
+    public static Reporter<File> fileSystemReporter() {
         return popup() ? new PopupReporter(differ()) : new CommandLineReporter(differ());
+    }
+
+    public static Reporter<File> classPathReporter() {
+        return new ClassPathReporter(differ());
     }
 
     private static boolean popup() {

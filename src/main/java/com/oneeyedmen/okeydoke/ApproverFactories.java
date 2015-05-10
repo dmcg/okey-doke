@@ -71,4 +71,15 @@ public class ApproverFactories {
             }
         };
     }
+
+    public static ApproverFactory classPathApproverFactory(final File actualRoot) {
+        return new ApproverFactory<Approver>() {
+            @Override
+            public Approver createApprover(String testName, Class<?> testClass) {
+                return new Approver(testName,
+                        Sources.classPath(actualRoot, testClass.getPackage())
+                );
+            }
+        };
+    }
 }

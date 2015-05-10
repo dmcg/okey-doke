@@ -14,14 +14,18 @@ public class CommandLineReporter implements Reporter<File> {
 
     @Override
     public void reportFailure(File actual, File approved, Throwable e) {
-        System.err.println("To see differences...");
-        System.err.println(diffCommandFor(actual, approved));
-        System.err.println("To approve...");
-        System.err.format("cp '%s' '%s'\n", actual, approved);
+        reportFailure(actual.getAbsolutePath(), approved.getAbsolutePath());
     }
 
-    protected String diffCommandFor(File actual, File approved) {
-        return differ() + " '" + actual + "' '" + approved + "'";
+    protected void reportFailure(String actualPath, String approvedPath) {
+        System.err.println("To see differences...");
+        System.err.println(diffCommandFor(actualPath, approvedPath));
+        System.err.println("To approve...");
+        System.err.format("cp '%s' '%s'\n", actualPath, approvedPath);
+    }
+
+    protected String diffCommandFor(String actualPath, String approvedPath) {
+        return differ() + " '" + actualPath + "' '" + approvedPath + "'";
     }
 
     protected String differ() {

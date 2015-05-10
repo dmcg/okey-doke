@@ -24,8 +24,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         this.reporter = reporter;
     }
 
-    public FileSystemSourceOfApproval(File directory, File actualDir, Reporter<File> reporter) {
-        this(directory, actualDir, "", reporter);
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, Reporter<File> reporter) {
+        this(approvedDir, actualDir, "", reporter);
     }
 
     public FileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
