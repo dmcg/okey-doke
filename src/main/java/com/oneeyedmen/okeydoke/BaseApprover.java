@@ -78,11 +78,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     public void makeApproved(ApprovedT approved) throws IOException {
-        writeToApproved(formatter.formatted(approved));
-    }
-
-    private void writeToApproved(ComparedT formatted) throws IOException {
-        sourceOfApproval.writeToApproved(testName(), formatted, serializer);
+        sourceOfApproval.writeToApproved(testName(), formatter.formatted(approved), serializer);
     }
 
     public boolean satisfactionChecked() {
@@ -105,5 +101,9 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     protected String testName() {
         return testName;
+    }
+
+    public void removeApproved() throws IOException {
+        sourceOfApproval.removeApproved(testName());
     }
 }

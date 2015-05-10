@@ -51,7 +51,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public void removeActual(String testName) throws IOException {
-        actualFor(testName).delete(); // best efforts
+        if (!actualFor(testName).delete())
+            throw new IOException("Couldn't delete file " + actualFor(testName));
     }
 
     @Override
@@ -77,6 +78,12 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     @Override
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
         checker.assertEquals(approvedContent(testName, serializer), readActual(testName, serializer));
+    }
+
+    @Override
+    public void removeApproved(String testName) throws IOException {
+        if (!approvedFor(testName).delete())
+            throw new IOException("Couldn't delete file " + approvedFor(testName));
     }
 
     public File approvedFor(String testName) {

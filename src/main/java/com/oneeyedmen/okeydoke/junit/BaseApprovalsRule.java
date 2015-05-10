@@ -79,4 +79,8 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWa
             throw new IllegalStateException("Something is wrong - check your " +
                     getClass().getSimpleName() + " is an @Rule field");
     }
+
+    public void removeApproved() throws IOException {
+        approver().removeApproved();
+    }
 }
