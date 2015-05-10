@@ -1,6 +1,8 @@
 package com.oneeyedmen.okeydoke.sources;
 
+import com.oneeyedmen.okeydoke.Checker;
 import com.oneeyedmen.okeydoke.Reporter;
+import com.oneeyedmen.okeydoke.Serializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +25,16 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
     public OutputStream outputForActual(String testname) throws IOException {
         InputStream approvedOrNull = inputOrNullForApproved(testname);
         return approvedOrNull == null ?
-            super.outputForActual(testname) :
-            new ComparingOutputStream(super.outputForActual(testname), approvedOrNull);
+                super.outputForActual(testname) :
+                new ComparingOutputStream(super.outputForActual(testname), approvedOrNull);
+    }
+
+    @Override
+    public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
+        if (outputStream instanceof ComparingOutputStream) {
+            ((ComparingOutputStream) outputStream).assertNoMismatch();
+        } else {
+            super.checkActualAgainstApproved(outputStream, testName, serializer, checker);
+        }
     }
 }

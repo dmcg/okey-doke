@@ -1,7 +1,5 @@
 package com.oneeyedmen.okeydoke;
 
-import com.oneeyedmen.okeydoke.sources.Snitch;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -61,20 +59,16 @@ public class BaseApprover<ApprovedT, ComparedT> {
         assertSatisfied();
     }
 
+    @SuppressWarnings("FeatureEnvy" /* keeps sourceOfApproval simple */)
     public void assertSatisfied() {
         try {
-            osForActual().close();
-            try {
-                if (osForActual() instanceof Snitch) {
-                    ((Snitch) osForActual()).tellIf();
-                } else {
-                    sourceOfApproval.checkActualAgainstApproved(testName(), serializer, checker);
-                }
-                sourceOfApproval.removeActual(testName());
-            } catch (AssertionError e) {
-                sourceOfApproval.reportFailure(testName(), e);
-                throw e;
-            }
+            OutputStream outputStream = osForActual();
+            outputStream.close();
+            sourceOfApproval.checkActualAgainstApproved(outputStream, testName(), serializer, checker);
+            sourceOfApproval.removeActual(testName());
+        } catch (AssertionError e) {
+            sourceOfApproval.reportFailure(testName(), e);
+            throw e;
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         } finally {
@@ -82,7 +76,6 @@ public class BaseApprover<ApprovedT, ComparedT> {
             done = true;
         }
     }
-
 
     public void makeApproved(ApprovedT approved) throws IOException {
         writeToApproved(formatter.formatted(approved));

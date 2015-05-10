@@ -75,10 +75,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public <T> void checkActualAgainstApproved(String testName, Serializer<T> serializer, Checker<T> checker) throws AssertionError, IOException {
-        checker.assertEquals(
-                approvedContent(testName, serializer),
-                readActual(testName, serializer));
+    public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
+        checker.assertEquals(approvedContent(testName, serializer), readActual(testName, serializer));
     }
 
     public File approvedFor(String testName) {
