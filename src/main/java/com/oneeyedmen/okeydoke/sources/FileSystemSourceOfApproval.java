@@ -82,8 +82,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public void removeApproved(String testName) throws IOException {
-        if (!approvedFor(testName).delete())
-            throw new IOException("Couldn't delete file " + approvedFor(testName));
+        File file = approvedFor(testName);
+        file.delete();
+        if (file.exists())
+            throw new IOException("Couldn't delete file " + file);
     }
 
     public File approvedFor(String testName) {

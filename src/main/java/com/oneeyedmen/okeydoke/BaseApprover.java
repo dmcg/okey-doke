@@ -106,4 +106,5 @@ public class BaseApprover<ApprovedT, ComparedT> {
     public void removeApproved() throws IOException {
         sourceOfApproval.removeApproved(testName());
     }
+
 }

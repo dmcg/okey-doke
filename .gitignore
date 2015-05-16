@@ -3,3 +3,6 @@ okeydoke.iws
 okeydoke.ipr
 okeydoke.iml
 target/
+
+src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.see_how_my_IDE_reports_diffs.approved
+src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.see_how_my_IDE_reports_no_approval.approved

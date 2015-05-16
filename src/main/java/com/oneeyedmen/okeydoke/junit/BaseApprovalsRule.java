@@ -14,12 +14,12 @@ import java.io.PrintStream;
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
-public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWatcher {
+public class BaseApprovalsRule<ApprovedT, ComparedT, ApproverT extends BaseApprover<ApprovedT, ComparedT>> extends TestWatcher {
 
-    private A approver;
-    private final ApproverFactory<A> factory;
+    private final ApproverFactory<ApproverT> factory;
+    private ApproverT approver; // can only be bound once the test starts
 
-    public BaseApprovalsRule(ApproverFactory<A> factory) {
+    public BaseApprovalsRule(ApproverFactory<ApproverT> factory) {
         this.factory = factory;
     }
 
@@ -31,15 +31,15 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWa
         return approver.outputStream();
     }
 
-    public void writeFormatted(T o) {
+    public void writeFormatted(ApprovedT o) {
         approver().writeFormatted(o);
     }
 
-    public void assertApproved(T actual) {
+    public void assertApproved(ApprovedT actual) {
         approver().assertApproved(actual);
     }
 
-    public <T2 extends T> void assertApproved(T2 actual, Formatter<T2, C> formatter) {
+    public <T2 extends ApprovedT> void assertApproved(T2 actual, Formatter<T2, ComparedT> formatter) {
         approver().assertApproved(actual, formatter);
     }
 
@@ -49,7 +49,7 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWa
         approver().assertSatisfied();
     }
 
-    public void makeApproved(T approved) throws IOException {
+    public void makeApproved(ApprovedT approved) throws IOException {
         approver().makeApproved(approved);
     }
 
@@ -65,11 +65,11 @@ public class BaseApprovalsRule<T, C, A extends BaseApprover<T,C>> extends TestWa
         assertSatisfied();
     }
 
-    protected A createApprover(String testName, Class<?> testClass) {
+    protected ApproverT createApprover(String testName, Class<?> testClass) {
         return factory.createApprover(testName, testClass);
     }
 
-    public A approver() {
+    public ApproverT approver() {
         checkRuleState();
         return approver;
     }
