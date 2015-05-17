@@ -14,21 +14,34 @@ to compare current thing with an approved version and fail with a diff if they a
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
 
-    @Test(expected = ComparisonFailure.class)
-    public void doesnt_match_where_no_approved_result() {
-        assertFileNotExists("ApprovalsRuleTest.doesnt_match_where_no_approved_result.approved");
+    @Test
+    public void doesnt_match_where_no_approved_result() throws IOException {
+        whenApprovedIs(null);
+        try {
+            approver.assertApproved("banana");
+            fail("should have thrown");
+        } catch (ComparisonFailure expected) {
+            assertEquals("banana", expected.getActual());
+            assertEquals("", expected.getExpected());
+        }
+    }
+
+    @Test
+    public void matches_when_approved_result_matches() throws IOException {
+        whenApprovedIs("banana");
         approver.assertApproved("banana");
     }
 
-    @Test public void matches_when_approved_result_matches() {
-        assertFileExists("ApprovalsRuleTest.matches_when_approved_result_matches.approved");
-        approver.assertApproved("banana");
-    }
-
-    @Test(expected = ComparisonFailure.class)
-    public void doesnt_match_when_approved_result_doesnt_match() {
-        assertFileExists("ApprovalsRuleTest.doesnt_match_when_approved_result_doesnt_match.approved");
-        approver.assertApproved("kumquat");
+    @Test
+    public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+        whenApprovedIs("banana");
+        try {
+            approver.assertApproved("kumquat");
+            fail("should have thrown");
+        } catch (ComparisonFailure expected) {
+            assertEquals("kumquat", expected.getActual());
+            assertEquals("banana", expected.getExpected());
+        }
     }
 
 ```
