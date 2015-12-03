@@ -3,7 +3,7 @@
 
     <groupId>com.oneeyedmen</groupId>
     <artifactId>okeydoke</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>okeydoke</name>
@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:dmcg/okey-doke.git</connection>
         <developerConnection>scm:git:git@github.com:dmcg/okey-doke.git</developerConnection>
         <url>https://github.com/dmcg/okey-doke</url>
-      <tag>okeydoke-1.0.3</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <dependencies>
