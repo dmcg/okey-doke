@@ -112,9 +112,14 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new File(dir, testName + suffix);
     }
 
-    private BufferedOutputStream createAndOpenOutputStreamFor(File file) throws FileNotFoundException {
-        file.getParentFile().mkdirs();
-        return new BufferedOutputStream(new FileOutputStream(file));
+    private OutputStream createAndOpenOutputStreamFor(final File file) throws FileNotFoundException {
+        return new LazyOutputStream() {
+            @Override
+            protected OutputStream createOut() throws IOException {
+                file.getParentFile().mkdirs();
+                return new BufferedOutputStream(new FileOutputStream(file));
+            }
+        };
     }
 
     private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {
