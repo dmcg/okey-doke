@@ -6,7 +6,7 @@ import org.junit.Assert;
 public class StringChecker implements Checker<String> {
 
     @Override
-    public void assertEquals(String expected, String actual) throws AssertionError {
-        Assert.assertEquals(expected, actual);
+    public void assertEquals(String expectedMayBeNull, String actualMayBeNull) throws AssertionError {
+        Assert.assertEquals(expectedMayBeNull, actualMayBeNull);
     }
 }

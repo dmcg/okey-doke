@@ -20,9 +20,7 @@ to compare current thing with an approved version and fail with a diff if they a
         try {
             approver.assertApproved("banana");
             fail("should have thrown");
-        } catch (ComparisonFailure expected) {
-            assertEquals("banana", expected.getActual());
-            assertEquals("", expected.getExpected());
+        } catch (AssertionError expected) {
         }
     }
 

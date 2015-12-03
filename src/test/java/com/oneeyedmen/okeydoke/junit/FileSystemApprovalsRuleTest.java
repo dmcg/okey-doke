@@ -18,9 +18,7 @@ public class FileSystemApprovalsRuleTest {
         try {
             approver.assertApproved("banana");
             fail();
-        } catch (ComparisonFailure expected) {
-            assertEquals("banana", expected.getActual());
-            assertEquals("", expected.getExpected());
+        } catch (AssertionError expected) {
         } finally {
             approver.removeApproved();
         }

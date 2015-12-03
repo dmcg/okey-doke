@@ -95,8 +95,8 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return osForActual;
     }
 
-    public ComparedT readActual() throws IOException {
-        return sourceOfApproval.readActual(testName(), serializer);
+    public ComparedT actualContentOrNull() throws IOException {
+        return sourceOfApproval.actualContentOrNull(testName(), serializer);
     }
 
     protected String testName() {

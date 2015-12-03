@@ -42,7 +42,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public OutputStream outputForActual(String testName) throws IOException {
-        return createAndOpenOutputStreamFor(actualFor(testName));
+        return outputStreamFor(actualFor(testName));
     }
 
     protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
@@ -51,8 +51,9 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public void removeActual(String testName) throws IOException {
-        if (!actualFor(testName).delete())
-            throw new IOException("Couldn't delete file " + actualFor(testName));
+        File file = actualFor(testName);
+        if (file.isFile() && !file.delete())
+            throw new IOException("Couldn't delete file " + file);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     @Override
     public <T> void writeToApproved(String testName, T thing, Serializer<T> serializer) throws IOException {
-        OutputStream output = createAndOpenOutputStreamFor(approvedFor(testName));
+        OutputStream output = outputStreamFor(approvedFor(testName));
         try {
             serializer.writeTo(thing, output);
         } finally {
@@ -71,13 +72,14 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public <T> T readActual(String testName, Serializer<T> serializer) throws IOException {
-        return read(actualFor(testName), serializer);
+    public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException {
+        File file = actualFor(testName);
+        return file.isFile() ? read(file, serializer) : null;
     }
 
     @Override
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
-        checker.assertEquals(approvedContent(testName, serializer), readActual(testName, serializer));
+        checker.assertEquals(approvedContentOrNull(testName, serializer), actualContentOrNull(testName, serializer));
     }
 
     @Override
@@ -112,7 +114,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new File(dir, testName + suffix);
     }
 
-    private OutputStream createAndOpenOutputStreamFor(final File file) throws FileNotFoundException {
+    private OutputStream outputStreamFor(final File file) throws FileNotFoundException {
         return new LazyOutputStream() {
             @Override
             protected OutputStream createOut() throws IOException {
@@ -130,13 +132,9 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new BufferedInputStream(new FileInputStream(file));
     }
 
-    private <T> T approvedContent(String testName, Serializer<T> serializer) throws IOException {
+    private <T> T approvedContentOrNull(String testName, Serializer<T> serializer) throws IOException {
         InputStream existing = inputOrNullForApproved(testName);
-        if (existing != null)
-            return readAndClose(existing, serializer);
-        T empty = serializer.emptyThing();
-        writeToApproved(testName, empty, serializer); // so that an empty file exists for diff tools to chew on
-        return empty;
+        return (existing != null) ? readAndClose(existing, serializer) : null;
     }
 
     private <T> T read(File file, Serializer<T> serializer) throws IOException {

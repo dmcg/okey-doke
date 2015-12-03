@@ -19,7 +19,7 @@ public class FileSystemSourceOfApprovalTest {
     private final FileSystemSourceOfApproval sourceOfApproval = new FileSystemSourceOfApproval(
             new File("target/approvals"), Reporters.fileSystemReporter());
 
-    // This is mostly currently tested by ApproverTest
+    // This is mostly currently tested by ApproverFileLifecycleTest
 
     @Test public void writes_files_in_package() {
         assertEquals(

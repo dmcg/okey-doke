@@ -26,9 +26,8 @@ public class ApproverTest {
         try {
             approver.assertApproved("banana");
             fail("should have thrown");
-        } catch (ComparisonFailure expected) {
-            assertEquals("banana", expected.getActual());
-            assertEquals("", expected.getExpected());
+        } catch (AssertionError expected) {
+            assertEquals("expected:<null> but was:<banana>", expected.getMessage());
         }
     }
 

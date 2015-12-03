@@ -37,10 +37,14 @@ public abstract class LazyOutputStream extends OutputStream {
     }
 
     public void flush() throws IOException {
+        if (_out == null)
+            return;
         out().flush();
     }
 
     public void close() throws IOException {
+        if (_out == null)
+            return;
         try {
             flush();
         } catch (IOException ignored) {

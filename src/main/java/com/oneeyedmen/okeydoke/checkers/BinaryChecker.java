@@ -6,7 +6,7 @@ import org.junit.Assert;
 public class BinaryChecker implements Checker<byte[]> {
 
     @Override
-    public void assertEquals(byte[] expected, byte[] actual) throws AssertionError {
-        Assert.assertArrayEquals(expected, actual);
+    public void assertEquals(byte[] expectedMayBeNull, byte[] actualMayBeNull) throws AssertionError {
+        Assert.assertArrayEquals(expectedMayBeNull, actualMayBeNull);
     }
 }

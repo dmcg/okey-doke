@@ -13,7 +13,7 @@ public interface SourceOfApproval {
 
     public <T> void writeToApproved(String testName, T thing, Serializer<T> serializer) throws IOException;
 
-    public <T> T readActual(String testName, Serializer<T> serializer) throws IOException;
+    public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException;
 
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException;
 
