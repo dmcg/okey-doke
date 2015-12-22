@@ -6,12 +6,19 @@ public class StandardTranscript implements Transcript {
 
     private final PrintStream stream;
     private final Formatter<Object, String> formatter;
+    private final String lineSeparator;
 
     private boolean isStartOfLine = true;
 
     public StandardTranscript(PrintStream stream, Formatter<Object, String> formatter) {
+        this(stream, formatter, "\n");
+    }
+
+
+    public StandardTranscript(PrintStream stream, Formatter<Object, String> formatter, String lineSeparator) {
         this.stream = stream;
         this.formatter = formatter;
+        this.lineSeparator = lineSeparator;
     }
 
     @Override public boolean isStartOfLine() {
@@ -20,7 +27,8 @@ public class StandardTranscript implements Transcript {
 
     @Override
     public Transcript appendLine(String s) {
-        stream.println(s);
+        stream.print(s);
+        endl();
         isStartOfLine = true;
         return this;
     }
@@ -28,7 +36,7 @@ public class StandardTranscript implements Transcript {
     @Override
     public Transcript append(String s) {
         stream.append(s);
-        isStartOfLine = s.endsWith("\n");
+        isStartOfLine = s.endsWith(lineSeparator);
         return this;
     }
 
@@ -46,7 +54,7 @@ public class StandardTranscript implements Transcript {
 
     @Override
     public Transcript endl() {
-        stream.println();
+        stream.print(lineSeparator);
         isStartOfLine = true;
         return this;
     }
