@@ -1,23 +1,20 @@
 package com.oneeyedmen.okeydoke.examples;
 
-import com.oneeyedmen.okeydoke.pickle.Feature;
 import com.oneeyedmen.okeydoke.pickle.FeatureRule;
 import com.oneeyedmen.okeydoke.pickle.Scenario;
 import com.oneeyedmen.okeydoke.pickle.ScenarioRule;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
-import static com.oneeyedmen.okeydoke.junit.ApprovalsRule.fileSystemRule;
+import static com.oneeyedmen.okeydoke.junit.ApprovalsRule.usualRule;
+import static com.oneeyedmen.okeydoke.pickle.FeatureInfo.featureNamed;
 
-@Feature(
-        value = "Addition",
-        inOrder = "to avoid silly mistakes",
-        as = "a math idiot",
-        iWant = "to be told the sum of two numbers")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PickleTest {
 
-    @ClassRule public static final FeatureRule feature = new FeatureRule(fileSystemRule("src/test/java"));
+    @ClassRule public static final FeatureRule feature = new FeatureRule(
+            featureNamed("Addition").asA("a math idiot").inOrder("to avoid silly mistakes").iWant("to be told the sum of two numbers"),
+            usualRule());
     @Rule public final ScenarioRule scenario = feature.scenarioRule();
 
     private Calculator calculator;

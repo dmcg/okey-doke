@@ -2,7 +2,6 @@ package com.oneeyedmen.okeydoke.examples;
 
 import com.oneeyedmen.okeydoke.formatters.TableFormatter;
 import com.oneeyedmen.okeydoke.internal.Mapper;
-import com.oneeyedmen.okeydoke.pickle.Feature;
 import com.oneeyedmen.okeydoke.pickle.FeatureRule;
 import com.oneeyedmen.okeydoke.pickle.Scenario;
 import com.oneeyedmen.okeydoke.pickle.ScenarioRule;
@@ -11,18 +10,16 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import static com.oneeyedmen.okeydoke.junit.ApprovalsRule.fileSystemRule;
+import static com.oneeyedmen.okeydoke.junit.ApprovalsRule.usualRule;
+import static com.oneeyedmen.okeydoke.pickle.FeatureInfo.featureNamed;
 import static java.util.Arrays.asList;
 
-@Feature(
-        value = "Addition",
-        inOrder = "to avoid silly mistakes",
-        as = "a math idiot",
-        iWant = "to be told the sum of lots of numbers")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PickleTablesTest {
 
-    @ClassRule public static final FeatureRule feature = new FeatureRule(fileSystemRule("src/test/java"));
+    @ClassRule public static final FeatureRule feature = new FeatureRule(
+            featureNamed("Addition").asA("a math idiot").inOrder("to avoid silly mistakes").iWant("to be told the sum of lots of numbers"),
+            usualRule());
     @Rule public final ScenarioRule scenario = feature.scenarioRule();
 
     private Calculator calculator;

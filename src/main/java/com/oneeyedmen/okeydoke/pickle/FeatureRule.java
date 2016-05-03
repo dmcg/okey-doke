@@ -6,9 +6,11 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 public class FeatureRule extends TestWatcher {
+    private final FeatureInfo featureInfo;
     private final ApprovalsRule approvalsRule;
 
-    public FeatureRule(ApprovalsRule approvalsRule) {
+    public FeatureRule(FeatureInfo featureInfo, ApprovalsRule approvalsRule) {
+        this.featureInfo = featureInfo;
         this.approvalsRule = approvalsRule;
     }
 
@@ -19,8 +21,7 @@ public class FeatureRule extends TestWatcher {
     @Override
     protected void starting(Description description) {
         approvalsRule.starting(description);
-        Feature featureAnnotation = description.getTestClass().getAnnotation(Feature.class);
-        writeFeature(approvalsRule.transcript(), featureAnnotation);
+        writeFeature(approvalsRule.transcript(), featureInfo);
     }
 
     @Override
@@ -28,10 +29,10 @@ public class FeatureRule extends TestWatcher {
         approvalsRule.succeeded(description);
     }
 
-    private void writeFeature(Transcript transcript, Feature feature) {
-        transcript.append("Feature: ").appendLine(feature.value());
+    private void writeFeature(Transcript transcript, FeatureInfo feature) {
+        transcript.append("Feature: ").appendLine(feature.name());
         indent(transcript).append("In Order ").appendLine(feature.inOrder());
-        indent(transcript).append("As ").appendLine(feature.as());
+        indent(transcript).append("As ").appendLine(feature.asA());
         indent(transcript).append("I want ").appendLine(feature.iWant());
     }
 
