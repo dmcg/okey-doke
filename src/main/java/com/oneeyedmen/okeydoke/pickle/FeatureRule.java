@@ -31,12 +31,17 @@ public class FeatureRule extends TestWatcher {
 
     private void writeFeature(Transcript transcript, FeatureInfo feature) {
         transcript.append("Feature: ").appendLine(feature.name());
-        indent(transcript).append("In Order ").appendLine(feature.inOrder());
-        indent(transcript).append("As ").appendLine(feature.asA());
-        indent(transcript).append("I want ").appendLine(feature.iWant());
+        writeIfPresent(transcript, "In Order", feature.inOrder());
+        writeIfPresent(transcript, "As", feature.asA());
+        writeIfPresent(transcript, "I want", feature.iWant());
     }
 
     private Transcript indent(Transcript transcript) {
         return transcript.space(4);
+    }
+
+    private void writeIfPresent(Transcript transcript, String name, String value) {
+        if (value.length() > 0)
+            indent(transcript).append(name).append(" ").appendLine(value);
     }
 }

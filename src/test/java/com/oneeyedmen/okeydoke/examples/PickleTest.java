@@ -13,7 +13,7 @@ import static com.oneeyedmen.okeydoke.pickle.FeatureInfo.featureNamed;
 public class PickleTest {
 
     @ClassRule public static final FeatureRule feature = new FeatureRule(
-            featureNamed("Addition").asA("a math idiot").inOrder("to avoid silly mistakes").iWant("to be told the sum of two numbers"),
+            featureNamed("Addition").inOrder("to avoid silly mistakes").iWant("to be told the sum of two numbers"),
             usualRule());
     @Rule public final ScenarioRule scenario = feature.scenarioRule();
 
