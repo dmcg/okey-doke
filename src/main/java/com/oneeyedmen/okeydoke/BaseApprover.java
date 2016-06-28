@@ -65,7 +65,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
             OutputStream outputStream = getActual().outputStream();
             outputStream.close();
             sourceOfApproval.checkActualAgainstApproved(outputStream, testName(), serializer, checker);
-            sourceOfApproval.removeActual(testName());
+            getActual().remove();
         } catch (AssertionError e) {
             sourceOfApproval.reportFailure(testName(), e);
             throw e;

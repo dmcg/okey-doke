@@ -47,13 +47,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public void removeActual(String testName) throws IOException {
-        File file = actualFor(testName);
-        if (file.isFile() && !file.delete())
-            throw new IOException("Couldn't delete file " + file);
-    }
-
-    @Override
     public void reportFailure(String testName, AssertionError e) {
         reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
     }

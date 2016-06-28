@@ -26,6 +26,13 @@ public class FileResource implements Resource {
         return new FileInputStream(file);
     }
 
+    @Override
+    public void remove() throws IOException {
+        file.delete();
+        if (file.exists())
+            throw new IOException("Failed to delete " + file);
+    }
+
     protected OutputStream outputStreamFor(final File file) throws IOException {
         return new LazyOutputStream() {
             @Override

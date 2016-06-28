@@ -8,4 +8,6 @@ import java.io.OutputStream;
 public interface Resource {
     public OutputStream outputStream() throws IOException;
     public InputStream inputStream() throws IOException;
+
+    public void remove() throws IOException;
 }
