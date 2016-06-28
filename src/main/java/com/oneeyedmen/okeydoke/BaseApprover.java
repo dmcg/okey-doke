@@ -80,7 +80,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     public void makeApproved(ApprovedT approved) throws IOException {
-        OutputStream output = sourceOfApproval.approvedResourceFor(testName()).outputStream();
+        OutputStream output = sourceOfApproval.approvedFor(testName()).outputStream();
         try {
             serializer.writeTo(formatter.formatted(approved), output);
         } finally {
@@ -98,7 +98,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     private Resource getActual() throws IOException {
         if (actual == null)
-            actual = sourceOfApproval.actualResourceFor(testName());
+            actual = sourceOfApproval.actualFor(testName());
         return actual;
     }
 
@@ -107,7 +107,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     public void removeApproved() throws IOException {
-        sourceOfApproval.approvedResourceFor(testName()).remove();
+        sourceOfApproval.approvedFor(testName()).remove();
     }
 
 }

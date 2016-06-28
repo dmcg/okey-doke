@@ -24,17 +24,17 @@ public class FileSystemSourceOfApprovalTest {
     @Test public void writes_files_in_package() {
         assertEquals(
                 new File("target/approvals", "testname.approved"),
-                sourceOfApproval.approvedFor("testname"));
+                sourceOfApproval.approvedFileFor("testname"));
         assertEquals(
                 new File("target/approvals", "testname.actual"),
-                sourceOfApproval.actualFor("testname"));
+                sourceOfApproval.actualFileFor("testname"));
     }
 
     @Test public void doesnt_create_files_until_written_to() throws IOException {
-        OutputStream stream = sourceOfApproval.actualResourceFor("testname").outputStream();
-        assertFalse(sourceOfApproval.actualFor("testname").isFile());
+        OutputStream stream = sourceOfApproval.actualFor("testname").outputStream();
+        assertFalse(sourceOfApproval.actualFileFor("testname").isFile());
 
         stream.write("hello".getBytes());
-        assertTrue(sourceOfApproval.actualFor("testname").isFile());
+        assertTrue(sourceOfApproval.actualFileFor("testname").isFile());
     }
 }

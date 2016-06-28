@@ -22,11 +22,11 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
     }
 
     @Override
-    public Resource actualResourceFor(String testname) throws IOException {
-        File file = approvedFor(testname);
+    public Resource actualFor(String testname) throws IOException {
+        File file = approvedFileFor(testname);
         return file.exists() && file.isFile()
-                ? new StreamingFileResource(actualFor(testname), new FileResource(approvedFor(testname)))
-                : new FileResource(actualFor(testname));
+                ? new StreamingFileResource(actualFileFor(testname), new FileResource(approvedFileFor(testname)))
+                : new FileResource(actualFileFor(testname));
     }
 
     @Override

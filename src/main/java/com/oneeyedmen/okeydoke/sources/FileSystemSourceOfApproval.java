@@ -39,44 +39,44 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public Resource actualResourceFor(String testName) throws IOException {
-        return new FileResource(actualFor(testName));
+    public Resource actualFor(String testName) throws IOException {
+        return new FileResource(actualFileFor(testName));
     }
 
     @Override
-    public Resource approvedResourceFor(String testName) throws IOException {
-        return new FileResource(approvedFor(testName));
+    public Resource approvedFor(String testName) throws IOException {
+        return new FileResource(approvedFileFor(testName));
     }
 
     @Override
     public void reportFailure(String testName, AssertionError e) {
-        reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
+        reporter.reportFailure(actualFileFor(testName), approvedFileFor(testName), e);
     }
 
     @Override
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
         checker.assertEquals(
-                readResource(approvedResourceFor(testName), serializer),
-                readResource(actualResourceFor(testName), serializer));
+                readResource(approvedFor(testName), serializer),
+                readResource(actualFor(testName), serializer));
     }
 
-    public File approvedFor(String testName) {
+    public File approvedFileFor(String testName) {
         return fileFor(approvedDir, testName, approvedExtension());
     }
 
-    public File actualFor(String testName) {
+    public File actualFileFor(String testName) {
         return fileFor(actualDir, testName, actualExtension());
     }
 
-    protected String approvedExtension() {
+    private String approvedExtension() {
         return ".approved" + typeExtension();
     }
 
-    protected String actualExtension() {
+    private String actualExtension() {
         return ".actual" + typeExtension();
     }
 
-    protected String typeExtension() {
+    private String typeExtension() {
         return typeExtension;
     }
 
