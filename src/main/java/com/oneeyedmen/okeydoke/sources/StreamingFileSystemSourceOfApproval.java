@@ -7,7 +7,6 @@ import com.oneeyedmen.okeydoke.Serializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * A SourceOfApproval that compares the actual to the approved as it is writing the actual.
@@ -30,11 +29,12 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
     }
 
     @Override
-    public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
-        if (outputStream instanceof ComparingOutputStream) {
-            ((ComparingOutputStream) outputStream).assertNoMismatch();
+    public <T> void checkActualAgainstApproved(String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
+        Resource actual = actualFor(testName);
+        if (actual instanceof StreamingFileResource) {
+            ((ComparingOutputStream) actual.outputStream()).assertNoMismatch();
         } else {
-            super.checkActualAgainstApproved(outputStream, testName, serializer, checker);
+            super.checkActualAgainstApproved(testName, serializer, checker);
         }
     }
 }

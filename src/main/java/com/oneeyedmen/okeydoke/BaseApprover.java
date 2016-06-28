@@ -64,9 +64,8 @@ public class BaseApprover<ApprovedT, ComparedT> {
     @SuppressWarnings("FeatureEnvy" /* keeps sourceOfApproval simple */)
     public void assertSatisfied() {
         try {
-            OutputStream outputStream = getActual().outputStream();
-            outputStream.close();
-            sourceOfApproval.checkActualAgainstApproved(outputStream, testName(), serializer, checker);
+            getActual().outputStream().close();
+            sourceOfApproval.checkActualAgainstApproved(testName(), serializer, checker);
             getActual().remove();
         } catch (AssertionError e) {
             sourceOfApproval.reportFailure(testName(), e);
