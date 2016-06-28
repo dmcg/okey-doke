@@ -1,9 +1,6 @@
 package com.oneeyedmen.okeydoke.sources;
 
-import com.oneeyedmen.okeydoke.Checker;
-import com.oneeyedmen.okeydoke.Reporter;
-import com.oneeyedmen.okeydoke.Serializer;
-import com.oneeyedmen.okeydoke.SourceOfApproval;
+import com.oneeyedmen.okeydoke.*;
 import com.oneeyedmen.okeydoke.internal.IO;
 
 import java.io.*;
@@ -43,6 +40,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     @Override
     public OutputStream outputForActual(String testName) throws IOException {
         return outputStreamFor(actualFor(testName));
+    }
+
+    @Override
+    public Resource resourceFor(String testName) throws IOException {
+        return new FileResource(actualFor(testName));
     }
 
     protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {

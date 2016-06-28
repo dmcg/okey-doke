@@ -6,8 +6,7 @@ import java.io.OutputStream;
 public interface SourceOfApproval {
 
     public OutputStream outputForActual(String testName) throws IOException;
-
-    public void removeActual(String testName) throws IOException;
+    public Resource resourceFor(String testName) throws IOException;
 
     public void reportFailure(String testName, AssertionError e);
 
@@ -17,5 +16,6 @@ public interface SourceOfApproval {
 
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException;
 
+    public void removeActual(String testName) throws IOException;
     public void removeApproved(String testName) throws IOException;
 }
