@@ -30,14 +30,14 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     public PrintStream printStream() {
         try {
-            return new PrintStream(getActual().outputStream());
+            return new PrintStream(actual().outputStream());
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
     }
 
     public OutputStream outputStream() throws IOException {
-        return getActual().outputStream();
+        return actual().outputStream();
     }
 
     public void writeFormatted(ApprovedT object) {
@@ -46,7 +46,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     public <AT extends ApprovedT> void writeFormatted(AT object, Formatter<AT, ComparedT> aFormatter) {
         try {
-            serializer.writeTo(aFormatter.formatted(object), getActual().outputStream());
+            serializer.writeTo(aFormatter.formatted(object), actual().outputStream());
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
@@ -64,9 +64,9 @@ public class BaseApprover<ApprovedT, ComparedT> {
     @SuppressWarnings("FeatureEnvy" /* keeps sourceOfApproval simple */)
     public void assertSatisfied() {
         try {
-            getActual().outputStream().close();
+            actual().outputStream().close();
             sourceOfApproval.checkActualAgainstApproved(testName(), serializer, checker);
-            getActual().remove();
+            actual().remove();
         } catch (AssertionError e) {
             sourceOfApproval.reportFailure(testName(), e);
             throw e;
@@ -95,7 +95,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return formatter;
     }
 
-    private Resource getActual() throws IOException {
+    private Resource actual() throws IOException {
         if (actual == null)
             actual = sourceOfApproval.actualFor(testName());
         return actual;
