@@ -38,11 +38,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public OutputStream outputForActual(String testName) throws IOException {
-        return outputStreamFor(actualFor(testName));
-    }
-
-    @Override
     public Resource resourceFor(String testName) throws IOException {
         return new FileResource(actualFor(testName));
     }

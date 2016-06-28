@@ -91,7 +91,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     protected OutputStream osForActual() throws IOException {
         if (osForActual == null)
-            osForActual = sourceOfApproval.outputForActual(testName());
+            osForActual = sourceOfApproval.resourceFor(testName()).outputStream();
         return osForActual;
     }
 

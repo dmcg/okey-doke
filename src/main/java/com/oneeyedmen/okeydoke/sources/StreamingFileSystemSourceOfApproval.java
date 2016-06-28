@@ -2,11 +2,11 @@ package com.oneeyedmen.okeydoke.sources;
 
 import com.oneeyedmen.okeydoke.Checker;
 import com.oneeyedmen.okeydoke.Reporter;
+import com.oneeyedmen.okeydoke.Resource;
 import com.oneeyedmen.okeydoke.Serializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -22,11 +22,11 @@ public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfAppro
     }
 
     @Override
-    public OutputStream outputForActual(String testname) throws IOException {
-        InputStream approvedOrNull = inputOrNullForApproved(testname);
-        return approvedOrNull == null ?
-                super.resourceFor(testname).outputStream() :
-                new ComparingOutputStream(super.resourceFor(testname).outputStream(), approvedOrNull);
+    public Resource resourceFor(String testname) throws IOException {
+        File file = approvedFor(testname);
+        return file.exists() && file.isFile()
+                ? new StreamingFileResource(actualFor(testname), new FileResource(approvedFor(testname)))
+                : new FileResource(actualFor(testname));
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.io.OutputStream;
 
 public interface SourceOfApproval {
 
-    public OutputStream outputForActual(String testName) throws IOException;
     public Resource resourceFor(String testName) throws IOException;
 
     public void reportFailure(String testName, AssertionError e);
