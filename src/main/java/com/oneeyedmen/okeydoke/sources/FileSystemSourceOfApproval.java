@@ -5,7 +5,6 @@ import com.oneeyedmen.okeydoke.internal.IO;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
@@ -55,8 +54,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     @Override
     public <T> void checkActualAgainstApproved(String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
         checker.assertEquals(
-                readResource(approvedFor(testName), serializer),
-                readResource(actualFor(testName), serializer));
+                IO.readResource(approvedFor(testName), serializer),
+                IO.readResource(actualFor(testName), serializer));
     }
 
     public File approvedFileFor(String testName) {
@@ -83,18 +82,5 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new File(dir, testName + suffix);
     }
 
-    private <T> T readResource(Resource resource, Serializer<T> serializer) throws IOException {
-        if (!resource.exists())
-            return null;
-        else
-            return readAndClose(resource.inputStream(), serializer);
-    }
 
-    private <T> T readAndClose(InputStream input, Serializer<T> serializer) throws IOException {
-        try {
-            return serializer.readFrom(input);
-        } finally {
-            IO.closeQuietly(input);
-        }
-    }
 }
