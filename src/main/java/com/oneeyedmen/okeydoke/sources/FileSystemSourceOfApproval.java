@@ -3,7 +3,10 @@ package com.oneeyedmen.okeydoke.sources;
 import com.oneeyedmen.okeydoke.*;
 import com.oneeyedmen.okeydoke.internal.IO;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
@@ -50,14 +53,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
     }
 
-    public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException {
-        File file = actualFor(testName);
-        return file.isFile() ? read(file, serializer) : null;
-    }
-
     @Override
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException {
-        checker.assertEquals(approvedContentOrNull(testName, serializer), actualContentOrNull(testName, serializer));
+        checker.assertEquals(
+                readResource(approvedResourceFor(testName), serializer),
+                readResource(actualResourceFor(testName), serializer));
     }
 
     public File approvedFor(String testName) {
@@ -84,25 +84,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new File(dir, testName + suffix);
     }
 
-    protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
-        return inputStreamOrNullFor(approvedFor(testName));
-    }
-
-    private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {
-        return !(file.exists() && file.isFile()) ? null : inputStreamFor(file);
-    }
-
-    private BufferedInputStream inputStreamFor(File file) throws FileNotFoundException {
-        return new BufferedInputStream(new FileInputStream(file));
-    }
-
-    private <T> T approvedContentOrNull(String testName, Serializer<T> serializer) throws IOException {
-        InputStream existing = inputOrNullForApproved(testName);
-        return (existing != null) ? readAndClose(existing, serializer) : null;
-    }
-
-    private <T> T read(File file, Serializer<T> serializer) throws IOException {
-        return readAndClose(inputStreamFor(file), serializer);
+    private <T> T readResource(Resource resource, Serializer<T> serializer) throws IOException {
+        if (!resource.exists())
+            return null;
+        else
+            return readAndClose(resource.inputStream(), serializer);
     }
 
     private <T> T readAndClose(InputStream input, Serializer<T> serializer) throws IOException {
@@ -112,6 +98,4 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
             IO.closeQuietly(input);
         }
     }
-
-
 }

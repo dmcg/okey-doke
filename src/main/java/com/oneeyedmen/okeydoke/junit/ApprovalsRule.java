@@ -24,10 +24,6 @@ public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
         return new ApprovalsRule(ApproverFactories.streamingApproverFactory(new File(sourceRoot)));
     }
 
-    public static ApprovalsRule classPathRule(String actualRoot) {
-        return new ApprovalsRule(ApproverFactories.classPathApproverFactory(new File(actualRoot)));
-    }
-
     public ApprovalsRule(ApproverFactory factory) {
         super(factory);
     }

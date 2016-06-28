@@ -10,4 +10,5 @@ public interface Resource {
     public InputStream inputStream() throws IOException;
 
     public void remove() throws IOException;
+    public boolean exists();
 }

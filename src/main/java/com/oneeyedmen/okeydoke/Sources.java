@@ -1,6 +1,5 @@
 package com.oneeyedmen.okeydoke;
 
-import com.oneeyedmen.okeydoke.sources.ClassPathSourceOfApproval;
 import com.oneeyedmen.okeydoke.sources.FileSystemSourceOfApproval;
 import com.oneeyedmen.okeydoke.sources.StreamingFileSystemSourceOfApproval;
 
@@ -22,10 +21,6 @@ public class Sources {
 
     public static FileSystemSourceOfApproval streamingInto(File srcRoot, Package thePackage) {
         return streamingInto(dirForPackage(srcRoot, thePackage));
-    }
-
-    public static SourceOfApproval classPath(File actualRoot, Package thePackage) {
-        return new ClassPathSourceOfApproval(thePackage, dirForPackage(actualRoot, thePackage), Reporters.classPathReporter());
     }
 
     private static File dirForPackage(File root, Package aPackage) {

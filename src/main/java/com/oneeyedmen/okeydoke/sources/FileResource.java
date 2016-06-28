@@ -29,8 +29,13 @@ public class FileResource implements Resource {
     @Override
     public void remove() throws IOException {
         file.delete();
-        if (file.exists())
+        if (exists())
             throw new IOException("Failed to delete " + file);
+    }
+
+    @Override
+    public boolean exists() {
+        return file.exists();
     }
 
     protected OutputStream outputStreamFor(final File file) throws IOException {
