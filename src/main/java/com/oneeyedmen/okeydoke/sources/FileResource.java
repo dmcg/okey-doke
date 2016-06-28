@@ -23,6 +23,7 @@ public class FileResource implements Resource {
 
     @Override
     public InputStream inputStream() throws IOException {
+        // It feels a bit odd that this isn't memoized, but we don't seem to need it to be
         return new FileInputStream(file);
     }
 
