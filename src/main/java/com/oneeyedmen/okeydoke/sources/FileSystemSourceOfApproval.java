@@ -58,12 +58,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
                 IO.readResource(actualFor(testName), serializer));
     }
 
-    public File approvedFileFor(String testName) {
-        return fileFor(approvedDir, testName, approvedExtension());
-    }
-
+    // Public for testing
+    public File approvedFileFor(String testName) { return new File(approvedDir, testName + approvedExtension()); }
     public File actualFileFor(String testName) {
-        return fileFor(actualDir, testName, actualExtension());
+        return new File(actualDir, testName + actualExtension());
     }
 
     private String approvedExtension() {
@@ -77,10 +75,5 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     private String typeExtension() {
         return typeExtension;
     }
-
-    private File fileFor(File dir, String testName, String suffix) {
-        return new File(dir, testName + suffix);
-    }
-
 
 }
