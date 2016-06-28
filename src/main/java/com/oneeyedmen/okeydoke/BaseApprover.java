@@ -111,7 +111,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     public void removeApproved() throws IOException {
-        sourceOfApproval.removeApproved(testName());
+        sourceOfApproval.approvedResourceFor(testName()).remove();
     }
 
 }

@@ -65,14 +65,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         checker.assertEquals(approvedContentOrNull(testName, serializer), actualContentOrNull(testName, serializer));
     }
 
-    @Override
-    public void removeApproved(String testName) throws IOException {
-        File file = approvedFor(testName);
-        file.delete();
-        if (file.exists())
-            throw new IOException("Couldn't delete file " + file);
-    }
-
     public File approvedFor(String testName) {
         return fileFor(approvedDir, testName, approvedExtension());
     }
@@ -95,16 +87,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private File fileFor(File dir, String testName, String suffix) {
         return new File(dir, testName + suffix);
-    }
-
-    private OutputStream outputStreamFor(final File file) throws FileNotFoundException {
-        return new LazyOutputStream() {
-            @Override
-            protected OutputStream createOut() throws IOException {
-                file.getParentFile().mkdirs();
-                return new BufferedOutputStream(new FileOutputStream(file));
-            }
-        };
     }
 
     private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {

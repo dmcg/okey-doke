@@ -14,6 +14,4 @@ public interface SourceOfApproval {
     public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException;
 
     public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException;
-
-    public void removeApproved(String testName) throws IOException;
 }
