@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import static com.oneeyedmen.okeydoke.internal.IO.closeQuietly;
+
 public class BaseApprover<ApprovedT, ComparedT> {
 
     private final String testName;
@@ -78,7 +80,12 @@ public class BaseApprover<ApprovedT, ComparedT> {
     }
 
     public void makeApproved(ApprovedT approved) throws IOException {
-        sourceOfApproval.writeToApproved(testName(), formatter.formatted(approved), serializer);
+        OutputStream output = sourceOfApproval.approvedResourceFor(testName()).outputStream();
+        try {
+            serializer.writeTo(formatter.formatted(approved), output);
+        } finally {
+            closeQuietly(output);
+        }
     }
 
     public boolean satisfactionChecked() {
@@ -91,7 +98,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     private Resource getActual() throws IOException {
         if (actual == null)
-            actual = sourceOfApproval.resourceFor(testName());
+            actual = sourceOfApproval.actualResourceFor(testName());
         return actual;
     }
 

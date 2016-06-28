@@ -5,8 +5,6 @@ import com.oneeyedmen.okeydoke.internal.IO;
 
 import java.io.*;
 
-import static com.oneeyedmen.okeydoke.internal.IO.closeQuietly;
-
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private final Reporter<File> reporter;
@@ -38,8 +36,13 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public Resource resourceFor(String testName) throws IOException {
+    public Resource actualResourceFor(String testName) throws IOException {
         return new FileResource(actualFor(testName));
+    }
+
+    @Override
+    public Resource approvedResourceFor(String testName) throws IOException {
+        return new FileResource(approvedFor(testName));
     }
 
     protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
@@ -49,16 +52,6 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     @Override
     public void reportFailure(String testName, AssertionError e) {
         reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
-    }
-
-    @Override
-    public <T> void writeToApproved(String testName, T thing, Serializer<T> serializer) throws IOException {
-        OutputStream output = outputStreamFor(approvedFor(testName));
-        try {
-            serializer.writeTo(thing, output);
-        } finally {
-            closeQuietly(output);
-        }
     }
 
     @Override

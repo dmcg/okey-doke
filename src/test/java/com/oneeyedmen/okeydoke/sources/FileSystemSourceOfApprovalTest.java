@@ -31,7 +31,7 @@ public class FileSystemSourceOfApprovalTest {
     }
 
     @Test public void doesnt_create_files_until_written_to() throws IOException {
-        OutputStream stream = sourceOfApproval.resourceFor("testname").outputStream();
+        OutputStream stream = sourceOfApproval.actualResourceFor("testname").outputStream();
         assertFalse(sourceOfApproval.actualFor("testname").isFile());
 
         stream.write("hello".getBytes());
