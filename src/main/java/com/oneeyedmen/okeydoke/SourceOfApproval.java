@@ -9,9 +9,8 @@ public interface SourceOfApproval {
 
     public Resource approvedResourceFor(String testName) throws IOException;
 
+    public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws AssertionError, IOException;
+
     public void reportFailure(String testName, AssertionError e);
 
-    public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException;
-
-    public <T> void checkActualAgainstApproved(OutputStream outputStream, String testName, Serializer<T> serializer, Checker<T> checker) throws IOException;
 }

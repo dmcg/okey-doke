@@ -45,16 +45,11 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return new FileResource(approvedFor(testName));
     }
 
-    protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
-        return inputStreamOrNullFor(approvedFor(testName));
-    }
-
     @Override
     public void reportFailure(String testName, AssertionError e) {
         reporter.reportFailure(actualFor(testName), approvedFor(testName), e);
     }
 
-    @Override
     public <T> T actualContentOrNull(String testName, Serializer<T> serializer) throws IOException {
         File file = actualFor(testName);
         return file.isFile() ? read(file, serializer) : null;
@@ -87,6 +82,10 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
 
     private File fileFor(File dir, String testName, String suffix) {
         return new File(dir, testName + suffix);
+    }
+
+    protected InputStream inputOrNullForApproved(String testName) throws FileNotFoundException {
+        return inputStreamOrNullFor(approvedFor(testName));
     }
 
     private InputStream inputStreamOrNullFor(File file) throws FileNotFoundException {

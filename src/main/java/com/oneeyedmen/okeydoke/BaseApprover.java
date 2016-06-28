@@ -102,10 +102,6 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return actual;
     }
 
-    public ComparedT actualContentOrNull() throws IOException {
-        return sourceOfApproval.actualContentOrNull(testName(), serializer);
-    }
-
     protected String testName() {
         return testName;
     }
