@@ -7,6 +7,7 @@ import java.io.*;
 public class FileResource implements Resource {
 
     private final File file;
+    private OutputStream os;
 
     public FileResource(File file) {
         this.file = file;
@@ -14,7 +15,10 @@ public class FileResource implements Resource {
 
     @Override
     public OutputStream outputStream() throws IOException {
-        return outputStreamFor(file);
+        if (os == null) {
+            os = outputStreamFor(file);
+        }
+        return os;
     }
 
     @Override
@@ -22,7 +26,7 @@ public class FileResource implements Resource {
         return new FileInputStream(file);
     }
 
-    private OutputStream outputStreamFor(final File file) throws FileNotFoundException {
+    protected OutputStream outputStreamFor(final File file) throws IOException {
         return new LazyOutputStream() {
             @Override
             protected OutputStream createOut() throws IOException {

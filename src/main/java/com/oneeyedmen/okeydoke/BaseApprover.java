@@ -12,7 +12,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     private final Serializer<ComparedT> serializer;
     private final Checker<ComparedT> checker;
 
-    private OutputStream osForActual;
+    private Resource actual;
     private boolean done;
 
     protected BaseApprover(String testName, SourceOfApproval sourceOfApproval,
@@ -28,14 +28,14 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     public PrintStream printStream() {
         try {
-            return new PrintStream(osForActual());
+            return new PrintStream(getActual().outputStream());
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
     }
 
     public OutputStream outputStream() throws IOException {
-        return osForActual();
+        return getActual().outputStream();
     }
 
     public void writeFormatted(ApprovedT object) {
@@ -44,7 +44,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
 
     public <AT extends ApprovedT> void writeFormatted(AT object, Formatter<AT, ComparedT> aFormatter) {
         try {
-            serializer.writeTo(aFormatter.formatted(object), osForActual());
+            serializer.writeTo(aFormatter.formatted(object), getActual().outputStream());
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }
@@ -62,7 +62,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
     @SuppressWarnings("FeatureEnvy" /* keeps sourceOfApproval simple */)
     public void assertSatisfied() {
         try {
-            OutputStream outputStream = osForActual();
+            OutputStream outputStream = getActual().outputStream();
             outputStream.close();
             sourceOfApproval.checkActualAgainstApproved(outputStream, testName(), serializer, checker);
             sourceOfApproval.removeActual(testName());
@@ -72,7 +72,7 @@ public class BaseApprover<ApprovedT, ComparedT> {
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         } finally {
-            osForActual = null;
+            actual = null;
             done = true;
         }
     }
@@ -89,10 +89,10 @@ public class BaseApprover<ApprovedT, ComparedT> {
         return formatter;
     }
 
-    protected OutputStream osForActual() throws IOException {
-        if (osForActual == null)
-            osForActual = sourceOfApproval.resourceFor(testName()).outputStream();
-        return osForActual;
+    private Resource getActual() throws IOException {
+        if (actual == null)
+            actual = sourceOfApproval.resourceFor(testName());
+        return actual;
     }
 
     public ComparedT actualContentOrNull() throws IOException {

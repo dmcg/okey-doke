@@ -15,8 +15,9 @@ public class StreamingFileResource extends FileResource {
         this.comparedTo = comparedTo;
     }
 
+
     @Override
-    public OutputStream outputStream() throws IOException {
+    protected OutputStream outputStreamFor(File file) throws IOException {
         return new ComparingOutputStream(super.outputStream(), comparedTo.inputStream());
     }
 }
