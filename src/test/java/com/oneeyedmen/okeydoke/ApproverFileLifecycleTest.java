@@ -20,65 +20,65 @@ public class ApproverFileLifecycleTest {
 
     @Before public void createApproverInsideCleanDirectoryRule() {
         // required because otherwise the directory is cleaned after the approver has created its file inside it
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
         approver = new Approver("testname", sourceOfApproval);
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 
     @Test public void approved_removes_actual_file() throws IOException {
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.makeApproved("banana");
-        assertEquals("banana".length(), sourceOfApproval.approvedFileFor("testname").length());
+        assertEquals("banana".length(), sourceOfApproval.approvedFor("testname").size());
 
         approver.assertApproved("banana");
-        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
+        assertTrue(sourceOfApproval.approvedFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
     }
 
     @Test public void creates_approved_file_when_there_is_none_to_give_a_diff() {
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         try {
             approver.assertApproved("banana");
         } catch (AssertionError expected) {}
-        assertEquals(0, sourceOfApproval.approvedFileFor("testname").length());
-        assertEquals("banana".length(), sourceOfApproval.actualFileFor("testname").length());
+        assertEquals(0, sourceOfApproval.approvedFor("testname").size());
+        assertEquals("banana".length(), sourceOfApproval.actualFor("testname").size());
     }
 
     @Test public void both_files_present_when_doesnt_match_approved() throws IOException {
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.makeApproved("banana");
-        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertTrue(sourceOfApproval.approvedFor("testname").exists());
 
         try {
             approver.assertApproved("kumquat");
         } catch (AssertionError expected) {}
-        assertEquals("banana".length(), sourceOfApproval.approvedFileFor("testname").length());
-        assertEquals("kumquat".length(), sourceOfApproval.actualFileFor("testname").length());
+        assertEquals("banana".length(), sourceOfApproval.approvedFor("testname").size());
+        assertEquals("kumquat".length(), sourceOfApproval.actualFor("testname").size());
     }
 
     @Test public void neither_file_created_if_no_assertion() throws IOException {
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
+        assertFalse(sourceOfApproval.approvedFor("testname").exists());
 
         approver.assertSatisfied();
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
-        assertFalse(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
+        assertFalse(sourceOfApproval.approvedFor("testname").exists());
     }
 
     @Test public void approved_not_removed_if_no_assertion() throws IOException {
         approver.makeApproved("banana");
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
-        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
+        assertTrue(sourceOfApproval.approvedFor("testname").exists());
 
         try {
             approver.assertSatisfied();
         } catch (AssertionError expected) {}
 
-        assertFalse(sourceOfApproval.actualFileFor("testname").exists());
-        assertTrue(sourceOfApproval.approvedFileFor("testname").exists());
+        assertFalse(sourceOfApproval.actualFor("testname").exists());
+        assertTrue(sourceOfApproval.approvedFor("testname").exists());
     }
 
 }

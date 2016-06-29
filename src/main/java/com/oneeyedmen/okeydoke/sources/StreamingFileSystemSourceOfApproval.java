@@ -16,12 +16,12 @@ import java.io.IOException;
  */
 public class StreamingFileSystemSourceOfApproval extends FileSystemSourceOfApproval {
 
-    public StreamingFileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
+    public StreamingFileSystemSourceOfApproval(File directory, Reporter<File, File> reporter) {
         super(directory, reporter);
     }
 
     @Override
-    public Resource actualFor(String testname) throws IOException {
+    public Resource actualFor(String testname) {
         File file = approvedFileFor(testname);
         return file.exists() && file.isFile()
                 ? new StreamingFileResource(actualFileFor(testname), new FileResource(approvedFileFor(testname)))

@@ -4,7 +4,7 @@ import com.oneeyedmen.okeydoke.Reporter;
 
 import java.io.File;
 
-public class CommandLineReporter implements Reporter<File> {
+public class CommandLineReporter implements Reporter<File, File> {
 
     private final String differ;
 

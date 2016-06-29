@@ -39,6 +39,15 @@ public class FileResource implements Resource {
         return file.exists();
     }
 
+    @Override
+    public long size() {
+        return file.length();
+    }
+
+    public File file() {
+        return file;
+    }
+
     protected OutputStream outputStreamFor(final File file) throws IOException {
         return new LazyOutputStream() {
             @Override

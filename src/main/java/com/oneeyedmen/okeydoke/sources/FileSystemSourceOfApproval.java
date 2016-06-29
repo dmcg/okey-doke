@@ -8,23 +8,23 @@ import java.io.IOException;
 
 public class FileSystemSourceOfApproval implements SourceOfApproval {
 
-    private final Reporter<File> reporter;
+    private final Reporter<File, File> reporter;
     private final File approvedDir;
     private final File actualDir;
     private final String typeExtension;
 
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String typeExtension, Reporter<File> reporter) {
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, String typeExtension, Reporter<File, File> reporter) {
         this.approvedDir = approvedDir;
         this.actualDir = actualDir;
         this.typeExtension = typeExtension;
         this.reporter = reporter;
     }
 
-    public FileSystemSourceOfApproval(File approvedDir, File actualDir, Reporter<File> reporter) {
+    public FileSystemSourceOfApproval(File approvedDir, File actualDir, Reporter<File, File> reporter) {
         this(approvedDir, actualDir, "", reporter);
     }
 
-    public FileSystemSourceOfApproval(File directory, Reporter<File> reporter) {
+    public FileSystemSourceOfApproval(File directory, Reporter<File, File> reporter) {
         this(directory, directory, reporter);
     }
 
@@ -37,12 +37,12 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
     }
 
     @Override
-    public Resource actualFor(String testName) throws IOException {
+    public Resource actualFor(String testName) {
         return new FileResource(actualFileFor(testName));
     }
 
     @Override
-    public Resource approvedFor(String testName) throws IOException {
+    public Resource approvedFor(String testName) {
         return new FileResource(approvedFileFor(testName));
     }
 
@@ -58,9 +58,8 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
                 IO.readResource(actualFor(testName), serializer));
     }
 
-    // Public for testing
-    public File approvedFileFor(String testName) { return new File(approvedDir, testName + approvedExtension()); }
-    public File actualFileFor(String testName) {
+    protected File approvedFileFor(String testName) { return new File(approvedDir, testName + approvedExtension()); }
+    protected File actualFileFor(String testName) {
         return new File(actualDir, testName + actualExtension());
     }
 
@@ -68,7 +67,7 @@ public class FileSystemSourceOfApproval implements SourceOfApproval {
         return ".approved" + typeExtension();
     }
 
-    private String actualExtension() {
+    protected String actualExtension() {
         return ".actual" + typeExtension();
     }
 

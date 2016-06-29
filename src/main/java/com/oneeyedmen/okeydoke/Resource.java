@@ -11,4 +11,5 @@ public interface Resource {
 
     public void remove() throws IOException;
     public boolean exists();
+    public long size();
 }

@@ -1,7 +1,7 @@
 package com.oneeyedmen.okeydoke;
 
-public interface Reporter<StorageT> {
+public interface Reporter<ApprovedStorageT, ActualStorageT> {
 
-    public void reportFailure(StorageT actual, StorageT approved, Throwable e);
+    public void reportFailure(ApprovedStorageT actual, ActualStorageT approved, Throwable e);
 
 }
