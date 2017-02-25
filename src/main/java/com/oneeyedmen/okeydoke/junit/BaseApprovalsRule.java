@@ -3,7 +3,6 @@ package com.oneeyedmen.okeydoke.junit;
 import com.oneeyedmen.okeydoke.ApproverFactory;
 import com.oneeyedmen.okeydoke.BaseApprover;
 import com.oneeyedmen.okeydoke.Formatter;
-import com.oneeyedmen.okeydoke.internal.Naming;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
@@ -17,10 +16,16 @@ import java.io.PrintStream;
 public class BaseApprovalsRule<ApprovedT, ComparedT, ApproverT extends BaseApprover<ApprovedT, ComparedT>> extends TestWatcher {
 
     private final ApproverFactory<ApproverT> factory;
+    private final TestNamer testNamer;
     private ApproverT approver; // can only be bound once the test starts
 
     public BaseApprovalsRule(ApproverFactory<ApproverT> factory) {
+        this(factory, new StandardTestNamer());
+    }
+
+    public BaseApprovalsRule(ApproverFactory<ApproverT> factory, TestNamer testNamer) {
         this.factory = factory;
+        this.testNamer = testNamer;
     }
 
     public PrintStream printStream() {
@@ -55,7 +60,7 @@ public class BaseApprovalsRule<ApprovedT, ComparedT, ApproverT extends BaseAppro
 
     @Override
     public void starting(Description description) {
-        approver = createApprover(Naming.testNameFor(description), description.getTestClass());
+        approver = createApprover(testNamer.nameFor(description), description.getTestClass());
     }
 
     @Override

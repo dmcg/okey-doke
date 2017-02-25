@@ -4,7 +4,6 @@ import com.oneeyedmen.okeydoke.*;
 import com.oneeyedmen.okeydoke.formatters.InvocationFormatter;
 import com.oneeyedmen.okeydoke.internal.Fred;
 import com.oneeyedmen.okeydoke.internal.MethodFinder;
-import com.oneeyedmen.okeydoke.internal.Naming;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
@@ -26,6 +25,7 @@ public class TheoryApprovalsRule extends TestWatcher {
 
     private final Map<Description, Approver> approvers = new HashMap<Description, Approver>();
     private final ApproverFactory<Approver> factory;
+    private final TestNamer testNamer;
 
     private Description description;
 
@@ -38,7 +38,12 @@ public class TheoryApprovalsRule extends TestWatcher {
     }
 
     public TheoryApprovalsRule(ApproverFactory factory) {
+        this(factory, new StandardTestNamer());
+    }
+
+    public TheoryApprovalsRule(ApproverFactory factory, TestNamer testNamer) {
         this.factory = factory;
+        this.testNamer = testNamer;
     }
 
     public TheoryApprover approver() {
@@ -86,7 +91,7 @@ public class TheoryApprovalsRule extends TestWatcher {
         public void starting(Description description) {
             theory = description;
             if (!approvers.containsKey(description))
-                approvers.put(theory, factory.createApprover(Naming.testNameFor(description), TheoryApprovalsRule.this.description.getTestClass()));
+                approvers.put(theory, factory.createApprover(testNamer.nameFor(description), TheoryApprovalsRule.this.description.getTestClass()));
             super.starting(description);
         }
 

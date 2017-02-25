@@ -1,15 +1,15 @@
-package com.oneeyedmen.okeydoke.internal;
+package com.oneeyedmen.okeydoke.junit;
 
 import org.junit.runner.Description;
 
-public class Naming {
+public class StandardTestNamer implements TestNamer {
 
-    public static String testNameFor(Description description) {
+    @Override
+    public String nameFor(Description description) {
         String justTheClassName = description.getTestClass().getSimpleName();
         String methodName = description.getMethodName();
         return methodName == null ?
                 justTheClassName :
                 justTheClassName + "." + methodName;
     }
-
 }
