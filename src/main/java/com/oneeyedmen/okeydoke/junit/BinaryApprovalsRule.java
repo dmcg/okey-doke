@@ -27,4 +27,8 @@ public class BinaryApprovalsRule extends BaseApprovalsRule<byte[], byte[], Binar
         super(factory);
     }
 
+    public BinaryApprovalsRule(ApproverFactory<BinaryApprover> factory, TestNamer testNamer) {
+        super(factory, testNamer);
+    }
+
 }

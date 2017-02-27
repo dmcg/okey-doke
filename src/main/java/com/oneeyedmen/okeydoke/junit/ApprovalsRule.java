@@ -28,6 +28,10 @@ public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
         super(factory);
     }
 
+    public ApprovalsRule(ApproverFactory factory, TestNamer testNamer) {
+        super(factory, testNamer);
+    }
+
     public Transcript transcript() {
         return approver().transcript();
     }
