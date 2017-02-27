@@ -12,7 +12,7 @@ to compare current thing with an approved version and fail with a diff if they a
 
 ```java
 
-    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("src/test/java");
+    @Rule public final ApprovalsRule approver = ApprovalsRule.usualRule();
 
     @Test
     public void doesnt_match_where_no_approved_result() throws IOException {
