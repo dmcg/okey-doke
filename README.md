@@ -81,10 +81,8 @@ for easy testing of legacy code.
 ```
 
 Then move on to
-
 - [TranscriptTest](src/test/java/com/oneeyedmen/okeydoke/examples/TranscriptTest.java)
 for producing approved files with interactions
-- [Konsent](https://github.com/dmcg/konsent) for producing Gerkin-like output from your tests that the customer can approve.
-
-Oh, and I should mention, there is an [IntelliJ plugin](https://github.com/s4nchez/okey-doke-idea) (thanks Ivan) to help approve your output.
+- [PickleTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTest.java) and [PickleTableTest](src/test/java/com/oneeyedmen/okeydoke/examples/PickleTablesTest.java)
+for producing Gerkin-like output from your tests that the customer can approve.
 
