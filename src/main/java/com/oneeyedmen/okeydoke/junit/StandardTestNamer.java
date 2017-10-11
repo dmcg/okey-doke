@@ -9,15 +9,15 @@ public class StandardTestNamer implements TestNamer {
 
     @Override
     public String nameFor(Description description) {
-        return nameFromClass(description) + nameFromMethod(description);
+        return nameFromClass(description) + suffixFromMethod(description);
     }
 
-    private String nameFromMethod(Description description) {
+    private String suffixFromMethod(Description description) {
         String override = nameFromMethodAnnotation(description);
         if (override != null)
             return "." + override;
         String methodNameFromDescription = description.getMethodName();
-        return methodNameFromDescription == null ? "" : "." + methodNameFromDescription;
+        return methodNameFromDescription == null ? "" : ("." + methodNameFromDescription);
     }
 
     private String nameFromMethodAnnotation(Description description) {
@@ -43,7 +43,7 @@ public class StandardTestNamer implements TestNamer {
     private String nameFromClass(Description description) {
         Class<?> testClass = description.getTestClass();
         if (testClass == null)
-            return "";
+            return description.getClassName();
         Name annotation = testClass.getAnnotation(Name.class);
         return annotation == null ? testClass.getSimpleName() : annotation.value();
     }
