@@ -36,14 +36,16 @@
   </scm>
 
     <dependencies>
+        <!-- Scoped as provided so that you can use JUnit 4 or JUnit 5 dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- These are scoped as provided so that we don't depend on them
-             They are used only by Fred -->
+     They are used only by Fred, and hence experimental -->
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
@@ -56,7 +58,6 @@
             <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -67,8 +68,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <optimize>true</optimize>
                     <debug>true</debug>
                 </configuration>
