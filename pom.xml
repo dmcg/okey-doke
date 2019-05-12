@@ -3,7 +3,7 @@
 
     <groupId>com.oneeyedmen</groupId>
     <artifactId>okeydoke</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>okeydoke</name>
@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:dmcg/okey-doke.git</connection>
         <developerConnection>scm:git:git@github.com:dmcg/okey-doke.git</developerConnection>
         <url>https://github.com/dmcg/okey-doke</url>
-      <tag>HEAD</tag>
+      <tag>okeydoke-1.2.0</tag>
   </scm>
 
     <dependencies>
@@ -111,6 +111,13 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+<!--                            <passphraseServerId>${gpg.keyname}</passphraseServerId>-->
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
