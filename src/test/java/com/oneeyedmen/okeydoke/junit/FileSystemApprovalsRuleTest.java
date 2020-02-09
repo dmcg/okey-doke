@@ -1,8 +1,8 @@
 package com.oneeyedmen.okeydoke.junit;
 
-import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.io.IOException;
 
@@ -24,17 +24,17 @@ public class FileSystemApprovalsRuleTest {
         }
     }
 
-    @Test public void matches_when_approved_result_matches() throws IOException {
+    @Test public void matches_when_approved_result_matches() {
         approver.assertApproved("banana");
     }
 
-    @Test public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
+    @Test public void doesnt_match_when_approved_result_doesnt_match() {
         try {
             approver.assertApproved("kumquat");
             fail();
-        } catch (ComparisonFailure expected) {
-            assertEquals("kumquat", expected.getActual());
-            assertEquals("banana", expected.getExpected());
+        } catch (AssertionFailedError expected) {
+            assertEquals("kumquat", expected.getActual().getValue());
+            assertEquals("banana", expected.getExpected().getValue());
         }
     }
 }

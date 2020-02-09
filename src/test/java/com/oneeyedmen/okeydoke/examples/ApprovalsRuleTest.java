@@ -1,10 +1,10 @@
 package com.oneeyedmen.okeydoke.examples;
 
 import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
-import org.junit.ComparisonFailure;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.io.IOException;
 
@@ -39,9 +39,9 @@ public class ApprovalsRuleTest {
         try {
             approver.assertApproved("kumquat");
             fail("should have thrown");
-        } catch (ComparisonFailure expected) {
-            assertEquals("kumquat", expected.getActual());
-            assertEquals("banana", expected.getExpected());
+        } catch (AssertionFailedError expected) {
+            assertEquals("kumquat", expected.getActual().getValue());
+            assertEquals("banana", expected.getExpected().getValue());
         }
     }
 

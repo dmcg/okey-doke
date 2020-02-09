@@ -36,16 +36,20 @@
   </scm>
 
     <dependencies>
-        <!-- Scoped as provided so that you can use JUnit 4 or JUnit 5 dependencies -->
+        <dependency>
+            <groupId>org.opentest4j</groupId>
+            <artifactId>opentest4j</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <!-- These are scoped as provided so that we don't depend on them
+             They are used only by Fred, and hence experimental -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- These are scoped as provided so that we don't depend on them
-     They are used only by Fred, and hence experimental -->
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>

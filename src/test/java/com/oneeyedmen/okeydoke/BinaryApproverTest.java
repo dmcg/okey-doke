@@ -1,9 +1,9 @@
 package com.oneeyedmen.okeydoke;
 
 import com.oneeyedmen.okeydoke.testutils.CleanDirectoryRule;
-import org.junit.ComparisonFailure;
 import org.junit.Rule;
 import org.junit.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class BinaryApproverTest {
         try {
             approver.assertApproved("banana".getBytes());
             fail();
-        } catch (AssertionError failure) {
+        } catch (AssertionFailedError failure) {
         }
     }
 
@@ -35,9 +35,9 @@ public class BinaryApproverTest {
         try {
             approver.assertApproved("bnana".getBytes());
             fail();
-        } catch (ComparisonFailure failure) {
-            assertEquals("62 6E 61 6E 61", failure.getActual());
-            assertEquals("62 61 6E 61 6E 61", failure.getExpected());
+        } catch (AssertionFailedError failure) {
+            assertEquals("62 6E 61 6E 61", failure.getActual().getValue());
+            assertEquals("62 61 6E 61 6E 61", failure.getExpected().getValue());
         }
     }
 

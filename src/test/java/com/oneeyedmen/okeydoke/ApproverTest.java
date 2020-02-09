@@ -1,15 +1,15 @@
 package com.oneeyedmen.okeydoke;
 
 import com.oneeyedmen.okeydoke.testutils.CleanDirectoryRule;
-import org.junit.ComparisonFailure;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class ApproverTest {
 
@@ -24,10 +24,11 @@ public class ApproverTest {
     public void doesnt_match_where_no_approved_result() throws IOException {
         whenApprovedIs(null);
         try {
-            approver.assertApproved("banana");
+            approver.assertApproved("kumquat");
             fail("should have thrown");
-        } catch (AssertionError expected) {
-            assertEquals("expected:<null> but was:<banana>", expected.getMessage());
+        } catch (AssertionFailedError exception) {
+            assertNull(exception.getExpected().getValue());
+            assertEquals("kumquat", exception.getActual().getStringRepresentation());
         }
     }
 
@@ -41,10 +42,16 @@ public class ApproverTest {
         try {
             approver.assertApproved("kumquat");
             fail("should have thrown");
-        } catch (ComparisonFailure expected) {
-            assertEquals("kumquat", expected.getActual());
-            assertEquals("banana", expected.getExpected());
+        } catch (AssertionFailedError exception) {
+            assertEquals("banana", exception.getExpected().getValue());
+            assertEquals("kumquat", exception.getActual().getValue());
         }
+    }
+
+    @Ignore("Unignore to see no failure in IDE")
+    @Test public void what_does_intellij_say() throws IOException {
+        whenApprovedIs("banana");
+        approver.assertApproved("kumquat");
     }
 
     @Test public void can_assert_with_nothing_approved() throws IOException {
