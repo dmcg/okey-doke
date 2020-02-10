@@ -42,6 +42,13 @@
             <version>1.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- These are scoped as provided so that we don't depend on them
              They are used only by Fred, and hence experimental -->
         <dependency>
@@ -60,6 +67,12 @@
             <groupId>org.jmock</groupId>
             <artifactId>jmock-legacy</artifactId>
             <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
