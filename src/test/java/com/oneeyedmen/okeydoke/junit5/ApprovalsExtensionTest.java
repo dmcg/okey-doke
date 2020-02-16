@@ -14,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(ApprovalsExtension.class)
 public class ApprovalsExtensionTest {
 
+    private static File dir = new File("src/test/resources/com/oneeyedmen/okeydoke/junit5/");
+
     @AfterEach
     public void cleanupFiles() {
-        new File("src/test/resources/com/oneeyedmen/okeydoke/junit5/ApprovalsExtensionTest.shouldFailInvalidOutput.actual").delete();
-        new File("src/test/resources/com/oneeyedmen/okeydoke/junit5/ApprovalsExtensionTest.shouldRetainTheActualOutputOnFailure.actual").delete();
+        new File(dir, "ApprovalsExtensionTest.shouldFailInvalidOutput.actual").delete();
+        new File(dir, "ApprovalsExtensionTest.shouldRetainTheActualOutputOnFailure.actual").delete();
     }
 
     @Test
@@ -37,7 +39,6 @@ public class ApprovalsExtensionTest {
         } catch (Throwable ignored) {
         }
 
-        assertTrue(new File("src/test/resources/com/oneeyedmen/okeydoke/junit5/ApprovalsExtensionTest.shouldRetainTheActualOutputOnFailure.actual").exists());
+        assertTrue(new File(dir, "ApprovalsExtensionTest.shouldRetainTheActualOutputOnFailure.actual").exists());
     }
-
 }

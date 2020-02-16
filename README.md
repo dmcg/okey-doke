@@ -6,6 +6,8 @@ An Approval Testing library for Java and JUnit - like [Llewellyn Falco's](http:/
 
 A [helping hand](http://youtu.be/EbqaxWjIgOg) for many testing problems.
 
+## JUnit 4
+
 The basic mode of operation is
 [ApprovalsRuleTest](src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.java)
 to compare current thing with an approved version and fail with a diff if they aren't the same.
@@ -36,9 +38,9 @@ to compare current thing with an approved version and fail with a diff if they a
         try {
             approver.assertApproved("kumquat");
             fail("should have thrown");
-        } catch (ComparisonFailure expected) {
-            assertEquals("kumquat", expected.getActual());
-            assertEquals("banana", expected.getExpected());
+        } catch (AssertionFailedError expected) {
+            assertEquals("kumquat", expected.getActual().getValue());
+            assertEquals("banana", expected.getExpected().getValue());
         }
     }
 
@@ -85,5 +87,52 @@ Then move on to
 for producing approved files with interactions
 - [Konsent](https://github.com/dmcg/konsent) for producing Gerkin-like output from your tests that the customer can approve.
 
-Oh, and I should mention, there is an [IntelliJ plugin](https://github.com/s4nchez/okey-doke-idea) (thanks Ivan) to help approve your output.
+## JUnit 5
+
+Thanks to @jshiell we now have basic JUnit 5 support.
+
+The basic mode of operation is
+
+[ApprovalsExtensionTest](src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsExtensionTest.java)
+to compare current thing with an approved version and fail with a diff if they aren't the same.
+
+```java
+@ExtendWith(ApprovalsExtension.class)
+public class ApprovalsExtensionTest {
+
+
+    @Test
+    public void doesnt_match_where_no_approved_result(Approver approver) throws IOException {
+        whenApprovedIs(null, approver);
+        try {
+            approver.assertApproved("banana");
+            fail("should have thrown");
+        } catch (AssertionError expected) {
+        }
+    }
+
+    @Test
+    public void matches_when_approved_result_matches(Approver approver) throws IOException {
+        whenApprovedIs("banana", approver);
+        approver.assertApproved("banana");
+    }
+
+    @Test
+    public void doesnt_match_when_approved_result_doesnt_match(Approver approver) throws IOException {
+        whenApprovedIs("banana", approver);
+        try {
+            approver.assertApproved("kumquat");
+            fail("should have thrown");
+        } catch (AssertionFailedError expected) {
+            assertEquals("kumquat", expected.getActual().getValue());
+            assertEquals("banana", expected.getExpected().getValue());
+        }
+    }
+
+```
+
+
+## IntelliJ
+
+Oh, and I should mention, there is an [IntelliJ plugin](https://github.com/s4nchez/okey-doke-idea) (thanks @s4nchez) to help approve your output.
 

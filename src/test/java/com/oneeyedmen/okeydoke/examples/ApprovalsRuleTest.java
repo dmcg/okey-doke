@@ -65,5 +65,4 @@ public class ApprovalsRuleTest {
         else
             approver.makeApproved(valueOrNull);
     }
-
 }
