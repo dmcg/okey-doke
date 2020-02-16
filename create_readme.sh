@@ -8,6 +8,8 @@ function write_file_contents {
 }
 
 echo "
+[![Download](https://api.bintray.com/packages/dmcg/oneeyedmen-mvn/okey-doke/images/download.svg)](https://bintray.com/dmcg/oneeyedmen-mvn/okey-doke/_latestVersion)
+
 okey-doke
 =========
 
