@@ -12,8 +12,10 @@ import java.io.File;
  */
 public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
 
+    public static final String usualJavaSourceRoot = "src/test/java";
+
     public static ApprovalsRule usualRule() {
-        return fileSystemRule("src/test/java");
+        return fileSystemRule(usualJavaSourceRoot);
     }
 
     public static ApprovalsRule fileSystemRule(String sourceRoot) {

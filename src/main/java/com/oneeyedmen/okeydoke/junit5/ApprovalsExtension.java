@@ -1,30 +1,49 @@
 package com.oneeyedmen.okeydoke.junit5;
 
 import com.oneeyedmen.okeydoke.Approver;
-import com.oneeyedmen.okeydoke.ApproverFactories;
 import com.oneeyedmen.okeydoke.ApproverFactory;
 import com.oneeyedmen.okeydoke.Name;
-import org.junit.jupiter.api.extension.*;
+import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
 
 import java.io.File;
 import java.lang.reflect.Method;
 
+import static com.oneeyedmen.okeydoke.ApproverFactories.fileSystemApproverFactory;
+
 public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
 
-    private static final String STORE_KEY = "approver";
+    private static final String STORE_KEY = "okeydoke.approver";
 
-    private final ApproverFactory<Approver> factory = ApproverFactories.fileSystemApproverFactory(new File("src/test/resources"));
+    private final ApproverFactory<Approver> factory;
     private final TestNamer testNamer = new TestNamer();
 
+    public ApprovalsExtension(ApproverFactory<Approver> factory) {
+        this.factory = factory;
+    }
+
+    public ApprovalsExtension(String sourceRoot) {
+        this(fileSystemApproverFactory(new File(sourceRoot)));
+    }
+
+    public ApprovalsExtension() {
+        this(ApprovalsRule.usualJavaSourceRoot);
+    }
+
     @Override
-    public void beforeTestExecution(ExtensionContext context) throws Exception {
+    public void beforeTestExecution(ExtensionContext context) {
         store(context).put(STORE_KEY, factory.createApprover(
                 testNamer.nameFor(context.getRequiredTestClass(), context.getRequiredTestMethod()),
                 context.getRequiredTestClass()));
     }
 
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterTestExecution(ExtensionContext context) {
         if (!context.getExecutionException().isPresent()) {
             Approver approver = (Approver) store(context).get(STORE_KEY);
             if (!approver.satisfactionChecked()) {

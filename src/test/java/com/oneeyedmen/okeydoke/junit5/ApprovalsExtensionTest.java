@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(ApprovalsExtension.class)
 public class ApprovalsExtensionTest {
 
-    private static File dir = new File("src/test/resources/com/oneeyedmen/okeydoke/junit5/");
+    private static File dir = new File("src/test/java/com/oneeyedmen/okeydoke/junit5/");
 
     @AfterEach
     public void cleanupFiles() {
