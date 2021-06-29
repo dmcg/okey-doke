@@ -1,5 +1,6 @@
 
-[![Download](https://api.bintray.com/packages/dmcg/oneeyedmen-mvn/okey-doke/images/download.svg)](https://bintray.com/dmcg/oneeyedmen-mvn/okey-doke/_latestVersion)
+[![Download](https://maven-badges.herokuapp.com/maven-central/com.oneeyedmen/okeydoke/badge.svg?style=flat-square
+)](https://search.maven.org/artifact/com.oneeyedmen/okeydoke)
 
 okey-doke
 =========
