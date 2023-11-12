@@ -1,4 +1,4 @@
-package com.oneeyedmen.okeydoke.junit;
+package com.oneeyedmen.okeydoke.junit4;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static com.oneeyedmen.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
+import static com.oneeyedmen.okeydoke.junit4.TheoryApprovalsRule.fileSystemRule;
 
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleTest {

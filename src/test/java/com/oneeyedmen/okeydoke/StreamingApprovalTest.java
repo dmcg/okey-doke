@@ -1,6 +1,6 @@
 package com.oneeyedmen.okeydoke;
 
-import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.ApprovalsRule;
 import com.oneeyedmen.okeydoke.util.TestDirectory;
 import org.junit.Ignore;
 import org.junit.Rule;

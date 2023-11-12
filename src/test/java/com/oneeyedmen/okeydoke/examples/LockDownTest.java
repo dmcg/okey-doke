@@ -1,6 +1,6 @@
 package com.oneeyedmen.okeydoke.examples;
 
-import com.oneeyedmen.okeydoke.junit.TheoryApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.TheoryApprovalsRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static com.oneeyedmen.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
+import static com.oneeyedmen.okeydoke.junit4.TheoryApprovalsRule.fileSystemRule;
 
 /**
  * Here we show how to use Theories and DataPoints to push all combinations of parameters into an approver

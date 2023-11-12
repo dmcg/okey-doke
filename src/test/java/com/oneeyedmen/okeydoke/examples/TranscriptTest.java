@@ -1,7 +1,7 @@
 package com.oneeyedmen.okeydoke.examples;
 
 import com.oneeyedmen.okeydoke.Transcript;
-import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.ApprovalsRule;
 import org.junit.Rule;
 import org.junit.Test;
 

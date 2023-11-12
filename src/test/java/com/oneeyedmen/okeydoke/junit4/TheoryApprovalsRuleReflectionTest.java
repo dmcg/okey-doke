@@ -1,10 +1,10 @@
-package com.oneeyedmen.okeydoke.junit;
+package com.oneeyedmen.okeydoke.junit4;
 
 import org.junit.Test;
 import org.junit.experimental.theories.Theories;
 import org.junit.runner.RunWith;
 
-import static com.oneeyedmen.okeydoke.junit.TheoryApprovalsRule.fileSystemRule;
+import static com.oneeyedmen.okeydoke.junit4.TheoryApprovalsRule.fileSystemRule;
 
 @RunWith(Theories.class)
 public class TheoryApprovalsRuleReflectionTest {

@@ -2,7 +2,7 @@ package com.oneeyedmen.okeydoke.testutils;
 
 import com.oneeyedmen.okeydoke.Approver;
 import com.oneeyedmen.okeydoke.ApproverFactory;
-import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.ApprovalsRule;
 
 public class PrecannedApprovalsRule {
 

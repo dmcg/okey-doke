@@ -3,7 +3,7 @@ package com.oneeyedmen.okeydoke.sources;
 import com.oneeyedmen.okeydoke.Approver;
 import com.oneeyedmen.okeydoke.Reporters;
 import com.oneeyedmen.okeydoke.internal.OperatingSystem;
-import com.oneeyedmen.okeydoke.junit.TestDirectoryRule;
+import com.oneeyedmen.okeydoke.junit4.TestDirectoryRule;
 import com.oneeyedmen.okeydoke.reporters.PopupReporter;
 import org.junit.Ignore;
 import org.junit.Rule;

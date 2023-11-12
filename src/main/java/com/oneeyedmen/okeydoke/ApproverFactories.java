@@ -1,6 +1,6 @@
 package com.oneeyedmen.okeydoke;
 
-import com.oneeyedmen.okeydoke.junit.BinaryApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.BinaryApprovalsRule;
 
 import java.io.File;
 

@@ -3,7 +3,7 @@ package com.oneeyedmen.okeydoke.junit5;
 import com.oneeyedmen.okeydoke.Approver;
 import com.oneeyedmen.okeydoke.ApproverFactory;
 import com.oneeyedmen.okeydoke.Name;
-import com.oneeyedmen.okeydoke.junit.ApprovalsRule;
+import com.oneeyedmen.okeydoke.junit4.ApprovalsRule;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

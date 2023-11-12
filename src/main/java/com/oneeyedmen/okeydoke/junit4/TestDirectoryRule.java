@@ -1,4 +1,4 @@
-package com.oneeyedmen.okeydoke.junit;
+package com.oneeyedmen.okeydoke.junit4;
 
 import com.oneeyedmen.okeydoke.util.TestDirectory;
 import org.junit.rules.TestWatcher;
