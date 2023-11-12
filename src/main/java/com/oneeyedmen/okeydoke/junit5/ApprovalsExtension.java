@@ -16,6 +16,11 @@ import java.lang.reflect.Method;
 
 import static com.oneeyedmen.okeydoke.ApproverFactories.fileSystemApproverFactory;
 
+/**
+ * A JUnit 5 Extension to provide an Approver as a parameter to test functions.
+ *
+ * Stores approved files in src/test/java
+ */
 public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
 
     private static final String STORE_KEY = "okeydoke.approver";
