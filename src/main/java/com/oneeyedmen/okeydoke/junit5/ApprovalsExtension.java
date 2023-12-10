@@ -40,7 +40,7 @@ public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTes
     }
 
     public ApprovalsExtension(String extension) {
-        this(fileSystemApproverFactory(new File(findARootDirectory(), extension)));
+        this(fileSystemApproverFactory(findARootDirectory(), extension));
     }
 
     public ApprovalsExtension() {
