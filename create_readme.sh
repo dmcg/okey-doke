@@ -9,7 +9,7 @@ function write_file_contents {
 
 echo "
 [![Download](https://maven-badges.herokuapp.com/maven-central/com.oneeyedmen/okeydoke/badge.svg?style=flat-square
-)](https://search.maven.org/artifact/com.oneemvnyedmen/okeydoke)
+)](https://search.maven.org/artifact/com.oneeyedmen/okeydoke)
 
 okey-doke
 =========
