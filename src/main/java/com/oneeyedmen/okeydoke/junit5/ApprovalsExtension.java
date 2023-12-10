@@ -3,13 +3,8 @@ package com.oneeyedmen.okeydoke.junit5;
 import com.oneeyedmen.okeydoke.Approver;
 import com.oneeyedmen.okeydoke.ApproverFactory;
 import com.oneeyedmen.okeydoke.Name;
-import com.oneeyedmen.okeydoke.junit4.ApprovalsRule;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
+import com.oneeyedmen.okeydoke.util.DirectoryFinder;
+import org.junit.jupiter.api.extension.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -18,14 +13,12 @@ import static com.oneeyedmen.okeydoke.ApproverFactories.fileSystemApproverFactor
 
 /**
  * A JUnit 5 Extension to provide an Approver as a parameter to test functions.
- *
+ * <br>
  * Use as a class in `@ExtendWith(ApprovalsExtension.class)`
- *
+ * <br>
  * or a field
- *
- * @RegisterExtension ApprovalsExtension approvals = new ApprovalsExtension();
- *
- * Stores approved files in src/test/java by default.
+ * <br>
+ * `@RegisterExtension ApprovalsExtension approvals = new ApprovalsExtension();`
  */
 public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
 
@@ -47,11 +40,11 @@ public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTes
     }
 
     public ApprovalsExtension(String extension) {
-        this(fileSystemApproverFactory(new File(ApprovalsRule.usualJavaSourceRoot, extension)));
+        this(fileSystemApproverFactory(new File(findARootDirectory(), extension)));
     }
 
     public ApprovalsExtension() {
-        this(new File(ApprovalsRule.usualJavaSourceRoot));
+        this(findARootDirectory());
     }
 
     @Override
@@ -108,5 +101,19 @@ public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTes
             }
             return testClass.getSimpleName();
         }
+    }
+
+    private static final File[] likelyDirectories = {
+            new File("src/test/java"),
+            new File("src/test/kotlin"),
+            new File("src/test/scala")
+    };
+
+    private static File findARootDirectory() {
+        File firstDirThatExists = DirectoryFinder.firstDirThatExists(likelyDirectories);
+        if (firstDirThatExists == null) {
+            throw new IllegalStateException("Couldn't find a source directory");
+        }
+        return firstDirThatExists;
     }
 }
