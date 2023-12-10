@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:dmcg/okey-doke.git</connection>
         <developerConnection>scm:git:git@github.com:dmcg/okey-doke.git</developerConnection>
         <url>https://github.com/dmcg/okey-doke</url>
-      <tag>HEAD</tag>
+      <tag>okeydoke-2.0.0</tag>
   </scm>
 
     <dependencies>
