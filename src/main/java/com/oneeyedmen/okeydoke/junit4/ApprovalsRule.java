@@ -7,19 +7,26 @@ import com.oneeyedmen.okeydoke.Transcript;
 
 import java.io.File;
 
+import static com.oneeyedmen.okeydoke.internal.DirectoryFinder.findARootDirectory;
+
 /**
  * Use as an @Rule to automate approvals in JUnit.
  */
 public class ApprovalsRule extends BaseApprovalsRule<Object, String, Approver> {
 
+    /** Left for backward compatibility **/
     public static final String usualJavaSourceRoot = "src/test/java";
 
     public static ApprovalsRule usualRule() {
-        return fileSystemRule(usualJavaSourceRoot);
+        return fileSystemRule(findARootDirectory());
     }
 
     public static ApprovalsRule fileSystemRule(String sourceRoot) {
-        return new ApprovalsRule(ApproverFactories.fileSystemApproverFactory(new File(sourceRoot)));
+        return fileSystemRule(new File(sourceRoot));
+    }
+
+    public static ApprovalsRule fileSystemRule(File sourceRoot) {
+        return new ApprovalsRule(ApproverFactories.fileSystemApproverFactory(sourceRoot));
     }
 
     public static ApprovalsRule streamingFileSystemRule(String sourceRoot) {

@@ -1,5 +1,6 @@
 package com.oneeyedmen.okeydoke.util;
 
+import com.oneeyedmen.okeydoke.internal.DirectoryFinder;
 import org.junit.Before;
 import org.junit.Test;
 

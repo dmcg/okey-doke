@@ -5,64 +5,28 @@ import com.oneeyedmen.okeydoke.junit5.ApprovalsExtension;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.opentest4j.AssertionFailedError;
 
 import java.io.IOException;
 
+import static com.oneeyedmen.okeydoke.examples.Support.doSomeCalculation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //README_TEXT
-@ExtendWith(ApprovalsExtension.class)
 public class ApprovalsExtensionTest {
 
+    // Initialise okey-doke.
+    @RegisterExtension ApprovalsExtension approvals = new ApprovalsExtension();
+        // See other constructors to change where the files are stored,
+        // or change the extension
 
     @Test
-    public void doesnt_match_where_no_approved_result(Approver approver) throws IOException {
-        whenApprovedIs(null, approver);
-        try {
-            approver.assertApproved("banana");
-            fail("should have thrown");
-        } catch (AssertionError expected) {
-        }
-    }
-
-    @Test
-    public void matches_when_approved_result_matches(Approver approver) throws IOException {
-        whenApprovedIs("banana", approver);
-        approver.assertApproved("banana");
-    }
-
-    @Test
-    public void doesnt_match_when_approved_result_doesnt_match(Approver approver) throws IOException {
-        whenApprovedIs("banana", approver);
-        try {
-            approver.assertApproved("kumquat");
-            fail("should have thrown");
-        } catch (AssertionFailedError expected) {
-            assertEquals("kumquat", expected.getActual().getValue());
-            assertEquals("banana", expected.getExpected().getValue());
-        }
-    }
-
-    //README_TEXT
-
-    @Disabled("Unignore to see no approval in IDE")
-    @Test public void see_how_my_IDE_reports_no_approval(Approver approver) throws IOException {
-        whenApprovedIs(null, approver);
-        approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
-    }
-
-    @Disabled("Unignore to see failure report in IDE")
-    @Test public void see_how_my_IDE_reports_diffs(Approver approver) throws IOException {
-        whenApprovedIs("Deliberate failure - Jackdaws love my big sphinx of quartz", approver);
-        approver.assertApproved("Deliberate failure - Jackdaws peck my big sphincter of quartz");
-    }
-
-    private void whenApprovedIs(String valueOrNull, Approver approver) throws IOException {
-        if (valueOrNull == null)
-            approver.removeApproved();
-        else
-            approver.makeApproved(valueOrNull);
+    public void something_that_we_want_to_be_the_same_next_time(
+            Approver approver // approver will be injected
+    ) {
+        Object result = doSomeCalculation(42, "banana");
+        approver.assertApproved(result); // check that the result is as approved
     }
 }

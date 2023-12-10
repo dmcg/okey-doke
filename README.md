@@ -9,53 +9,42 @@ An Approval Testing library for Java and JUnit - like [Llewellyn Falco's](http:/
 
 A [helping hand](http://youtu.be/EbqaxWjIgOg) for many testing problems.
 
-## Breaking Change
+## Version 2
 
-If you are upgrading from verions 1.x to version 2.x - JUnit 4 support has been moved from com.oneeyedmen.junit to com.oneeyedmen.junit4
+If you are upgrading from verions 1.x to version 2.x - JUnit 4 support has been moved from `com.oneeyedmen.junit` to `com.oneeyedmen.junit4`.
+
+In return, you no longer need to specify whether your are using Java or Kotlin
 
 ## JUnit 5
 
-Add an @ExtendWith(ApprovalsExtension.class) to your test class to get access to an approver in every test method
-
-[ApprovalsExtensionTest](src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsExtensionTest.java)
-to compare current thing with an approved version and fail with a diff if they aren't the same.
 
 ```java
-@ExtendWith(ApprovalsExtension.class)
 public class ApprovalsExtensionTest {
 
+    // Initialise okey-doke.
+    @RegisterExtension ApprovalsExtension approvals = new ApprovalsExtension();
+        // See other constructors to change where the files are stored,
+        // or change the extension
 
     @Test
-    public void doesnt_match_where_no_approved_result(Approver approver) throws IOException {
-        whenApprovedIs(null, approver);
-        try {
-            approver.assertApproved("banana");
-            fail("should have thrown");
-        } catch (AssertionError expected) {
-        }
+    public void something_that_we_want_to_be_the_same_next_time(
+            Approver approver // approver will be injected
+    ) {
+        Object result = doSomeCalculation(42, "banana");
+        approver.assertApproved(result); // check that the result is as approved
     }
-
-    @Test
-    public void matches_when_approved_result_matches(Approver approver) throws IOException {
-        whenApprovedIs("banana", approver);
-        approver.assertApproved("banana");
-    }
-
-    @Test
-    public void doesnt_match_when_approved_result_doesnt_match(Approver approver) throws IOException {
-        whenApprovedIs("banana", approver);
-        try {
-            approver.assertApproved("kumquat");
-            fail("should have thrown");
-        } catch (AssertionFailedError expected) {
-            assertEquals("kumquat", expected.getActual().getValue());
-            assertEquals("banana", expected.getExpected().getValue());
-        }
-    }
-
+}
 ```
 
-If your source is in src/test/kotlin use [KotlinApprovalsExtension] instead.
+
+The first time you run this test it will fail, but the result of `doSomeCalculation` will  be written into a
+file next to the test, named  `ApprovalsExtensionTest.something_that_we_want_to_be_the_same_next_time.actual`
+
+You can look at this file to check that it is what you expect, and if it is, approve the test by renaming the file
+it to `ApprovalsExtensionTest.something_that_we_want_to_be_the_same_next_time.approved` (or ask the plugin to do it for you).
+
+From then on the test will pass provided the result of `doSomeCalculation` doesn't change.
+If it does change then you can either fix the code if it shouldn't have, or approve the new version.
 
 ## IntelliJ
 
@@ -65,42 +54,17 @@ There is an [IntelliJ plugin](https://github.com/s4nchez/okey-doke-idea) (thanks
 
 We still support JUnit 4 with a Rule -
 [ApprovalsRuleTest](src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsRuleTest.java)
-to compare current thing with an approved version and fail with a diff if they aren't the same.
 
 ```java
-
     @Rule public final ApprovalsRule approver = ApprovalsRule.usualRule();
 
     @Test
-    public void doesnt_match_where_no_approved_result() throws IOException {
-        whenApprovedIs(null);
-        try {
-            approver.assertApproved("banana");
-            fail("should have thrown");
-        } catch (AssertionError expected) {
-        }
+    public void something_that_we_want_to_be_the_same_next_time(
+    ) {
+        Object result = doSomeCalculation(42, "banana");
+        approver.assertApproved(result); // check that the result is as approved
     }
-
-    @Test
-    public void matches_when_approved_result_matches() throws IOException {
-        whenApprovedIs("banana");
-        approver.assertApproved("banana");
-    }
-
-    @Test
-    public void doesnt_match_when_approved_result_doesnt_match() throws IOException {
-        whenApprovedIs("banana");
-        try {
-            approver.assertApproved("kumquat");
-            fail("should have thrown");
-        } catch (AssertionFailedError expected) {
-            assertEquals("kumquat", expected.getActual().getValue());
-            assertEquals("banana", expected.getExpected().getValue());
-        }
-    }
-
 ```
 
-
-
+Here you can use the `ApprovalsRule` as a approver.
 

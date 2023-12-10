@@ -3,13 +3,14 @@ package com.oneeyedmen.okeydoke.junit5;
 import com.oneeyedmen.okeydoke.Approver;
 import com.oneeyedmen.okeydoke.ApproverFactory;
 import com.oneeyedmen.okeydoke.Name;
-import com.oneeyedmen.okeydoke.util.DirectoryFinder;
+import com.oneeyedmen.okeydoke.internal.DirectoryFinder;
 import org.junit.jupiter.api.extension.*;
 
 import java.io.File;
 import java.lang.reflect.Method;
 
 import static com.oneeyedmen.okeydoke.ApproverFactories.fileSystemApproverFactory;
+import static com.oneeyedmen.okeydoke.internal.DirectoryFinder.findARootDirectory;
 
 /**
  * A JUnit 5 Extension to provide an Approver as a parameter to test functions.
@@ -101,19 +102,5 @@ public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTes
             }
             return testClass.getSimpleName();
         }
-    }
-
-    private static final File[] likelyDirectories = {
-            new File("src/test/java"),
-            new File("src/test/kotlin"),
-            new File("src/test/scala")
-    };
-
-    private static File findARootDirectory() {
-        File firstDirThatExists = DirectoryFinder.firstDirThatExists(likelyDirectories);
-        if (firstDirThatExists == null) {
-            throw new IllegalStateException("Couldn't find a source directory");
-        }
-        return firstDirThatExists;
     }
 }
