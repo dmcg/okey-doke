@@ -19,7 +19,13 @@ import static com.oneeyedmen.okeydoke.ApproverFactories.fileSystemApproverFactor
 /**
  * A JUnit 5 Extension to provide an Approver as a parameter to test functions.
  *
- * Stores approved files in src/test/java
+ * Use as a class in `@ExtendWith(ApprovalsExtension.class)`
+ *
+ * or a field
+ *
+ * @RegisterExtension ApprovalsExtension approvals = new ApprovalsExtension();
+ *
+ * Stores approved files in src/test/java by default.
  */
 public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
 
@@ -32,12 +38,20 @@ public class ApprovalsExtension implements BeforeTestExecutionCallback, AfterTes
         this.factory = factory;
     }
 
-    public ApprovalsExtension(String sourceRoot) {
-        this(fileSystemApproverFactory(new File(sourceRoot)));
+    public ApprovalsExtension(File sourceRoot) {
+        this(fileSystemApproverFactory(sourceRoot));
+    }
+
+    public ApprovalsExtension(File sourceRoot, String extension) {
+        this(fileSystemApproverFactory(sourceRoot, extension));
+    }
+
+    public ApprovalsExtension(String extension) {
+        this(fileSystemApproverFactory(new File(ApprovalsRule.usualJavaSourceRoot, extension)));
     }
 
     public ApprovalsExtension() {
-        this(ApprovalsRule.usualJavaSourceRoot);
+        this(new File(ApprovalsRule.usualJavaSourceRoot));
     }
 
     @Override
