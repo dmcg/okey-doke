@@ -18,9 +18,13 @@ An Approval Testing library for Java and JUnit - like [Llewellyn Falco's](http:/
 
 A [helping hand](http://youtu.be/EbqaxWjIgOg) for many testing problems.
 
+## Breaking Change
+
+If you are upgrading from verions 1.x to version 2.x - JUnit 4 support has been moved from com.oneeyedmen.junit to com.oneeyedmen.junit4
+
 ## JUnit 5
 
-Add an `@ExtendWith(ApprovalsExtension.class)` to your test class to get access to an approver in every test method
+Add an @ExtendWith(ApprovalsExtension.class) to your test class to get access to an approver in every test method
 
 [ApprovalsExtensionTest](src/test/java/com/oneeyedmen/okeydoke/examples/ApprovalsExtensionTest.java)
 to compare current thing with an approved version and fail with a diff if they aren't the same.
